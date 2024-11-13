@@ -19,6 +19,14 @@ module.exports = {
     'react-refresh'
   ],
   rules: {
+    // Material import
+    'no-restricted-imports': [
+      'error',
+      {
+        'patterns': ['@mui/*/*/*']
+      }
+    ],
+    // React
     'react-refresh/only-export-components': 'warn',
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
