@@ -1,8 +1,5 @@
-import Stack from '@mui/material/Stack'
-import Button from '@mui/material/Button'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
-import { Box } from '@mui/material'
-import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
 import { useColorScheme } from '@mui/material/styles'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -10,6 +7,7 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
+import Container from '@mui/material/Container'
 
 const ModeSelect = () => {
   const { mode, setMode } = useColorScheme()
@@ -55,15 +53,37 @@ const ModeSelect = () => {
 const App = () => {
   return (
     <>
-      <ModeSelect />
-      <hr />
-      <Box>test</Box>
-      <Stack spacing={2} direction="row">
-        <Button variant="text">Text</Button>
-        <Button variant="contained" color="primary">Contained</Button>
-        <Button variant="outlined">Outlined</Button>
-      </Stack>
-      <Typography variant="body2" color="success.dark">This is a test</Typography>
+      <Container disableGutters={ true } maxWidth={ false } sx={{ height: '100vh' }}>
+        <Box sx={{
+          bgcolor: 'primary.light',
+          width: '100%',
+          height: (theme) => theme.trelloCustom.appBarHeight,
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+          <ModeSelect />
+        </Box>
+
+        <Box sx={{
+          bgcolor: 'primary.dark',
+          width: '100%',
+          height: (theme) => theme.trelloCustom.boardBarHeight,
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+          BoardBard
+        </Box>
+
+        <Box sx={{
+          bgcolor: 'primary.main',
+          width: '100%',
+          height: (theme) => `calc(100vh - ${theme.trelloCustom.boardBarHeight} - ${theme.trelloCustom.appBarHeight})`,
+          display: 'flex',
+          alignItems: 'center'
+        }}>
+          Board content
+        </Box>
+      </Container>
     </>
   )
 }
