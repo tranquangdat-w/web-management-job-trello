@@ -3,8 +3,8 @@ import { teal, deepOrange, cyan, orange } from '@mui/material/colors'
 
 const theme = extendTheme({
   trelloCustom: {
-    appBarHeight: '68px',
-    boardBarHeight: '58px'
+    appBarHeight: '56px',
+    boardBarHeight: '48px'
   },
   colorSchemes: {
     light: {
@@ -16,6 +16,44 @@ const theme = extendTheme({
     dark: {
       palette: cyan,
       secondary: orange
+    }
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none'
+        }
+      }
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main,
+          fontSize: '0.875rem',
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main
+          },
+          '&:hover': {
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: theme.palette.primary.main
+            }
+          },
+          '& fieldset': {
+            borderWidth: '1px !important'
+          },
+          '& .MuiSvgIcon-root': {
+            color: theme.palette.primary.main
+          }
+        })
+      }
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.main
+        })
+      }
     }
   }
 })
