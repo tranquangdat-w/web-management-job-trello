@@ -7,8 +7,8 @@ import theme from './theme.js'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <>
     <CssVarsProvider theme ={theme}>
-      <CssBaseline />
       {/* Need font roboto to use, please download font roboto from goggle */}
+      <CssBaseline />
       <App />
     </CssVarsProvider>
   </>
