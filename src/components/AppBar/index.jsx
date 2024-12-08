@@ -16,6 +16,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
 import Button from '@mui/material/Button'
 import More from './Menus/Responsive/More'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 
 const AppBar = () => {
   return (
@@ -26,8 +27,7 @@ const AppBar = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 2,
-        paddingRight: 2,
+        paddingX: (theme) => theme.trelloCustom.barPadding,
         gap: 2
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -42,7 +42,10 @@ const AppBar = () => {
             <Recent />
             <Started />
             <Templates />
-            <Button variant="outlined">Create</Button>
+            <Button variant="outlined" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <LibraryAddIcon fontSize='small'/>
+              Create
+            </Button>
           </Box>
 
           {/* For responsive */}
