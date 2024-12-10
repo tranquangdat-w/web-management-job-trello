@@ -1,8 +1,11 @@
 from fastapi import Request, HTTPException
 import jwt
 from starlette.middleware.base import BaseHTTPMiddleware
+from dotenv import load_dotenv
+import os
 
-SECRET_KEY = "login"
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 class AuthMiddleware(BaseHTTPMiddleware):
