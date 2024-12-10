@@ -1,0 +1,3 @@
+Tương tác với Cơ sở dữ liệu: Lưu trữ thông tin và ánh xạ dữ liệu.
+Định nghĩa cấu trúc dữ liệu: Schema, các ràng buộc, và cấu trúc của dữ liệu.
+Logic xử lý dữ liệu: Tập trung logic có liên quan đến dữ liệu.

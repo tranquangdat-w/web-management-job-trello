@@ -1,0 +1,5 @@
+"""
+Quản lý thay đổi cơ sở dữ liệu: Lưu giữ thông tin về các thay đổi trong cấu trúc cơ sở dữ liệu khi bạn thay đổi model dữ liệu.
+Cập nhật schema của DB: Mỗi thay đổi trong cấu trúc dữ liệu sẽ được ghi nhận trong file migration và áp dụng vào cơ sở dữ liệu.
+Rollback: Cho phép quay lại trạng thái trước đó nếu có lỗi.
+"""
