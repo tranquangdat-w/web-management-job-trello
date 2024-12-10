@@ -30,6 +30,7 @@ const Recent = () => {
   return (
     <Box>
       <Button
+        sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white' }}
         id="basic-button-recent"
         aria-controls={open ? 'basic-menu-recent' : undefined} // controls element has id is basic-menu-workspaces
         aria-haspopup="true" // how to menu appear
