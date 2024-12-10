@@ -1,0 +1,3 @@
+Hỗ trợ chức năng lặp lại: Chứa các hàm tiện ích không phụ thuộc vào logic cụ thể.
+Tách mã lệnh: Giữ cho code chính sạch sẽ và dễ bảo trì.
+Gồm các hàm xử lý logic thông dụng như định dạng dữ liệu, các hàm xử lý string, xử lý thông tin từ request, v.v.
