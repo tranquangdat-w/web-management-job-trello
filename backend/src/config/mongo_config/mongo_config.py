@@ -1,9 +1,7 @@
-import asyncio
 from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 from dotenv import load_dotenv
-from zmq import CONNECT_TIMEOUT
 
 load_dotenv()
 MONGO_URI = os.getenv("MONGO_CLOUD_TEST_URI")
