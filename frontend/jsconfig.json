@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    // Go to defind components after when absolute import
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  }
+}

@@ -1,0 +1,1 @@
+fix lỗi đường dẫn : export PYTHONPATH=/home/duc/P_CODE
