@@ -10,7 +10,7 @@ const Board = () => {
       <Container disableGutters={ true } maxWidth={ false } sx={{ height: '100vh' }}>
         <AppBar />
         <BoardBar />
-        <BoardContent />
+        <BoardContent maxWidth={ false }/>
       </Container>
     </>
   )
