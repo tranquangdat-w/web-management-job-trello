@@ -7,7 +7,7 @@ const BoardContent = () => {
       width: '100%',
       height: (theme) => `calc(100vh - ${theme.trelloCustom.boardBarHeight} - ${theme.trelloCustom.appBarHeight})`,
       display: 'flex',
-      alignItems: 'center'
+      alignItems: 'center',
     }}>
           Board content
     </Box>

@@ -3,21 +3,21 @@ import { teal, deepOrange, cyan, orange } from '@mui/material/colors'
 
 const theme = extendTheme({
   trelloCustom: {
-    appBarHeight: '56px',
-    boardBarHeight: '48px',
+    appBarHeight: '68px',
+    boardBarHeight: '58px',
     barPadding: 2
   },
   colorSchemes: {
-    light: {
-      palette: {
-        primary: teal,
-        secondary: deepOrange
-      }
-    },
-    dark: {
-      palette: cyan,
-      secondary: orange
-    }
+    // light: {
+    //   palette: {
+    //     primary: teal,
+    //     secondary: deepOrange
+    //   }
+    // },
+    // dark: {
+    //   palette: cyan,
+    //   secondary: orange
+    // }
   },
   components: {
     MuiButton: {
@@ -30,22 +30,22 @@ const theme = extendTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.primary.main,
-          fontSize: '0.875rem',
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.main
-          },
-          '&:hover': {
-            '.MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.palette.primary.main
-            }
-          },
-          '& fieldset': {
-            borderWidth: '1px !important'
-          },
-          '& .MuiSvgIcon-root': {
-            color: theme.palette.primary.main
-          }
+          // color: theme.palette.primary.main,
+          fontSize: '0.875rem'
+          // '& .MuiOutlinedInput-notchedOutline': {
+          //   borderColor: theme.palette.primary.main
+          // },
+          // '&:hover': {
+          //   '.MuiOutlinedInput-notchedOutline': {
+          //     borderColor: theme.palette.primary.main
+          //   }
+          // },
+          // '& fieldset': {
+          //   borderWidth: '1px !important'
+          // }
+          // '& .MuiSvgIcon-root': {
+          //   color: theme.palette.primary.main
+          // }
         })
       }
     },
