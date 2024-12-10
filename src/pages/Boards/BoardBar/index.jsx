@@ -12,6 +12,7 @@ import Avatar from '@mui/material/Avatar'
 import AvatarGroup from '@mui/material/AvatarGroup'
 
 const MENU_STYLES = {
+  bgcolor: 'white',
   paddingX: 2,
   color: 'primary.main',
   border: 'none',
@@ -38,7 +39,7 @@ const BoardBar = () => {
     }}>
       <Box sx={{ display: 'flex', aliginItems: 'center', gap: 2 }}>
         <Chip
-          icon={<DashboardIcon />}
+          icon={<DashboardIcon fontSize='small'/>}
           label="Tran Quang Dat"
           clickable
           onClick= {() => {}}
@@ -46,7 +47,7 @@ const BoardBar = () => {
         />
 
         <Chip
-          icon={<VpnLockIcon />}
+          icon={<VpnLockIcon fontSize='small'/>}
           label="Public/Private WorkSpace"
           clickable
           onClick= {() => {}}
@@ -54,21 +55,21 @@ const BoardBar = () => {
         />
 
         <Chip
-          icon={<AddToDriveIcon />}
+          icon={<AddToDriveIcon fontSize='small'/>}
           label="Add to Google Drive"
           clickable
           onClick= {() => {}}
           sx={MENU_STYLES}
         />
         <Chip
-          icon={<BoltIcon />}
+          icon={<BoltIcon fontSize='small'/>}
           label="Automatic"
           clickable
           onClick= {() => {}}
           sx={MENU_STYLES}
         />
         <Chip
-          icon={<FilterListIcon />}
+          icon={<FilterListIcon fontSize='small'/>}
           label="Filter"
           clickable
           onClick= {() => {}}
@@ -76,9 +77,8 @@ const BoardBar = () => {
         />
 
       </Box>
-      <Box sx={{ display: 'flex', aliginItems: 'center', gap: 2 }}>
-        <Button variant="outlined" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          < PersonAddAlt1Icon fontSize='small'/>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <Button variant="outlined" size="small" sx={{ display: 'flex', alignItems: 'center' }} startIcon={<PersonAddAlt1Icon />}>
           Invite
         </Button>
         <AvatarGroup max={4}
@@ -130,8 +130,6 @@ const BoardBar = () => {
               src="https://yt3.ggpht.com/9qASLSpof72HuZY9Q085U0k_EhBSldutj2khX7dNHPy75dXU-0vTi_Pk8jcrn5ypC-tonjL0TA=s88-c-k-c0x00ffffff-no-rj"
             />
           </Tooltip>
-
-
         </AvatarGroup>
       </Box>
     </Box>

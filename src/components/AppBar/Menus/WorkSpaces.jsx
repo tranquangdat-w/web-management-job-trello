@@ -50,7 +50,7 @@ const WorkSpaces = () => {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem>
+        <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <ContentCut fontSize="small" />
           </ListItemIcon>
@@ -59,7 +59,8 @@ const WorkSpaces = () => {
               ⌘X
           </Typography>
         </MenuItem>
-        <MenuItem>
+
+        <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <ContentCopy fontSize="small" />
           </ListItemIcon>
@@ -68,7 +69,7 @@ const WorkSpaces = () => {
               ⌘C
           </Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <ContentPaste fontSize="small" />
           </ListItemIcon>
@@ -78,7 +79,7 @@ const WorkSpaces = () => {
           </Typography>
         </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Cloud fontSize="small" />
           </ListItemIcon>

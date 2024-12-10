@@ -42,8 +42,7 @@ const AppBar = () => {
             <Recent />
             <Started />
             <Templates />
-            <Button variant="outlined" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <LibraryAddIcon fontSize='small'/>
+            <Button variant="outlined" startIcon={<LibraryAddIcon />} sx={{ display: 'flex', alignItems: 'center' }}>
               Create
             </Button>
           </Box>
