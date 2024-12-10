@@ -9,6 +9,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7'
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
 
 const ModeSelect = () => {
+  const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
   const { mode, setMode } = useColorScheme()
 
   const handleChangeSelectMode = (event) => {
@@ -17,14 +18,29 @@ const ModeSelect = () => {
   }
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">  { /*  Use for componment of Mui */ }
-      <InputLabel id="label-select-dark-light-mode">Mode</InputLabel>
+    <FormControl sx={{ m: 1, minWidth: 150 }} size="small">  { /*  Use for componment of Mui */ }
+      <InputLabel
+        id="label-select-dark-light-mode"
+        sx={{
+          color: colorComponents,
+          '&.Mui-focused': { color: colorComponents }
+        }}
+      >
+        Mode
+      </InputLabel>
       <Select
         labelid="label-select-dark-light-mode"
         id="select-dark-light-mode"
         value={mode}
         label="mode"
         onChange={handleChangeSelectMode}
+        sx={{
+          color: colorComponents,
+          '.MuiOutlinedInput-notchedOutline': { borderColor: '#8590a2' },
+          '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#8590a2' },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'white' },
+          '.MuiSvgIcon-root': { color: colorComponents }
+        }}
       >
         <MenuItem value='light'>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}> { /* No need thinking about name of class when use Box insteds of div, and can use advance of Mui. */ }

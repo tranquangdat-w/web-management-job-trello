@@ -44,6 +44,7 @@ const More = () => {
         aria-expanded={open ? 'true' : undefined} // State of menu close or open
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
+        sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white' }}
       >
         More
       </Button>

@@ -19,10 +19,19 @@ import Button from '@mui/material/Button'
 import More from './Menus/Responsive/More'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
-
-const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
+import { useState } from 'react'
 
 const AppBar = () => {
+  const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
+  const [placeholderSearch, setPlacehoderSearch] = useState('Search')
+
+  const handleFocus = () => {
+    setPlacehoderSearch('Search in Trello')
+  }
+
+  const handleBlur = () => {
+    setPlacehoderSearch('Search')
+  }
   return (
     <>
       <Box sx={{
@@ -33,7 +42,8 @@ const AppBar = () => {
         justifyContent: 'space-between',
         paddingX: (theme) => theme.trelloCustom.barPadding,
         gap: 2,
-        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#1d2125' : '#005180'
+        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#1d2125' : '#005180',
+        overflowX: 'auto'
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <AppsIcon sx={{ color: colorComponents }}/>
@@ -73,7 +83,9 @@ const AppBar = () => {
               id="outlined-search"
               type="search"
               size="small"
-              placeholder='Search'
+              placeholder={placeholderSearch}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -85,12 +97,21 @@ const AppBar = () => {
                 sx: {
                   '&::placeholder': {
                     color: 'white',
-                    Opacity: 1
+                    opacity: 0.8,
+                    fontSize: '18px'
                   }
                 }
               }}
               sx={{
-                width: (theme) => theme.spacing(28)
+                width: (theme) => theme.spacing(28),
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: '#8590a2' },
+                  '&:hover fieldset': { borderColor: '#8590a2' },
+                  '&.Mui-focused fieldset': { borderColor: 'white' }
+                },
+                '& .MuiInputBase-root': {
+                  color: 'white'
+                }
               }}
             />
           </Tooltip>
