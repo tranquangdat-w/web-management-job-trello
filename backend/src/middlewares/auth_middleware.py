@@ -1,8 +1,9 @@
 from fastapi import Request, HTTPException
-import jwt
 from starlette.middleware.base import BaseHTTPMiddleware
 from dotenv import load_dotenv
 import os
+
+from backend.src.utils.jwt_util import decode_jwt
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -13,13 +14,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
         token = request.headers.get("Authorization")
         if not token:
             raise HTTPException(status_code=401, detail="Không có token")
-        try:
-            payload = jwt.decode(token.split(" ")[1], SECRET_KEY, algorithms=["HS256"])
-            request.state.user = payload
-        except jwt.ExpiredSignatureError:
-            raise HTTPException(status_code=401, detail="Token hết hạn")
-        except jwt.InvalidTokenError:
-            raise HTTPException(status_code=401, detail="Token không hợp lệ")
+
+        payload = decode_jwt(token)
+        request.state.user = payload
 
         response = call_next(request)
         return response
