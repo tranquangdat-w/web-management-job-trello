@@ -104,11 +104,15 @@ const BoardBar = () => {
         <AvatarGroup max={4}
           sx={{
             gap: 0.7,
-            '& .MuiAvatar-root': {
+            '.MuiAvatar-root': {
               width: '32px',
               height: '32px',
               fontSize: '16px',
-              border: 'none'
+              border: 'none',
+              color: 'white'
+            },
+            '.MuiAvatar-colorDefault': {
+              bgcolor: 'grey'
             }
           }}
         >
