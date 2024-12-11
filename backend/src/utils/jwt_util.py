@@ -20,7 +20,7 @@ def create_jwt(payload: dict) -> str:
 
 def decode_jwt(token: str) -> dict:
     """
-    Giải mã token và trả về payload
+    Giải mã TOKEN và trả về payload
     """
     try:
         decode_payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
