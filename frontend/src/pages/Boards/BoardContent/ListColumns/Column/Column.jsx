@@ -1,4 +1,5 @@
-import * as React from 'react'
+import React, { useEffect } from 'react'
+import { useRef } from 'react'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -18,8 +19,10 @@ import { Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import ListCards from './ListCards/ListCards'
 
-const Column = () => {
+const Column = ( { column }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
+  const [headerHeight, setHeaderHeight] = React.useState(0)
+  const headerRef = useRef(null)
 
   const open = Boolean(anchorEl)
 
@@ -30,6 +33,11 @@ const Column = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  useEffect(() => {
+    const height = headerRef?.current?.offsetHeight + 'px'
+    setHeaderHeight(height)
+  }, [column])
 
   return (
     <Box sx={{
@@ -43,20 +51,24 @@ const Column = () => {
     }}>
 
       {/* Header */}
-      <Box sx={{
-        height: (theme) => theme.trelloCustom.columnHeaderHeight,
-        p: 2,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-        <Typography variant='h6' sx={{
-          fontSize: '1rem',
-          fontWeight: 'bold',
-          cursor: 'pointer'
+      <Box
+        ref={headerRef}
+        sx={{
+          height: 'auto',
+          p: 2,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between'
         }}>
-          Column title
-        </Typography>
+        <Box>
+          <Typography variant='h6' sx={{
+            fontSize: '1rem',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}>
+            { column?.title }
+          </Typography>
+        </Box>
 
         <Box>
           <Button
@@ -137,7 +149,7 @@ const Column = () => {
       </Box>
 
       {/* ListCards */}
-      <ListCards />
+      <ListCards headerHeight={headerHeight} cards={column?.cards}/>
 
       {/* Footer */}
       <Box sx={{
@@ -165,3 +177,4 @@ const Column = () => {
 }
 
 export default Column
+

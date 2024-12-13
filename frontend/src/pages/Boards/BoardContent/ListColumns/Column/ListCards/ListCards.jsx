@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import Card from './Card/Card'
 
-const ListCards = () => {
+const ListCards = ({ headerHeight, cards }) => {
   return (
     <Box sx={{
       p: 2,
@@ -14,16 +14,16 @@ const ListCards = () => {
         ${theme.trelloCustom.boardContentHeight} -
         ${theme.spacing(5)} -
         ${theme.trelloCustom.columnFooterHeight} -
-        ${theme.trelloCustom.columnHeaderHeight}
+        ${headerHeight}
       )`,
       '& .MuiCard-root': {
         overflow: 'unset'
       }
     }}>
-      <Card />
-      <Card />
+      {cards?.map(card => <Card key={card._id} card={card} />)}
     </Box>
   )
 }
 
 export default ListCards
+
