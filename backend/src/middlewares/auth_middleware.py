@@ -15,6 +15,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if not token:
             raise HTTPException(status_code=401, detail="Không có token")
 
+        if token.startswith("Bearer "):
+            token = token[7:]
+
         payload = decode_jwt(token)
         request.state.user = payload
 
