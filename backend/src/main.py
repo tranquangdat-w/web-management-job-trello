@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.src.routes.auth_routes.auth_routes import router as register_login_router
+from backend.src.middlewares.auth_middleware import AuthMiddleware
+from backend.src.routes.auth_routes.auth_routes import (
+    router as register_or_login_router,
+)
 
 app = FastAPI()
 
@@ -12,9 +15,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(AuthMiddleware)
 
 # Thêm các route vào server
-app.include_router(register_login_router)
+app.include_router(register_or_login_router, prefix="/user")
 
 
 @app.get("/")
