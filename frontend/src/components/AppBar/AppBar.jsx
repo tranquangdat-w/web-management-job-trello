@@ -34,17 +34,19 @@ const AppBar = () => {
   }
   return (
     <>
-      <Box sx={{
-        width: '100%',
-        height: (theme) => theme.trelloCustom.appBarHeight,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingX: (theme) => theme.trelloCustom.barPadding,
-        gap: 2,
-        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#1d2125' : '#005180',
-        overflowX: 'auto'
-      }}>
+      <Box
+        sx={{
+          width: '100%',
+          height: (theme) => theme.trelloCustom.appBarHeight,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          paddingX: (theme) => theme.trelloCustom.barPadding,
+          gap: 2,
+          bgcolor: (theme) => theme.palette.mode === 'dark' ? '#1d2125' : '#005180',
+          overflowX: 'auto'
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <AppsIcon sx={{ color: colorComponents }}/>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>

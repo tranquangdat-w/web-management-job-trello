@@ -3,7 +3,7 @@ import Column from './Column/Column'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
 
-const ListColumns = () => {
+const ListColumns = ( { columns } ) => {
   return (
     <Box sx={{
       bgcolor: 'inherit',
@@ -13,9 +13,8 @@ const ListColumns = () => {
       overflowX: 'auto',
       overflowY: 'hidden'
     }}>
-      <Column />
-      <Column />
-      <Column />
+      {columns?.map(column => (<Column key ={column._id} column={column} />))}
+
 
       <Box sx={{
         minWidth: (theme) => theme.trelloCustom.columnWidth,
@@ -24,9 +23,9 @@ const ListColumns = () => {
         '&:hover': {
           bgcolor: '#33769e'
         },
-        minHeight: (theme) => theme.trelloCustom.columnHeaderHeight,
-        maxHeight: (theme) => theme.trelloCustom.columnHeaderHeight,
-        ml: (theme) => theme.trelloCustom.marginLeftColumn,
+        minHeight: '56px',
+        maxHeight: '56px',
+        marginX: (theme) => theme.trelloCustom.marginLeftColumn,
         borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
         display: 'flex',
         alignItems: 'center',
