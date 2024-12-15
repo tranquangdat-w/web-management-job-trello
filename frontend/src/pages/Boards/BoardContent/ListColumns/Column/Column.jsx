@@ -23,6 +23,16 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
 const Column = ( { column }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+    id: column._id,
+    data: { ...column }
+  })
+
+  const style = {
+    touchAction: 'none',
+    transform: CSS.Translate.toString(transform),
+    transition
+  }
 
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -42,18 +52,25 @@ const Column = ( { column }) => {
   useEffect(() => {
     const height = headerRef?.current?.offsetHeight + 'px'
     setHeaderHeight(height)
-  }, [column])
+  }, [column.title])
 
   return (
-    <Box sx={{
-      minWidth: (theme) => theme.trelloCustom.columnWidth,
-      maxWidth: (theme) => theme.trelloCustom.columnWidth,
-      bgcolor: (theme) => theme.palette.mode === 'dark' ? '#101204' : '#f1f2f4',
-      ml: (theme) => theme.trelloCustom.marginLeftColumn,
-      borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
-      height: 'fit-content',
-      maxHeight: (theme) => `calc(${theme.trelloCustom.boardContentHeight} - ${theme.spacing(5)})`
-    }}>
+    <Box
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      sx={{
+        minWidth: (theme) => theme.trelloCustom.columnWidth,
+        maxWidth: (theme) => theme.trelloCustom.columnWidth,
+        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#101204' : '#f1f2f4',
+        ml: (theme) => theme.trelloCustom.marginLeftColumn,
+        borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
+        height: 'fit-content',
+        maxHeight: (theme) => `calc(${theme.trelloCustom.boardContentHeight} - ${theme.spacing(5)})`,
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
 
       {/* Header */}
       <Box
@@ -62,14 +79,15 @@ const Column = ( { column }) => {
           height: 'auto',
           p: 2,
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           justifyContent: 'space-between'
         }}>
         <Box>
           <Typography variant='h6' sx={{
             fontSize: '1rem',
             fontWeight: 'bold',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            wordBreak: 'break-word'
           }}>
             { column?.title }
           </Typography>
@@ -163,7 +181,8 @@ const Column = ( { column }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        mb: 1
+        mb: 1,
+        mt: 1
       }}>
         <Button startIcon={<AddIcon />}
           sx={{
@@ -182,4 +201,3 @@ const Column = ( { column }) => {
 }
 
 export default Column
-

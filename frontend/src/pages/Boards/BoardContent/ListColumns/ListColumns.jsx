@@ -6,48 +6,48 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 
 const ListColumns = ( { columns } ) => {
   return (
-    <SortableContext items = {columns} strategy={horizontalListSortingStrategy}>
-      <Box sx={{
-        bgcolor: 'inherit',
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        overflowX: 'auto',
-        overflowY: 'hidden'
-      }}>
-        {columns?.map(column => (<Column key ={column._id} column={column} />))}
-
-
+    <>
+      <SortableContext items = {columns?.map(column => column._id)} strategy={horizontalListSortingStrategy}>
         <Box sx={{
-          minWidth: (theme) => theme.trelloCustom.columnWidth,
-          maxWidth: (theme) => theme.trelloCustom.columnWidth,
-          bgcolor: '#3d99ce',
-          '&:hover': {
-            bgcolor: '#33769e'
-          },
-          minHeight: '56px',
-          maxHeight: '56px',
-          marginX: (theme) => theme.trelloCustom.marginLeftColumn,
-          borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
+          bgcolor: 'inherit',
+          width: '100%',
+          height: '100%',
           display: 'flex',
-          alignItems: 'center',
-          pl: '10px',
-          cursor: 'pointer'
+          overflowX: 'auto',
+          overflowY: 'hidden'
         }}>
-          <Button
-            disableRipple
-            startIcon={<AddIcon />}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'transparent'
-              }
-            }}>
-            Add another column
-          </Button>
+          {columns?.map(column => (<Column key ={column._id} column={column} />))}
+          <Box sx={{
+            minWidth: (theme) => theme.trelloCustom.columnWidth,
+            maxWidth: (theme) => theme.trelloCustom.columnWidth,
+            bgcolor: '#3d99ce',
+            '&:hover': {
+              bgcolor: '#33769e'
+            },
+            minHeight: '56px',
+            maxHeight: '56px',
+            marginX: (theme) => theme.trelloCustom.marginLeftColumn,
+            borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
+            display: 'flex',
+            alignItems: 'center',
+            pl: '10px',
+            cursor: 'pointer'
+          }}>
+            <Button
+              disableRipple
+              startIcon={<AddIcon />}
+              sx={{
+                color: 'white',
+                '&:hover': {
+                  bgcolor: 'transparent'
+                }
+              }}>
+              Add another column
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </SortableContext>
+      </SortableContext>
+    </>
   )
 }
 

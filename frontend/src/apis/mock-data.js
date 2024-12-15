@@ -11,7 +11,7 @@ const mockData = {
       {
         _id: 'column-id-01',
         boardId: 'board-id-01',
-        title: 'To Do Heheheheheheehheehehhehehh Column 01',
+        title: 'To Do Heheheheheheehheehehhehehhehehehehehehehhe Column 01',
         cardOrderIds: ['card-id-02', 'card-id-01', 'card-id-03', 'card-id-04', 'card-id-05', 'card-id-06', 'card-id-07'],
         cards: [
           {
