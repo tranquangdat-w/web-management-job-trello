@@ -29,7 +29,8 @@ const ListColumns = ( { columns } ) => {
         borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
         display: 'flex',
         alignItems: 'center',
-        pl: '10px'
+        pl: '10px',
+        cursor: 'pointer'
       }}>
         <Button
           disableRipple

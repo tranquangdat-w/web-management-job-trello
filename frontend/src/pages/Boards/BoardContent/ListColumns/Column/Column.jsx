@@ -18,8 +18,10 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import ListCards from './ListCards/ListCards'
+import { mapOrder } from '~/utils/sorts'
 
 const Column = ( { column }) => {
+  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [headerHeight, setHeaderHeight] = React.useState(0)
   const headerRef = useRef(null)
@@ -149,7 +151,7 @@ const Column = ( { column }) => {
       </Box>
 
       {/* ListCards */}
-      <ListCards headerHeight={headerHeight} cards={column?.cards}/>
+      <ListCards headerHeight={headerHeight} cards={orderedCards}/>
 
       {/* Footer */}
       <Box sx={{
