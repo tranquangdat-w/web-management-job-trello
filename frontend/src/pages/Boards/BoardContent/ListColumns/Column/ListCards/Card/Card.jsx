@@ -11,8 +11,21 @@ import LinkIcon from '@mui/icons-material/Link'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 const Card = ({ card }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card._id,
+    data : { ...card }
+  })
+
+  const dndStyleCard = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.2 : 1
+  }
+
   const [hoverCheck, setHoverCheck] = React.useState(false)
 
   const shouldShowCardActions = () => {
@@ -20,10 +33,12 @@ const Card = ({ card }) => {
   }
 
   return (
-    <MuiCard sx={{
-      cursor: 'pointer',
-      boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)'
-    }}>
+    <MuiCard
+      ref={setNodeRef} style={dndStyleCard} {...attributes} {...listeners}
+      sx={{
+        cursor: 'pointer',
+        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)'
+      }}>
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
 
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
@@ -74,7 +89,6 @@ const Card = ({ card }) => {
             {!!card?.attachments?.length && <Button size="small" disableRipple startIcon={<LinkIcon />}>{card?.attachments?.length}</Button> }
           </CardActions>
         </Box>
-
       }
     </MuiCard>
   )
