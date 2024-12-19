@@ -4,9 +4,10 @@ from backend.src.middlewares.auth_middleware import AuthMiddleware
 from backend.src.routes.auth_routes import (
     router as register_or_login_router,
 )
-from backend.src.routes.user_routes import (
-    router as user_router,
-)  # Import router cho các route bảo vệ
+
+# from backend.src.routes.user_routes import (
+#     router as user_router,
+# )  # Import router cho các route bảo vệ
 
 app = FastAPI()
 
@@ -24,9 +25,9 @@ app.add_middleware(AuthMiddleware)
 
 # Thêm các route vào server
 app.include_router(register_or_login_router, prefix="/user")  # Đăng ký, đăng nhập
-app.include_router(
-    user_router, prefix="/dashboard"
-)  # Route cho các dashboard người dùng (bao gồm phân quyền)
+# app.include_router(
+#     user_router, prefix="/dashboard"
+# )  # Route cho các dashboard người dùng (bao gồm phân quyền)
 
 
 @app.get("/")
