@@ -91,3 +91,43 @@ class UserService:
 
         except Exception as e:
             return {"status": "error", "message": f"Lỗi khi xóa người dùng: {str(e)}"}
+
+    async def get_user_by_username(self, username: str) -> dict:
+        """
+        Lấy thông tin người dùng theo tên đăng nhập (username).
+
+        :param username: Tên đăng nhập của người dùng.
+        :return: Từ điển chứa thông tin người dùng hoặc thông báo lỗi.
+        """
+        try:
+            collection = self.mongo_config.database_instance()[self.collection_name]
+            user = await collection.find_one({"username": username})
+            if user:
+                return {"status": "success", "user": user}
+            else:
+                return {"status": "fail", "message": "Người dùng không tồn tại."}
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
+            }
+
+    async def get_user_by_email(self, email: str) -> dict:
+        """
+        Lấy thông tin người dùng theo email.
+
+        :param email: Email của người dùng.
+        :return: Từ điển chứa thông tin người dùng hoặc thông báo lỗi.
+        """
+        try:
+            collection = self.mongo_config.database_instance()[self.collection_name]
+            user = await collection.find_one({"email": email})
+            if user:
+                return {"status": "success", "user": user}
+            else:
+                return {"status": "fail", "message": "Người dùng không tồn tại."}
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
+            }
