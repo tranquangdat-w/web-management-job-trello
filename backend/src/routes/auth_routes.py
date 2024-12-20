@@ -10,7 +10,7 @@ from backend.src.validations.auth_validation.user_register_validation import (
 from backend.src.utils.jwt_util import (
     create_jwt,
     decode_jwt,
-)  # Đảm bảo import các hàm JWT đúng
+)
 
 router = APIRouter()
 
