@@ -10,6 +10,7 @@ import Button from '@mui/material/Button'
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import Avatar from '@mui/material/Avatar'
 import AvatarGroup from '@mui/material/AvatarGroup'
+import ChatBox from '../../../components/AppBar/Message/ChatBox'
 
 
 const BoardBar = () => {
@@ -101,6 +102,7 @@ const BoardBar = () => {
         >
           Invite
         </Button>
+        <ChatBox />
         <AvatarGroup max={4}
           sx={{
             gap: 0.7,
