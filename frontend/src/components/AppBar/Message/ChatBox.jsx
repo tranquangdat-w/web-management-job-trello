@@ -63,11 +63,11 @@ const ChatBox = () => {
           sx={{
             color: '#fff',
             '&:hover': {
-              backgroundColor: theme.palette.action.hover, 
+              backgroundColor: theme.palette.action.hover 
             },
             '&:active': {
-              backgroundColor: theme.palette.action.selected,
-            },
+              backgroundColor: theme.palette.action.selected
+            }
           }}
         >
           <ChatIcon />
@@ -86,7 +86,7 @@ const ChatBox = () => {
             bottom: '10px',
             right: '10px',
             zIndex: 1300,
-            backgroundColor: theme.palette.background.paper,
+            backgroundColor: theme.palette.background.paper
           }}
         >
           <Box 
@@ -121,7 +121,7 @@ const ChatBox = () => {
                 <Avatar 
                   sx={{ 
                     bgcolor: theme.palette.primary.contrastText, 
-                    color: theme.palette.primary.main,  
+                    color: theme.palette.primary.main  
                   }} 
                   src="https://khoinguonsangtao.vn/wp-content/uploads/2022/08/hinh-anh-meo-cute-doi-mat-to-tron-den-lay-de-thuong.jpg"
                 />
@@ -145,16 +145,15 @@ const ChatBox = () => {
                 sx={{
                   margin: '5px 0',
                   padding: '10px',
-                  backgroundColor: theme.palette.background.default,
                   borderRadius: '5px',
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'top' }}>
+                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                   <Badge
                     overlap="circular"
                     anchorOrigin={{
                       vertical: 'bottom',
-                      horizontal: 'right',
+                      horizontal: 'right'
                     }}
                     badgeContent={
                       <Box
@@ -177,7 +176,14 @@ const ChatBox = () => {
                       src="https://khoinguonsangtao.vn/wp-content/uploads/2023/01/hinh-anh-ma-cute.jpg"
                     />
                   </Badge>
-                  <Box sx={{marginLeft: '10px',}}>
+                  <Box 
+                    sx={{
+                      marginLeft: '10px',
+                      backgroundColor: theme.palette.mode === 'light' ? '#E1F5FE': theme.palette.background.paper, 
+                      color: theme.palette.text.primary, 
+                      borderRadius: '20px', 
+                      padding: '8px 12px'
+                    }}>
                     {msg}
                   </Box>
                 </Box>
@@ -191,7 +197,7 @@ const ChatBox = () => {
               alignItems: 'center',
               padding: '10px',
               borderTop: `1px solid ${theme.palette.divider}`,
-              backgroundColor: theme.palette.background.paper,
+              backgroundColor: theme.palette.background.paper
             }}
           >
             <TextField
