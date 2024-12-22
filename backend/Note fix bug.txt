@@ -1,1 +1,1 @@
-fix lỗi đường dẫn : export PYTHONPATH=/home/duc/P_CODE
+fix lỗi đường dẫn : export PYTHONPATH=/home/duc/Work-Management-Project

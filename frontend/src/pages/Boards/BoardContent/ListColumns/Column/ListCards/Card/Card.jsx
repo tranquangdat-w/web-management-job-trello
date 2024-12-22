@@ -1,4 +1,5 @@
 import { Card as MuiCard } from '@mui/material'
+import { Box } from '@mui/material'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
@@ -10,49 +11,86 @@ import LinkIcon from '@mui/icons-material/Link'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import * as React from 'react'
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
-const Card = () => {
+const Card = ({ card }) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: card._id,
+    data : { ...card }
+  })
+
+  const dndStyleCard = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    opacity: isDragging ? 0.2 : 1,
+    border: isDragging ? '1px solid blue' : 'none'
+  }
+
   const [hoverCheck, setHoverCheck] = React.useState(false)
 
+  const shouldShowCardActions = () => {
+    return Boolean(card?.memberIds?.length) || !!card?.comments?.length || !!card?.attachments?.length
+  }
+
   return (
-    <MuiCard sx={{
-      cursor: 'pointer',
-      boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)'
-    }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQasKPDCewT1v2j4mJjfCN1rqH2SczejiwkoA&s"
-        title="green iguana"
-      />
+    <MuiCard
+      ref={setNodeRef} style={dndStyleCard} {...attributes} {...listeners}
+      sx={{
+        cursor: 'pointer',
+        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)'
+      }}>
+      {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
+
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-        <Typography>
-          Card Title
-        </Typography>
+        <Typography>{card?.title}</Typography>
       </CardContent>
-      <CardActions
-        sx= {{
-          p: '0 4px 8px 4px',
-          '& .MuiButton-root' : {
-            ':not(:first-of-type)': {
-              marginLeft: '0px'
-            },
-            '& .MuiButton-startIcon': {
-              marginRight: '4px'
+
+      {shouldShowCardActions() &&
+        <Box sx={{ p: 1 }}>
+          <CardActions
+            sx= {{
+              p: '0 4px 8px 4px',
+              '& .MuiButton-root' : {
+                ':not(:first-of-type)': {
+                  marginLeft: '0px'
+                },
+                minWidth: 'unset',
+                lineHeight: 'unset',
+                p: '1px',
+                '& .MuiButton-startIcon': {
+                  marginRight: '4px'
+                },
+                fontSize: '16px',
+                '&:hover': {
+                  bgcolor: 'transparent'
+                }
+              },
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: 2
+            }}>
+            {!!card?.dueDate &&
+              <Button
+                disableRipple
+                size="small"
+                startIcon={hoverCheck ? <CheckBoxOutlineBlankIcon /> : <AccessTimeIcon /> }
+                onMouseEnter={() => setHoverCheck(true)}
+                onMouseLeave={() => setHoverCheck(false)}
+              >
+                {card?.dueDate}
+              </Button>
             }
-          }
-        }}>
-        <Button
-          size="small"
-          startIcon={hoverCheck ? <CheckBoxOutlineBlankIcon /> : <AccessTimeIcon /> }
-          onMouseEnter={() => setHoverCheck(true)}
-          onMouseLeave={() => setHoverCheck(false)}
-        >
-          20
-        </Button>
-        <Button size="small" startIcon={<GroupIcon />}>20</Button>
-        <Button size="small" startIcon={<CommentIcon />}>15</Button>
-        <Button size="small" startIcon={<LinkIcon />}>10</Button>
-      </CardActions>
+
+            {Boolean(card?.memberIds?.length) && <Button size="small" disableRipple startIcon={<GroupIcon />}>{card?.memberIds.length}</Button> }
+
+            {!!card?.comments?.length && <Button size="small" disableRipple startIcon={<CommentIcon />}>{card?.comments?.length}</Button> }
+
+            {!!card?.attachments?.length && <Button size="small" disableRipple startIcon={<LinkIcon />}>{card?.attachments?.length}</Button> }
+          </CardActions>
+        </Box>
+      }
     </MuiCard>
   )
 }

@@ -3,20 +3,22 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 from dotenv import load_dotenv
 
+from backend.src.config.mongo_config.config import DATABASE_NAME
+
 load_dotenv()
 MONGO_URI = os.getenv("MONGO_CLOUD_TEST_URI")
 
 
 class MongoConfig:
     """
-    Hàm dựng nhận tham số database_name là tên của DATABASE
+    Hàm dựng :
     - Tạo một thể hiện của MONGO CLIENT : __mongo_client_instance
     - Tạo một thể hiện của DATABASE : .database_instance()
     - Tạo một thể hiện của COLLECTION theo tên COLLECTION đó với tham số truyền vào collection_name : .collection_instance()
     """
 
-    def __init__(self, database_name: str):  # Hàm dựng
-        self.__database_name = database_name
+    def __init__(self):  # Hàm dựng
+        self.__database_name = DATABASE_NAME
         self.__mongo_client_instance: Optional[AsyncIOMotorClient] = None
         self.__database = None
 

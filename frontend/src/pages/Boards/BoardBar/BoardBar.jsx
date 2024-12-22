@@ -1,24 +1,24 @@
 import { Box } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import Chip from '@mui/material/Chip'
-import DashboardIcon from '@mui/icons-material/Dashboard'
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt'
 import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import Button from '@mui/material/Button'
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1'
 import Avatar from '@mui/material/Avatar'
 import AvatarGroup from '@mui/material/AvatarGroup'
 import ChatBox from '../../../components/AppBar/Message/ChatBox'
+import { capitalizeFirstLetter } from '~/utils/formatters'
 
 
-const BoardBar = () => {
+const BoardBar = ({ board }) => {
   const bgColorBoardBar = (theme) => theme.palette.mode === 'dark' ? '#004065' : '#005c91'
 
   const MENU_STYLES = {
     bgcolor: bgColorBoardBar,
-    paddingX: 2,
+    paddingX: 0.5,
     border: 'none',
     borderRadius: '6px',
     color: 'white',
@@ -43,18 +43,21 @@ const BoardBar = () => {
       bgcolor: bgColorBoardBar,
       overflowX: 'auto'
     }}>
-      <Box sx={{ display: 'flex', aliginItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', aliginItems: 'center', gap: 0.8 }}>
         <Chip
-          icon={<DashboardIcon fontSize='small'/>}
-          label="Tran Quang Dat"
+          label={board?.title}
           clickable
           onClick= {() => {}}
-          sx={MENU_STYLES}
+          sx={{
+            ...MENU_STYLES,
+            fontSize: '20px',
+            fontWeight: 'bold'
+          }}
         />
 
         <Chip
           icon={<VpnLockIcon fontSize='small'/>}
-          label="Public/Private WorkSpace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
           onClick= {() => {}}
           sx={MENU_STYLES}
@@ -83,11 +86,11 @@ const BoardBar = () => {
         />
 
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
         <Button
           variant="outlined"
           size="small"
-          startIcon={<PersonAddAlt1Icon />}
+          startIcon={<PersonAddAltIcon />}
           sx={{
             display: 'flex',
             alignItems: 'center',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { IconButton, TextField, Box, Paper, Typography, Badge, Avatar } from '@mui/material';
 import { Chat as ChatIcon, Send as SendIcon, Close as CloseIcon } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles'; // Import useTheme
 
 const ChatBox = () => {
   const [messages, setMessages] = useState([]);
@@ -8,6 +9,7 @@ const ChatBox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hasNewMessage, setHasNewMessage] = useState(false);
   const messagesEndRef = useRef(null);
+  const theme = useTheme(); // Truy cập vào theme hiện tại
 
   const handleSend = () => {
     if (input.trim()) {
@@ -60,10 +62,10 @@ const ChatBox = () => {
           sx={{
             color: '#fff',
             '&:hover': {
-              backgroundColor: 'rgba(236, 241, 241, 0.1)'
+              backgroundColor: theme.palette.action.hover, // Màu hover dựa trên theme
             },
             '&:active': {
-              backgroundColor: 'rgba(15, 4, 4, 0.2)'
+              backgroundColor: theme.palette.action.selected, // Màu active dựa trên theme
             },
           }}
         >
@@ -82,7 +84,8 @@ const ChatBox = () => {
             position: 'fixed',
             bottom: '10px',
             right: '10px',
-            zIndex: 1300 
+            zIndex: 1300,
+            backgroundColor: theme.palette.background.paper, // Màu nền dựa trên theme
           }}
         >
           <Box 
@@ -91,16 +94,22 @@ const ChatBox = () => {
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '10px',
-              borderBottom: '1px solid #ccc',
-              backgroundColor: '#3f51b5',
-              color: '#fff'
+              borderBottom: `1px solid ${theme.palette.divider}`, // Màu divider dựa trên theme
+              backgroundColor: theme.palette.primary.main, // Màu nền cho header dựa trên theme
+              color: theme.palette.primary.contrastText, // Màu chữ dựa trên theme
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ bgcolor: '#fff', color: '#3f51b5', marginRight: '10px' }}>T</Avatar>
+              <Avatar 
+              sx={{ 
+                bgcolor: theme.palette.primary.contrastText, 
+                color: theme.palette.primary.main, marginRight: '10px' 
+                }} 
+              src="https://khoinguonsangtao.vn/wp-content/uploads/2022/08/hinh-anh-meo-cute-doi-mat-to-tron-den-lay-de-thuong.jpg">
+              </Avatar>
               <Typography variant="h6">Chat with Group</Typography>
             </Box>
-            <IconButton onClick={toggleChatBox} sx={{ color: '#fff' }}>
+            <IconButton onClick={toggleChatBox} sx={{ color: theme.palette.primary.contrastText }}>
               <CloseIcon />
             </IconButton>
           </Box>
@@ -108,20 +117,29 @@ const ChatBox = () => {
             sx={{
               flex: 1,
               padding: '10px',
-              overflowY: 'auto'
-            }}>
+              overflowY: 'auto',
+            }}
+          >
             {messages.map((msg, index) => (
               <Typography 
                 key={index} 
                 sx={{
                   margin: '5px 0',
                   padding: '10px',
-                  backgroundColor: '#f1f1f1',
-                  borderRadius: '5px'
+                  backgroundColor: theme.palette.background.default, // Màu nền cho tin nhắn
+                  borderRadius: '5px',
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'top' }}>
-                  <Avatar sx={{ bgcolor: '#fff', color: '#3f51b5', marginRight: '10px', width: '25px', height: '25px' }}>Y</Avatar>
+                  <Avatar 
+                    sx={{ bgcolor: theme.palette.primary.contrastText, 
+                    color: theme.palette.primary.main, 
+                    marginRight: '10px', 
+                    width: '25px', 
+                    height: '25px' 
+                    }} 
+                  src = "https://khoinguonsangtao.vn/wp-content/uploads/2023/01/hinh-anh-ma-cute.jpg">
+                  </Avatar>
                   {msg}
                 </Box>
               </Typography>
@@ -133,8 +151,8 @@ const ChatBox = () => {
               display: 'flex',
               alignItems: 'center',
               padding: '10px',
-              borderTop: '1px solid #ccc',
-              backgroundColor: '#f9f9f9'
+              borderTop: `1px solid ${theme.palette.divider}`, // Màu border top dựa trên theme
+              backgroundColor: theme.palette.background.paper, // Màu nền input dựa trên theme
             }}
           >
             <TextField
@@ -147,15 +165,15 @@ const ChatBox = () => {
               sx={{
                 flex: 1,
                 marginRight: '1px',
-                backgroundColor: '#fff',
-                borderRadius: '15px'
+                backgroundColor: theme.palette.background.default, // Màu nền input dựa trên theme
+                borderRadius: '15px',
               }}
             />
             <IconButton
               onClick={handleSend}
               color='primary'
               sx={{
-                flexShrink: 0
+                flexShrink: 0,
               }}
             >
               <SendIcon />
