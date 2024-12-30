@@ -77,7 +77,8 @@ const Column = ( { column }) => {
           ref={headerRef}
           sx={{
             height: 'auto',
-            p: 2,
+            paddingX: 2,
+            pt: 2,
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between'
@@ -133,7 +134,7 @@ const Column = ( { column }) => {
 
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
-               đ  <ContentCutIcon fontSize='small'/>
+                  <ContentCutIcon fontSize='small'/>
                 </ListItemIcon>
                 <ListItemText>Cut</ListItemText>
               </MenuItem>
@@ -202,3 +203,4 @@ const Column = ( { column }) => {
 }
 
 export default Column
+

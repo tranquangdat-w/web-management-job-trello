@@ -3,10 +3,13 @@ import Card from './Card/Card'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 
 const ListCards = ({ headerHeight, cards }) => {
+  // console.log(cards)
+  const isAddPadding = !!cards?.length
+
   return (
-    <SortableContext items={cards.map(card => card._id)} strategy={verticalListSortingStrategy}>
+    <SortableContext items={cards?.map(card => card._id)} strategy={verticalListSortingStrategy}>
       <Box sx={{
-        p: 2,
+        p:  isAddPadding ? 2 : 0,
         display: 'flex',
         flexDirection: 'column',
         gap: 1.5,
