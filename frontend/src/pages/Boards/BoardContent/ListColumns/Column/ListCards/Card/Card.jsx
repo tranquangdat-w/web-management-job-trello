@@ -23,7 +23,8 @@ const Card = ({ card }) => {
   const dndStyleCard = {
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.2 : 1
+    opacity: isDragging ? 0.2 : 1,
+    border: isDragging ? '1px solid blue' : 'none'
   }
 
   const [hoverCheck, setHoverCheck] = React.useState(false)
