@@ -5,7 +5,7 @@ const App = () => {
   return (
     <>
       {/* This is Board details not board list*/}
-      <Board /> 
+      <Board />
     </>
   )
 }

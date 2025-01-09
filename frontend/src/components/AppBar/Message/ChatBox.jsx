@@ -182,9 +182,13 @@ const ChatBox = () => {
                       backgroundColor: theme.palette.mode === 'light' ? '#E1F5FE': theme.palette.background.paper, 
                       color: theme.palette.text.primary, 
                       borderRadius: '20px', 
-                      padding: '8px 12px'
-                    }}>
-                    {msg}
+                      padding: '8px 12px',
+                      maxWidth: '70%', // Giới hạn chiều rộng tin nhắn
+                      wordWrap: 'break-word', // Tự động xuống dòng nếu từ quá dài
+                      overflowWrap: 'break-word', // Chia nhỏ từ dài
+                    }}
+                  >
+                  {msg}
                   </Box>
                 </Box>
               </Typography>
