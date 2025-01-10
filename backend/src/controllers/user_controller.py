@@ -1,5 +1,5 @@
-from backend.src.services.user_service import UserService
-from backend.src.models.user_model import UserModel
+from src.services.user_service import UserService
+from src.models.user_model import UserModel
 
 
 class UserController:

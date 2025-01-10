@@ -1,10 +1,14 @@
+import os
 from pymongo.errors import DuplicateKeyError
 from datetime import datetime, timezone
 from bson import ObjectId
-from backend.src.config.mongo_config.config import USER_COLLECTION
-from backend.src.models.user_model import UserModel
-from backend.src.config.mongo_config.mongo_config import MongoConfig
+from dotenv import load_dotenv
+from src.models.user_model import UserModel
+from src.config.mongodb import MongoConfig
 
+load_dotenv()
+
+USER_COLLECTION = os.getenv('USER_COLLECTION')
 
 class UserService:
     def __init__(self):

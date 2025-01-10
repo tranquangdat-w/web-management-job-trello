@@ -1,14 +1,14 @@
 from passlib.context import CryptContext
 from fastapi import HTTPException
-from backend.src.utils.jwt_util import create_jwt, decode_jwt
-from backend.src.validations.auth_validation.user_login_validation import (
+from src.utils.jwt_util import create_jwt, decode_jwt
+from src.validations.auth_validation.user_login_validation import (
     UserLoginValidation,
 )
-from backend.src.validations.auth_validation.user_register_validation import (
+from src.validations.auth_validation.user_register_validation import (
     UserRegisterValidation,
 )
-from backend.src.models.user_model import UserModel
-from backend.src.services.user_service import UserService
+from src.models.user_model import UserModel
+from src.services.user_service import UserService
 
 
 class AuthService:

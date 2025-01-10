@@ -3,7 +3,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from dotenv import load_dotenv
 import os
 
-from backend.src.utils.jwt_util import decode_jwt
+from src.utils.jwt_util import decode_jwt
 
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -23,3 +23,4 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
         response = call_next(request)
         return response
+

@@ -3,10 +3,9 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 from dotenv import load_dotenv
 
-from backend.src.config.mongo_config.config import DATABASE_NAME
-
 load_dotenv()
-MONGO_URI = os.getenv("MONGO_CLOUD_TEST_URI")
+MONGO_URI = os.getenv("MONGODB_URI")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
 
 
 class MongoConfig:
@@ -48,3 +47,4 @@ class MongoConfig:
 
     def database_instance(self):  # Hàm tạo thể hiện cho DATABASE
         return self.__database
+

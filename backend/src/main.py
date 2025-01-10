@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.src.middlewares.auth_middleware import AuthMiddleware
-from backend.src.routes.auth_routes import (
+from src.middlewares.auth_middleware import AuthMiddleware
+from src.routes.auth_routes import (
     router as register_or_login_router,
 )
 
@@ -33,3 +33,4 @@ app.include_router(register_or_login_router, prefix="/user")  # Đăng ký, đă
 @app.get("/")
 async def root():
     return {"message": "Welcome to FastAPI server!"}
+

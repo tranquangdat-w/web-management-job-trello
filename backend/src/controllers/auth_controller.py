@@ -1,9 +1,9 @@
 from fastapi import HTTPException
-from backend.src.services.auth_service import AuthService
-from backend.src.validations.auth_validation.user_login_validation import (
+from src.services.auth_service import AuthService
+from src.validations.auth_validation.user_login_validation import (
     UserLoginValidation,
 )
-from backend.src.validations.auth_validation.user_register_validation import (
+from src.validations.auth_validation.user_register_validation import (
     UserRegisterValidation,
 )
 
