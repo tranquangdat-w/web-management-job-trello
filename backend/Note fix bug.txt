@@ -1,1 +1,0 @@
-fix lỗi đường dẫn : export PYTHONPATH=/home/duc/Work-Management-Project
