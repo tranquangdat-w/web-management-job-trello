@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from bson import ObjectId
 from dotenv import load_dotenv
 from src.models.user_model import UserModel
-from src.config.mongodb import MongoConfig
+from src.config.mongodb import MongoDbConnector
 
 load_dotenv()
 
@@ -12,7 +12,7 @@ USER_COLLECTION = os.getenv('USER_COLLECTION')
 
 class UserService:
     def __init__(self):
-        self.mongo_config = MongoConfig()
+        self.mongo_config = MongoDbConnector()
         self.collection_name = USER_COLLECTION
 
     async def create_user(self, user: UserModel) -> dict:
@@ -23,7 +23,7 @@ class UserService:
         :return: Từ điển chứa thông tin kết quả.
         """
         try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
+            collection = self.mongo_config.get_database_instance()[self.collection_name]
             existing_user = await collection.find_one({"email": user.email})
             if existing_user:
                 return {"status": "fail", "message": "Email đã tồn tại."}
@@ -53,7 +53,7 @@ class UserService:
         :return: Từ điển chứa thông tin kết quả.
         """
         try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
+            collection = self.mongo_config.get_database_instance()[self.collection_name]
 
             # Kiểm tra người dùng có tồn tại hay không
             existing_user = await collection.find_one({"_id": ObjectId(user_id)})
@@ -84,7 +84,7 @@ class UserService:
         :return: Từ điển chứa thông tin kết quả.
         """
         try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
+            collection = self.mongo_config.get_database_instance()[self.collection_name]
 
             # Xóa người dùng
             result = await collection.delete_one({"_id": ObjectId(user_id)})
@@ -104,7 +104,7 @@ class UserService:
         :return: Từ điển chứa thông tin người dùng hoặc thông báo lỗi.
         """
         try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
+            collection = self.mongo_config.get_database_instance()[self.collection_name]
             user = await collection.find_one({"username": username})
             if user:
                 return {"status": "success", "user": user}
@@ -124,7 +124,7 @@ class UserService:
         :return: Từ điển chứa thông tin người dùng hoặc thông báo lỗi.
         """
         try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
+            collection = self.mongo_config.get_database_instance()[self.collection_name]
             user = await collection.find_one({"email": email})
             if user:
                 return {"status": "success", "user": user}

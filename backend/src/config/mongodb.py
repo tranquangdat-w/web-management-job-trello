@@ -1,14 +1,11 @@
 from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient
-import os
-from dotenv import load_dotenv
+from src.config.environment import env
 
-load_dotenv()
-MONGO_URI = os.getenv("MONGODB_URI")
-DATABASE_NAME = os.getenv("DATABASE_NAME")
+MONGO_URI = env['MONGODB_URI']
+DATABASE_NAME = env['DATABASE_NAME']
 
-
-class MongoConfig:
+class MongoDbConnector:
     """
     Hàm dựng :
     - Tạo một thể hiện của MONGO CLIENT : __mongo_client_instance
@@ -17,34 +14,27 @@ class MongoConfig:
     """
 
     def __init__(self):  # Hàm dựng
-        self.__database_name = DATABASE_NAME
         self.__mongo_client_instance: Optional[AsyncIOMotorClient] = None
         self.__database = None
 
-    async def on_module_init(self):  # Hàm định nghĩa kết nối và truy cập cho DATABASE
-        try:
-            # Kết nối DATABASE
+    async def connect_database(self):  # Hàm định nghĩa kết nối và truy cập cho DATABASE
             self.__mongo_client_instance = AsyncIOMotorClient(
                 MONGO_URI,
                 connectTimeOutMS=10000,  # Thời gian timeout khi kết nối (ms)
                 socketTimeOutMS=20000,  # Thời gian timeout khi thao tác dữ liệu (ms)
             )
 
-            print("Connected to MongoDB")
+            await self.__mongo_client_instance.admin.command('ping')
 
-            # Truy cập DATABASE
-            self.__database = self.__mongo_client_instance.get_database(
-                self.__database_name
-            )
+            self.__database = self.__mongo_client_instance.get_database(DATABASE_NAME)
 
-        except Exception as error:
-            print("Failed to connected MongoDB", error)
-
-    async def on_module_destroy(self):  # Hàm đóng kết nối DATABASE
+    async def close_connect_to_database(self):  # Hàm đóng kết nối DATABASE
         if self.__mongo_client_instance:
             self.__mongo_client_instance.close()  # Đóng kết nối
-            print("Disconnected from MongoDB")
 
-    def database_instance(self):  # Hàm tạo thể hiện cho DATABASE
+    def get_database_instance(self):  # Hàm tạo thể hiện cho DATABASE
+        if not self.__mongo_client_instance:
+            raise Exception("Must connect to database first!")
+
         return self.__database
 
