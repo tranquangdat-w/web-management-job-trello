@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from bson import ObjectId
 from dotenv import load_dotenv
 from src.models.user_model import UserModel
-from src.config.mongodb import MongoDbConnector
+from src.config.mongodb import mongodb_connector
 
 load_dotenv()
 
@@ -12,7 +12,7 @@ USER_COLLECTION = os.getenv('USER_COLLECTION')
 
 class UserService:
     def __init__(self):
-        self.mongo_config = MongoDbConnector()
+        self.mongo_config = mongodb_connector
         self.collection_name = USER_COLLECTION
 
     async def create_user(self, user: UserModel) -> dict:

@@ -7,17 +7,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.middlewares.auth_middleware import AuthMiddleware
 from src.routes.auth_routes import (
-    router as register_or_login_router,
+    router as register_or_login_router
 )
-from src.config.mongodb import MongoDbConnector
+from src.routes.board_routes import (
+    router as board_router
+)
+
+from src.config.mongodb import mongodb_connector
 # from backend.src.routes.user_routes import (
 #     router as user_router,
 # )  # Import router cho các route bảo vệ
 
 APP_HOST = env['APP_HOST']
 APP_PORT = env['APP_PORT']
-
-mongodb_connector = MongoDbConnector()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -60,10 +62,12 @@ app = FastAPI(lifespan=lifespan)
 # #     user_router, prefix="/dashboard"
 # # )  # Route cho các dashboard người dùng (bao gồm phân quyền)
 #
+
+app.include_router(board_router, prefix="/boards")
+
 @app.get("/")
 async def get_root():
-    print(await mongodb_connector.get_database_instance().list_collection_names())
-    return {"heheeh"}
+    return {"Welcome baby": "haha"}
 
 if __name__ == '__main__':
     uvicorn.run('server:app', host=APP_HOST, port=APP_PORT, reload=True)
