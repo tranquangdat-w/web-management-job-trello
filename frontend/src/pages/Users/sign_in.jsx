@@ -91,11 +91,11 @@ function LoginPage() {
               <Link href="#" color="primary" sx={{ display: 'block', marginTop: 1 }}>
                 Forgot password?
               </Link>
-              <Button fullWidth variant="contained" color="primary" sx={{ mt: 2 }} type="submit" sx={{
+              <Button fullWidth variant="contained" color="primary" sx={{
                 backgroundColor: '#6C63FF',
                 color: '#fff',
                 padding: '10px',
-                }}>
+                }} type="submit">
                 Login
               </Button>
             </form>
@@ -142,11 +142,9 @@ function LoginPage() {
                 sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px' }}
                 required
               />
-              <Button fullWidth variant="contained" color="primary" sx={{ mt: 2 }} type="submit" sx={{
-                backgroundColor: '#6C63FF',
+              <Button fullWidth variant="contained" color="primary" sx={{ mt: 2, backgroundColor: '#6C63FF',
                 color: '#fff',
-                padding: '10px',
-                }}>
+                padding: '10px',}} type="submit">
                 Register
               </Button>
             </form>
