@@ -1,13 +1,11 @@
-from bson import ObjectId
+from src.config.environment import env
 from src.config.mongodb import mongodb_connector
 from src.models.board_model import BoardModel
-
-BOARD_COLLECTION_NAME = "boards"
 
 class BoardService:
     def __init__(self):
         self.mongodb_connector = mongodb_connector
-        self.board_collection_name = BOARD_COLLECTION_NAME
+        self.board_collection_name = env['BOARD_COLLECTION_NAME']
 
     async def create_board(self, board: BoardModel) -> dict:
         try:
