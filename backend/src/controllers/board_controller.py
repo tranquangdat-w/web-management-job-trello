@@ -10,3 +10,7 @@ class BoardController:
         board = BoardModel(title = board_data['title'], description = board_data['description'], slug = slugify(board_data['title']))
 
         return await self.board_service.create_board(board)
+
+    async def get_details(self, board_id: str) -> dict:
+        return await self.board_service.get_details(board_id)
+

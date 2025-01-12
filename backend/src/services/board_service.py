@@ -1,3 +1,4 @@
+from fastapi import Path
 from src.config.environment import env
 from src.config.mongodb import mongodb_connector
 from src.models.board_model import BoardModel
@@ -19,5 +20,17 @@ class BoardService:
             return {
                 'status': 'error',
                 'message': f"Error when creating board {str(e)}"
+            }
+
+    async def get_details(self, board_id: str) -> dict:
+        try:
+            board_collection = self.mongodb_connector.get_database_instance()[self.board_collection_name]
+            board = await board_collection.find_one({"_id" : board_id})
+
+            return board
+        except Exception as e:
+            return {
+                'status': 'error',
+                'message': f'Error when finding board {str(e)}'
             }
 

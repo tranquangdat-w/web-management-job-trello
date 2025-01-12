@@ -1,7 +1,6 @@
 from src.validations.board_validation import BoardValidation
 from src.controllers.board_controller import BoardController
-
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Path
 
 router = APIRouter()
 
@@ -23,6 +22,14 @@ async def create_board(board: BoardValidation):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't create board: {e}")
         
 
+@router.get("/{id}")
+async def get_details(id: str = Path(...)):
+        board_controller = BoardController()
+        board = await board_controller.get_details(id)
 
+        if not board: 
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found Board")
+
+        return board        
 
 
