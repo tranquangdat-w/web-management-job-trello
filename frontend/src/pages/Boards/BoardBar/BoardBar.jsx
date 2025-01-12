@@ -42,16 +42,18 @@ const BoardBar = ({ board }) => {
       overflowX: 'auto'
     }}>
       <Box sx={{ display: 'flex', aliginItems: 'center', gap: 0.8 }}>
-        <Chip
-          label={board?.title}
-          clickable
-          onClick= {() => {}}
-          sx={{
-            ...MENU_STYLES,
-            fontSize: '20px',
-            fontWeight: 'bold'
-          }}
-        />
+        <Tooltip title={board?.description}>
+          <Chip
+            label={board?.title}
+            clickable
+            onClick= {() => {}}
+            sx={{
+              ...MENU_STYLES,
+              fontSize: '20px',
+              fontWeight: 'bold'
+            }}
+          />
+        </Tooltip>
 
         <Chip
           icon={<VpnLockIcon fontSize='small'/>}
