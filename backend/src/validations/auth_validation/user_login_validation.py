@@ -1,5 +1,5 @@
 import re
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 
 class UserLoginValidation(BaseModel):
@@ -37,3 +37,6 @@ class UserLoginValidation(BaseModel):
         if not re.search(r"[A-Za-z]", value) or not re.search(r"\d", value):
             raise ValueError("Mật khẩu phải chứa ít nhất một chữ cái và một số")
         return value
+
+    class Config:
+        orm_mode = True
