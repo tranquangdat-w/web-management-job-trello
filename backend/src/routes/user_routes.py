@@ -10,7 +10,7 @@ user_controller = UserController()
 
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="token"
-)  # OAuth2PasswordBearer sẽ giúp bạn nhận token từ header
+)  # OAuth2PasswordBearer sẽ giúp nhận token từ header
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)):

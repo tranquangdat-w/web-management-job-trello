@@ -3,7 +3,6 @@ import smtplib
 from email.mime.text import MIMEText
 from random import randint
 from datetime import datetime, timezone
-from typing import Dict
 from cryptography.hazmat.primitives import hashes
 from passlib.context import CryptContext
 from bson import ObjectId
