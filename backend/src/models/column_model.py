@@ -1,4 +1,8 @@
 import uuid
+<<<<<<< HEAD
+=======
+
+>>>>>>> e3668518f3a2485c3679ae81aefcad516fe606b0
 from mongoengine import Document
 from mongoengine.fields import (
     UUIDField,
@@ -12,6 +16,7 @@ from datetime import datetime, timezone
 class ColumnModel(Document):
     _id = UUIDField(default=uuid.uuid4, primary_key=True)
     title = StringField(required=True, unique=True)
+<<<<<<< HEAD
     boardId = UUIDField(required=True)
     cardOrderIds = ListField(UUIDField(), default=[])
     createdAt = DateTimeField(default=datetime.now(timezone.utc))
@@ -28,3 +33,12 @@ class ColumnModel(Document):
             'updatedAt': self.updatedAt
         }
 
+=======
+
+    boardId = StringField()
+    cardOrderIds = ListField(UUIDField(), default=[])
+
+    createdAt = DateTimeField(default=datetime.now(timezone.utc))
+    updatedAt = DateTimeField(default=None)
+
+>>>>>>> e3668518f3a2485c3679ae81aefcad516fe606b0

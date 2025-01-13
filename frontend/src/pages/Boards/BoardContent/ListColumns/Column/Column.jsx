@@ -289,9 +289,23 @@ const Column = ( { column }) => {
                 >
                   Add Card
                 </Button>
-                <CloseIcon fontSize="small" sx={{ color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black', cursor: 'pointer' }}
-                  onClick={toggleOpenNewCardForm}
-                />
+                <Box sx={{
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: (theme) => theme.palette.mode === 'dark' ? 'grey.700' : 'grey.300'
+                  },
+                  display: 'flex',
+                  justifyContent: 'center',
+                  p: '6px',
+                  borderRadius: '4px'
+                }}>
+                  <CloseIcon fontSize="small"
+                    sx={{
+                      color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black'
+                    }}
+                    onClick={toggleOpenNewCardForm}
+                  />
+                </Box>
               </Box>
             </Box>
           }

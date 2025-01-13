@@ -1,6 +1,6 @@
 import sys
 from src.config.environment import env
-
+from src.utils.constants import WHITElIST_DOMAINS
 import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
@@ -40,10 +40,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# # Thêm CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Cho phép tất cả các domain
+    allow_origins=WHITElIST_DOMAINS,  # Domain
     allow_credentials=True,
     allow_methods=["*"],  # Cho phép tất cả phương thức HTTP
     allow_headers=["*"],  # Cho phép tất cả các header
