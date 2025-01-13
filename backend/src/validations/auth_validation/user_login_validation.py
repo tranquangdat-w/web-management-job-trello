@@ -1,171 +1,39 @@
-import os
-import smtplib
-from email.mime.text import MIMEText
-from random import randint
-from datetime import datetime, timezone
-from typing import Dict
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
-from passlib.context import CryptContext
-from bson import ObjectId
-import pyotp
-from .models import UserModel
-from .config import MongoConfig
-
-USER_COLLECTION = "users"
+import re
+from pydantic import BaseModel, Field, field_validator
 
 
-class UserService:
-    def __init__(self):
-        self.mongo_config = MongoConfig()
-        self.collection_name = USER_COLLECTION
-        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+class UserLoginValidation(BaseModel):
+    # Tên đăng nhập
+    # - Bắt buộc
+    # - Độ dài tối thiểu: 6 ký tự
+    # - Độ dài tối đa: 20 ký tự
+    # - Chỉ chứa chữ cái và số
+    username: str = Field(
+        ...,
+        min_length=6,
+        max_length=20,
+        pattern=r"^[a-zA-Z0-9]+$",
+        description="Tên đăng nhập (chỉ chứa chữ cái và số, từ 6 - 20 ký tự)",
+    )
 
-    def send_verification_email(self, email: str, verification_code: int):
-        """Gửi email xác thực với mã xác nhận."""
-        msg = MIMEText(f"Mã xác thực của bạn là: {verification_code}")
-        msg["Subject"] = "Xác thực tài khoản"
-        msg["From"] = os.getenv("EMAIL_SENDER")
-        msg["To"] = email
+    # Mật khẩu
+    # - Bắt buộc
+    # - Độ dài từ 8 đến 64 ký tự
+    # - Validator sẽ kiểm tra mật khẩu phải chứa ít nhất một chữ cái và một số
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=64,
+        description="Mật khẩu (phải chứa ít nhất một chữ cái và một số)",
+    )
 
-        try:
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-                server.login(os.getenv("EMAIL_SENDER"), os.getenv("EMAIL_PASSWORD"))
-                server.sendmail(os.getenv("EMAIL_SENDER"), email, msg.as_string())
-            return True
-        except Exception as e:
-            return False
-
-    def generate_otp_secret(self, user_id: str):
-        """Tạo mã OTP cho người dùng"""
-        totp = pyotp.TOTP(user_id)
-        return totp.now()  # Tạo mã OTP
-
-    def verify_otp(self, user_id: str, otp: str) -> bool:
-        """Xác minh mã OTP"""
-        totp = pyotp.TOTP(user_id)
-        return totp.verify(otp)
-
-    async def create_user(self, user: UserModel) -> dict:
-        """Tạo người dùng và gửi mã xác thực qua email."""
-        try:
-            # Mã xác thực gửi qua email
-            verification_code = randint(100000, 999999)
-            email_sent = self.send_verification_email(user.email, verification_code)
-            if email_sent:
-                # Tiến hành lưu người dùng vào CSDL
-                hashed_password = self.pwd_context.hash(user.password)
-                user_data = user.user_dict()
-                user_data["password"] = hashed_password
-                user_data["verification_code"] = verification_code  # Lưu mã xác thực
-                user_data["created_at"] = datetime.now(timezone.utc)
-
-                collection = self.mongo_config.database_instance()[self.collection_name]
-                result = await collection.insert_one(user_data)
-
-                return {
-                    "status": "success",
-                    "message": "Người dùng đã được tạo. Vui lòng kiểm tra email để xác thực.",
-                    "user_id": str(result.inserted_id),
-                }
-            else:
-                return {"status": "fail", "message": "Không thể gửi email xác thực."}
-        except Exception as e:
-            return {"status": "error", "message": f"Lỗi khi tạo người dùng: {str(e)}"}
-
-    async def reset_password(self, email: str) -> dict:
-        """Khôi phục mật khẩu thông qua email."""
-        try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
-            user = await collection.find_one({"email": email})
-            if user:
-                reset_code = randint(100000, 999999)
-                # Gửi mã khôi phục mật khẩu qua email
-                email_sent = self.send_verification_email(email, reset_code)
-                if email_sent:
-                    await collection.update_one(
-                        {"email": email},
-                        {"$set": {"reset_code": reset_code}},
-                    )
-                    return {
-                        "status": "success",
-                        "message": "Mã khôi phục mật khẩu đã được gửi.",
-                    }
-                else:
-                    return {
-                        "status": "fail",
-                        "message": "Không thể gửi email khôi phục.",
-                    }
-            else:
-                return {"status": "fail", "message": "Email không tồn tại."}
-        except Exception as e:
-            return {
-                "status": "error",
-                "message": f"Lỗi khi khôi phục mật khẩu: {str(e)}",
-            }
-
-    async def assign_role(self, user_id: str, role: str) -> dict:
-        """Gán vai trò cho người dùng"""
-        try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
-            result = await collection.update_one(
-                {"_id": ObjectId(user_id)},
-                {"$set": {"role": role}},
-            )
-            if result.matched_count:
-                return {
-                    "status": "success",
-                    "message": f"Vai trò {role} đã được gán cho người dùng.",
-                }
-            else:
-                return {"status": "fail", "message": "Người dùng không tồn tại."}
-        except Exception as e:
-            return {"status": "error", "message": f"Lỗi khi gán vai trò: {str(e)}"}
-
-    async def get_user_by_id(self, user_id: str) -> dict:
-        """Lấy thông tin người dùng theo ID"""
-        try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
-            user = await collection.find_one({"_id": ObjectId(user_id)})
-            if user:
-                return {"status": "success", "user": user}
-            else:
-                return {"status": "fail", "message": "Người dùng không tồn tại."}
-        except Exception as e:
-            return {
-                "status": "error",
-                "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
-            }
-
-    async def update_user(self, user_id: str, updated_data: dict) -> dict:
-        """Cập nhật thông tin người dùng"""
-        try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
-            result = await collection.update_one(
-                {"_id": ObjectId(user_id)},
-                {"$set": updated_data},
-            )
-            if result.matched_count:
-                return {
-                    "status": "success",
-                    "message": "Thông tin người dùng đã được cập nhật.",
-                }
-            else:
-                return {"status": "fail", "message": "Người dùng không tồn tại."}
-        except Exception as e:
-            return {
-                "status": "error",
-                "message": f"Lỗi khi cập nhật thông tin người dùng: {str(e)}",
-            }
-
-    async def delete_user(self, user_id: str) -> dict:
-        """Xóa người dùng"""
-        try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
-            result = await collection.delete_one({"_id": ObjectId(user_id)})
-            if result.deleted_count:
-                return {"status": "success", "message": "Người dùng đã được xóa."}
-            else:
-                return {"status": "fail", "message": "Người dùng không tồn tại."}
-        except Exception as e:
-            return {"status": "error", "message": f"Lỗi khi xóa người dùng: {str(e)}"}
+    # Validator kiểm tra mật khẩu
+    @field_validator("password")
+    def validate_password(cls, value):
+        """
+        Kiểm tra xem mật khẩu có chứa ít nhất một chữ cái và một số hay không.
+        Nếu không thỏa mãn thì ném lỗi.
+        """
+        if not re.search(r"[A-Za-z]", value) or not re.search(r"\d", value):
+            raise ValueError("Mật khẩu phải chứa ít nhất một chữ cái và một số")
+        return value
