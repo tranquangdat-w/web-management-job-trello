@@ -1,18 +1,17 @@
-from src.config.environment import env
 from src.config.mongodb import mongodb_connector
 from src.models.column_model import ColumnModel
+from src.models.board_model import BoardModel
 
 class ColumnService:
-    def __init__(self):
-        self.mongodb_connector = mongodb_connector
-        self.column_collection_name = env['COLUMN_COLLECTION_NAME']
-
     async def create_column(self, column: ColumnModel) -> dict:
         try:
-            column_collection = self.mongodb_connector.get_database_instance()[self.column_collection_name]
-            
-            result = await column_collection.insert_one(column.create_column())
-            result = await column_collection.find_one({"_id" : result.inserted_id})
+            result = await ColumnModel.create_column(column)
+
+            result = await mongodb_connector.get_database_instance()[ColumnModel.column_collection_name].find_one({"_id" : result.inserted_id})
+
+            if result:
+                result['cards'] = []
+                await BoardModel.push_column_order_ids(result)
 
             return result
         except Exception as e:

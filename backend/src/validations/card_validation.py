@@ -6,7 +6,7 @@ class CardValidation(BaseModel):
     boardId:  str =  Field(...)
     columnId: str = Field(...)
 
-    @field_validator("description", "title", mode = 'before')
+    @field_validator("title", mode = 'before')
     def valid_strip_whitespace(cls, value):
         return value.strip()
 

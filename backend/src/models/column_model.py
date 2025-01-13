@@ -1,8 +1,6 @@
 import uuid
-<<<<<<< HEAD
-=======
-
->>>>>>> e3668518f3a2485c3679ae81aefcad516fe606b0
+from src.config.mongodb import mongodb_connector
+from src.config.environment import env
 from mongoengine import Document
 from mongoengine.fields import (
     UUIDField,
@@ -16,29 +14,34 @@ from datetime import datetime, timezone
 class ColumnModel(Document):
     _id = UUIDField(default=uuid.uuid4, primary_key=True)
     title = StringField(required=True, unique=True)
-<<<<<<< HEAD
     boardId = UUIDField(required=True)
     cardOrderIds = ListField(UUIDField(), default=[])
     createdAt = DateTimeField(default=datetime.now(timezone.utc))
     updatedAt = DateTimeField(default=None)
+    column_collection_name = env['COLUMN_COLLECTION_NAME']
 
-    def create_column(self):
+    def create_column_data(self):
         return {
             '_id': str(self._id),
             'title': self.title,
             'boardId': self.boardId,
             'cardOrderIds': self.cardOrderIds,
-            'cards': [],
             'createdAt': self.createdAt,
             'updatedAt': self.updatedAt
         }
 
-=======
+    @staticmethod
+    async def create_column(column: 'ColumnModel'):
+        return await mongodb_connector.get_database_instance()[ColumnModel.column_collection_name].insert_one(column.create_column_data())
 
-    boardId = StringField()
-    cardOrderIds = ListField(UUIDField(), default=[])
 
-    createdAt = DateTimeField(default=datetime.now(timezone.utc))
-    updatedAt = DateTimeField(default=None)
-
->>>>>>> e3668518f3a2485c3679ae81aefcad516fe606b0
+    @staticmethod
+    async def push_card_order_ids(card):
+        column_collection = mongodb_connector.get_database_instance()[ColumnModel.column_collection_name]
+        result = await column_collection.find_one_and_update(
+            {"_id": card["columnId"]},
+            {"$push": {"cardOrderIds": card["_id"]}},
+            return_document=True
+        )
+        return result
+  

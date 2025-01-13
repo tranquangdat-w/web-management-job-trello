@@ -1,4 +1,6 @@
 import uuid
+from src.config.mongodb import mongodb_connector
+from src.config.environment import env
 from mongoengine import Document
 from mongoengine.fields import (
     UUIDField,
@@ -15,8 +17,9 @@ class CardModel(Document):
     columnId = UUIDField(required=True)
     createdAt = DateTimeField(default=datetime.now(timezone.utc))
     updatedAt = DateTimeField(default=None)
+    card_collection_name = env['CARD_COLLECTION_NAME']
 
-    def create_card(self):
+    def create_card_data(self):
         return {
             '_id': str(self._id),
             'title': self.title,
@@ -25,4 +28,10 @@ class CardModel(Document):
             'createdAt': self.createdAt,
             'updatedAt': self.updatedAt
         }
+    @staticmethod
+    async def create_card(card: 'CardModel'):
+        return await mongodb_connector.get_database_instance()[CardModel.card_collection_name].insert_one(card.create_card_data())
+
+
+    
 
