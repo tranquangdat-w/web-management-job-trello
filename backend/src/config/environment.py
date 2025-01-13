@@ -10,4 +10,3 @@ env = {
     'APP_PORT' : int(os.getenv('APP_PORT', 8000)),
     'BOARD_COLLECTION_NAME': os.getenv('BOARD_COLLECTION_NAME', '')
 }
-

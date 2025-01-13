@@ -1,4 +1,3 @@
-from fastapi import Path
 from src.config.environment import env
 from src.config.mongodb import mongodb_connector
 from src.models.board_model import BoardModel

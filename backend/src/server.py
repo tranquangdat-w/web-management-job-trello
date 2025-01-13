@@ -6,14 +6,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.middlewares.auth_middleware import AuthMiddleware
-from src.routes.auth_routes import (
-    router as register_or_login_router
-)
-from src.routes.board_routes import (
-    router as board_router
-)
+from src.routes.auth_routes import (router as register_or_login_router)
+from src.routes.board_routes import (router as board_router)
+from src.routes.card_routes import (router as card_router)
+from src.routes.column_routes import (router as column_router)
 
 from src.config.mongodb import mongodb_connector
+
 # from backend.src.routes.user_routes import (
 #     router as user_router,
 # )  # Import router cho các route bảo vệ
@@ -42,17 +41,14 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 # # Thêm CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # Cho phép tất cả các domain
-#     allow_credentials=True,
-#     allow_methods=["*"],  # Cho phép tất cả phương thức HTTP
-#     allow_headers=["*"],  # Cho phép tất cả các header
-# )
-#
-#
-#
-#
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cho phép tất cả các domain
+    allow_credentials=True,
+    allow_methods=["*"],  # Cho phép tất cả phương thức HTTP
+    allow_headers=["*"],  # Cho phép tất cả các header
+)
+
 # # Thêm AuthMiddleware để xử lý xác thực
 # app.add_middleware(AuthMiddleware)
 #
@@ -64,6 +60,8 @@ app = FastAPI(lifespan=lifespan)
 #
 
 app.include_router(board_router, prefix="/boards")
+app.include_router(card_router, prefix="/cards")
+app.include_router(column_router, prefix="/columns")
 
 @app.get("/")
 async def get_root():
