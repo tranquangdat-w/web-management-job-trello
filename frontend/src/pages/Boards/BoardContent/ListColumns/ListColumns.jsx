@@ -6,10 +6,33 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { useState } from 'react'
+import { toast, Bounce } from 'react-toastify'
 
 const ListColumns = ( { columns } ) => {
   const [isOpenNewColumnForm, setIsOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setIsOpenNewColumnForm(!isOpenNewColumnForm)
+
+  const [newColumnTitle, setNewColumnTitle] = useState('')
+
+  const addNewColumn = () => {
+    if (!newColumnTitle) {
+      return
+    }
+
+    toast.success('Created new column!', {
+      position: 'bottom-left',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark',
+      transition: Bounce
+    })
+    toggleOpenNewColumnForm()
+    setNewColumnTitle('')
+  }
 
   return (
     <>
@@ -58,11 +81,11 @@ const ListColumns = ( { columns } ) => {
               minWidth: (theme) => theme.trelloCustom.columnWidth,
               maxWidth: (theme) => theme.trelloCustom.columnWidth,
               bgcolor: (theme) => theme.palette.mode === 'dark' ? '#101204' : '#f1f2f4',
-              minHeight: '125px',
-              maxHeight: '125px',
               marginX: (theme) => theme.trelloCustom.marginLeftColumn,
               borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
               display: 'flex',
+              alignSelf: 'flex-start',
+              height: 'auto',
               flexDirection: 'column',
               gap: 1.5,
               p: 1.5
@@ -73,6 +96,8 @@ const ListColumns = ( { columns } ) => {
                 size="small"
                 placeholder={'Enter list name'}
                 autoFocus
+                value={newColumnTitle}
+                onChange={(e) => setNewColumnTitle(e.target.value)}
                 inputProps={{
                   sx: {
                     '&::placeholder': {
@@ -109,13 +134,15 @@ const ListColumns = ( { columns } ) => {
                   }
                 }}
                 variant="contained"
-                size="small">
+                size="small"
+                disableElevation={true}
+                onClick={addNewColumn}
+                >
                   Add list
                 </Button>
                 <CloseIcon fontSize="small" sx={{ color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black', cursor: 'pointer' }}
                   onClick={toggleOpenNewColumnForm}
                 />
-
               </Box>
             </Box>
           }
