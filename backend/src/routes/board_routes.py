@@ -14,7 +14,8 @@ async def create_board(board: BoardValidation):
         board_controller = BoardController()
         result = await board_controller.create_board({
             'title': board.title,
-            'description': board.description
+            'description': board.description,
+            'boardType': board.boardType
         })
 
         return result

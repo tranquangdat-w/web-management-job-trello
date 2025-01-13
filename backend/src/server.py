@@ -1,19 +1,15 @@
 import sys
 from src.config.environment import env
-
+from src.utils.constants import WHITElIST_DOMAINS
 import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.middlewares.auth_middleware import AuthMiddleware
-from src.routes.auth_routes import (
-    router as register_or_login_router
-)
-from src.routes.board_routes import (
-    router as board_router
-)
-
+from src.routes.auth_routes import (router as register_or_login_router)
+from src.routes.board_routes import (router as board_router)
 from src.config.mongodb import mongodb_connector
+
 # from backend.src.routes.user_routes import (
 #     router as user_router,
 # )  # Import router cho các route bảo vệ
@@ -41,14 +37,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# # Thêm CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # Cho phép tất cả các domain
-#     allow_credentials=True,
-#     allow_methods=["*"],  # Cho phép tất cả phương thức HTTP
-#     allow_headers=["*"],  # Cho phép tất cả các header
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=WHITElIST_DOMAINS,  # Domain
+    allow_credentials=True,
+    allow_methods=["*"],  # Cho phép tất cả phương thức HTTP
+    allow_headers=["*"],  # Cho phép tất cả các header
+)
 #
 #
 #
