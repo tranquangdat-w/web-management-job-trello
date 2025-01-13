@@ -66,7 +66,14 @@ class AuthService:
 
         # Tạo đối tượng người dùng và lưu vào cơ sở dữ liệu
         user = UserModel(
-            username=data.username, email=data.email, hashed_password=hashed_password
+            username=data.username,
+            email=data.email,
+            hashed_password=hashed_password,
+            fullname=data.fullname,
+            date_of_birth=data.date_of_birth,
+            sex=data.sex,
+            phone_number=data.phone_number,
+            address=data.address,
         )
 
         result = await self.user_service.create_user(user)
