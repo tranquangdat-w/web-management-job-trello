@@ -39,11 +39,16 @@ async def user_register_controller(data: UserRegisterValidation):
 async def verify_token_controller(token: str):
     try:
         # Xác minh token qua dịch vụ
-        payload = auth_service.verify_token(token)
+        payload = await auth_service.verify_token(
+            token
+        )  # Đảm bảo verify_token là async nếu cần await
         return {"message": "Token hợp lệ", "payload": payload}
     except ValueError as e:
         # Bắt lỗi ValueError khi token không hợp lệ
         raise HTTPException(status_code=401, detail=f"Token không hợp lệ: {str(e)}")
+    except HTTPException as e:
+        # Nếu có lỗi HTTPException (ví dụ token hết hạn)
+        raise e
     except Exception as e:
         # Bắt các lỗi khác và trả về HTTPException với mã lỗi 500
         raise HTTPException(status_code=500, detail="Lỗi xác minh token")
