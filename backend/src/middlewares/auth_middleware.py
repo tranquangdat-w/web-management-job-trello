@@ -18,9 +18,11 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if token.startswith("Bearer "):
             token = token[7:]
 
-        payload = decode_jwt(token)
-        request.state.user = payload
+        try:
+            payload = decode_jwt(token)
+            request.state.user = payload
+        except Exception as e:
+            raise HTTPException(status_code=401, detail=f"Token không hợp lệ: {str(e)}")
 
-        response = call_next(request)
+        response = await call_next(request)
         return response
-
