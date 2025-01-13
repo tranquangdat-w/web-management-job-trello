@@ -5,23 +5,22 @@ from random import randint
 from datetime import datetime, timezone
 from typing import Dict
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
 from passlib.context import CryptContext
 from bson import ObjectId
 import pyotp
 from src.models.user_model import UserModel
 from src.config.mongodb import MongoConfig
 
-USER_COLLECTION = "users"
+USER_COLLECTION = "user_test"  # Đổi tên collection thành 'user_test'
 
 
 class UserService:
     def __init__(self):
         self.mongo_config = MongoConfig()
-        self.collection_name = USER_COLLECTION
+        self.collection_name = USER_COLLECTION  # Sử dụng 'user_test' làm tên collection
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-    def send_verification_email(self, email: str, verification_code: int):
+    def send_verification_email(self, email: str, verification_code: int) -> bool:
         """Gửi email xác thực với mã xác nhận."""
         msg = MIMEText(f"Mã xác thực của bạn là: {verification_code}")
         msg["Subject"] = "Xác thực tài khoản"
@@ -34,9 +33,10 @@ class UserService:
                 server.sendmail(os.getenv("EMAIL_SENDER"), email, msg.as_string())
             return True
         except Exception as e:
+            print(f"Error sending email: {str(e)}")
             return False
 
-    def generate_otp_secret(self, user_id: str):
+    def generate_otp_secret(self, user_id: str) -> str:
         """Tạo mã OTP cho người dùng"""
         totp = pyotp.TOTP(user_id)
         return totp.now()  # Tạo mã OTP
@@ -46,9 +46,48 @@ class UserService:
         totp = pyotp.TOTP(user_id)
         return totp.verify(otp)
 
+    async def get_user_by_username(self, username: str) -> dict:
+        """Lấy thông tin người dùng theo tên đăng nhập"""
+        try:
+            collection = self.mongo_config.database_instance()[self.collection_name]
+            user = await collection.find_one({"username": username})
+            if user:
+                return {"status": "success", "user": user}
+            else:
+                return {"status": "fail", "message": "Người dùng không tồn tại."}
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
+            }
+
+    async def get_user_by_email(self, email: str) -> dict:
+        """Lấy thông tin người dùng theo email"""
+        try:
+            collection = self.mongo_config.database_instance()[self.collection_name]
+            user = await collection.find_one({"email": email})
+            if user:
+                return {"status": "success", "user": user}
+            else:
+                return {"status": "fail", "message": "Email không tồn tại."}
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
+            }
+
     async def create_user(self, user: UserModel) -> dict:
         """Tạo người dùng và gửi mã xác thực qua email."""
         try:
+            # Kiểm tra tài khoản và email đã tồn tại chưa
+            existing_user = await self.get_user_by_username(user.username)
+            if existing_user["status"] == "success":
+                return {"status": "fail", "message": "Tài khoản đã tồn tại"}
+
+            existing_email = await self.get_user_by_email(user.email)
+            if existing_email["status"] == "success":
+                return {"status": "fail", "message": "Email đã được sử dụng"}
+
             # Mã xác thực gửi qua email
             verification_code = randint(100000, 999999)
             email_sent = self.send_verification_email(user.email, verification_code)
@@ -72,21 +111,6 @@ class UserService:
                 return {"status": "fail", "message": "Không thể gửi email xác thực."}
         except Exception as e:
             return {"status": "error", "message": f"Lỗi khi tạo người dùng: {str(e)}"}
-
-    async def get_user_by_username(self, username: str) -> dict:
-        """Lấy thông tin người dùng theo tên đăng nhập"""
-        try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
-            user = await collection.find_one({"username": username})
-            if user:
-                return {"status": "success", "user": user}
-            else:
-                return {"status": "fail", "message": "Người dùng không tồn tại."}
-        except Exception as e:
-            return {
-                "status": "error",
-                "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
-            }
 
     async def reset_password(self, email: str) -> dict:
         """Khôi phục mật khẩu thông qua email."""

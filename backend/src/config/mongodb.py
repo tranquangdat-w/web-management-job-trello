@@ -4,7 +4,10 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-MONGO_URI = os.getenv("MONGODB_URI")
+
+MONGO_URI = os.getenv("MONGO_CLOUD_TEST_URI")
+
+
 DATABASE_NAME = os.getenv("DATABASE_NAME")
 
 
@@ -38,8 +41,8 @@ class MongoConfig:
                 # Tạo kết nối MongoDB (chỉ thực hiện một lần)
                 self.__mongo_client_instance = AsyncIOMotorClient(
                     MONGO_URI,
-                    connectTimeOutMS=10000,  # Thời gian timeout khi kết nối (ms)
-                    socketTimeOutMS=20000,  # Thời gian timeout khi thao tác dữ liệu (ms)
+                    connectTimeoutMS=10000,  # Thời gian timeout khi kết nối (ms)
+                    socketTimeoutMS=20000,  # Thời gian timeout khi thao tác dữ liệu (ms)
                 )
 
                 print("Kết nối đến MongoDB thành công")
@@ -50,7 +53,7 @@ class MongoConfig:
                 )
 
             except Exception as error:
-                print("Kết nối MongoDB thất bại:", error)
+                print(f"Kết nối MongoDB thất bại: {error}")
 
     async def on_module_destroy(self):
         """Đóng kết nối MongoDB."""
