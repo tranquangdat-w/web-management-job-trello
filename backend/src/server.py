@@ -10,12 +10,8 @@ from src.routes.auth_routes import (router as register_or_login_router)
 from src.routes.board_routes import (router as board_router)
 from src.routes.card_routes import (router as card_router)
 from src.routes.column_routes import (router as column_router)
-
 from src.config.mongodb import mongodb_connector
-
-# from backend.src.routes.user_routes import (
-#     router as user_router,
-# )  # Import router cho các route bảo vệ
+from src.routes.user_routes import (router as user_router)  # Import router cho các route bảo vệ
 
 APP_HOST = env['APP_HOST']
 APP_PORT = env['APP_PORT']
@@ -48,15 +44,18 @@ app.add_middleware(
     allow_headers=["*"],  # Cho phép tất cả các header
 )
 
-# # Thêm AuthMiddleware để xử lý xác thực
+# Thêm AuthMiddleware để xử lý xác thực token
 # app.add_middleware(AuthMiddleware)
-#
-# # Thêm các route vào server
-# app.include_router(register_or_login_router, prefix="/user")  # Đăng ký, đăng nhập
-# # app.include_router(
-# #     user_router, prefix="/dashboard"
-# # )  # Route cho các dashboard người dùng (bao gồm phân quyền)
-#
+
+# Đăng ký các route vào ứng dụng FastAPI
+app.include_router(
+    register_or_login_router, prefix="/user"
+)  # Route đăng ký, đăng nhập người dùng
+
+# Đưa ra các route dành cho dashboard hoặc các tài nguyên bảo vệ khác (nếu có)
+app.include_router(
+    user_router, prefix="/dashboard"
+)
 
 app.include_router(board_router, prefix="/boards")
 app.include_router(card_router, prefix="/cards")

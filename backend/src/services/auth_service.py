@@ -1,9 +1,7 @@
 from passlib.context import CryptContext
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from src.utils.jwt_util import create_jwt, decode_jwt
-from src.validations.auth_validation.user_login_validation import (
-    UserLoginValidation,
-)
+from src.validations.auth_validation.user_login_validation import UserLoginValidation
 from src.validations.auth_validation.user_register_validation import (
     UserRegisterValidation,
 )
@@ -29,49 +27,64 @@ class AuthService:
         """
         Đăng nhập người dùng và tạo JWT
         """
-        # Truy vấn người dùng từ MongoDB
         user = await self.user_service.get_user_by_username(data.username)
 
-        if not user:
+        # Kiểm tra xem người dùng có tồn tại và mật khẩu có đúng không
+        if not user or not self.verify_password(data.password, user["hashed_password"]):
             raise HTTPException(
-                status_code=401, detail="Sai tên tài khoản hoặc mật khẩu"
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Sai tên tài khoản hoặc mật khẩu",
             )
 
-        if not self.verify_password(data.password, user["hashed_password"]):
-            raise HTTPException(
-                status_code=401, detail="Sai tên tài khoản hoặc mật khẩu"
-            )
-
-        # Tạo token
-        token = create_jwt({"sub": data.username})
+        # Tạo và trả về token
+        token = create_jwt(
+            {
+                "sub": user["username"],
+                "user_id": user["user_id"],
+                "email": user["email"],
+            }
+        )
         return {"access_token": token, "token_type": "bearer"}
 
     async def register_user(self, data: UserRegisterValidation):
         """
-        Đăng ký người dùng
+        Đăng ký người dùng mới
         """
-        # Kiểm tra người dùng đã tồn tại trong MongoDB
-        existing_user = await self.user_service.get_user_by_username(data.username)
-        if existing_user:
-            raise HTTPException(status_code=400, detail="Tài khoản đã tồn tại")
+        # Kiểm tra người dùng đã tồn tại hay chưa
+        if await self.user_service.get_user_by_username(data.username):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Tài khoản đã tồn tại"
+            )
 
-        existing_email = await self.user_service.get_user_by_email(data.email)
-        if existing_email:
-            raise HTTPException(status_code=400, detail="Email đã tồn tại")
+        if await self.user_service.get_user_by_email(data.email):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Email đã tồn tại"
+            )
 
         # Mã hóa mật khẩu
         hashed_password = self.hash_password(data.password)
 
-        # Lưu người dùng vào MongoDB
+        # Tạo đối tượng người dùng và lưu vào cơ sở dữ liệu
         user = UserModel(
-            username=data.username, email=data.email, password=hashed_password
+            username=data.username,
+            email=data.email,
+            hashed_password=hashed_password,
+            fullname=data.fullname,
+            date_of_birth=data.date_of_birth,
+            sex=data.sex,
+            phone_number=data.phone_number,
+            address=data.address,
         )
+
         result = await self.user_service.create_user(user)
 
-        if result["status"] == "success":
+        if result.get("status") == "success":
             return {"message": "Đăng ký thành công"}
         else:
-            raise HTTPException(status_code=400, detail=result["message"])
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=result.get("message", "Có lỗi xảy ra khi đăng ký"),
+            )
 
     def verify_token(self, token: str) -> dict:
         """
@@ -81,8 +94,12 @@ class AuthService:
             payload = decode_jwt(token)
             return payload
         except ValueError as e:
-            raise HTTPException(status_code=401, detail=f"Token không hợp lệ: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail=f"Token không hợp lệ: {str(e)}",
+            )
         except Exception as e:
             raise HTTPException(
-                status_code=500, detail=f"Lỗi khi xác minh token: {str(e)}"
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Lỗi khi xác minh token: {str(e)}",
             )

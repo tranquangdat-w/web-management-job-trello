@@ -2,15 +2,12 @@ from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient
 from src.config.environment import env
 
-MONGO_URI = env['MONGODB_URI']
-DATABASE_NAME = env['DATABASE_NAME']
 
 class MongoDbConnector:
     """
-    Hàm dựng :
-    - Tạo một thể hiện của MONGO CLIENT : __mongo_client_instance
-    - Tạo một thể hiện của DATABASE : .database_instance()
-    - Tạo một thể hiện của COLLECTION theo tên COLLECTION đó với tham số truyền vào collection_name : .collection_instance()
+    Lớp Singleton quản lý kết nối MongoDB và đảm bảo chỉ có một thể hiện duy nhất.
+    - Tạo một thể hiện duy nhất của Mongo client.
+    - Cung cấp quyền truy cập vào cơ sở dữ liệu và collection.
     """
 
     def __init__(self):  # Hàm dựng
@@ -19,14 +16,14 @@ class MongoDbConnector:
 
     async def connect_database(self):  # Hàm định nghĩa kết nối và truy cập cho DATABASE
             self.__mongo_client_instance = AsyncIOMotorClient(
-                MONGO_URI,
+                env['MONGODB_URI'],
                 connectTimeOutMS=10000,  # Thời gian timeout khi kết nối (ms)
                 socketTimeOutMS=20000,  # Thời gian timeout khi thao tác dữ liệu (ms)
             )
 
             await self.__mongo_client_instance.admin.command('ping')
 
-            self.__database = self.__mongo_client_instance.get_database(DATABASE_NAME)
+            self.__database = self.__mongo_client_instance.get_database(env['DATABASE_NAME'])
 
     async def close_connect_to_database(self):  # Hàm đóng kết nối DATABASE
         if self.__mongo_client_instance:
@@ -39,4 +36,3 @@ class MongoDbConnector:
         return self.__database
 
 mongodb_connector = MongoDbConnector()
-

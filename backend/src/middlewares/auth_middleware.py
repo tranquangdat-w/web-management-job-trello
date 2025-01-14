@@ -1,26 +1,36 @@
-from fastapi import Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-from dotenv import load_dotenv
-import os
-
-from src.utils.jwt_util import decode_jwt
-
-load_dotenv()
-SECRET_KEY = os.getenv("SECRET_KEY")
+from fastapi.exceptions import HTTPException
+from starlette.requests import Request
 
 
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        token = request.headers.get("Authorization")
-        if not token:
+        # Bỏ qua kiểm tra token cho các endpoint đặc biệt
+        if request.url.path in [
+            "/",
+            "/docs",
+            "/redoc",
+            "/openapi.json",
+            "/user/register",
+            "/boards",
+            "/columns",
+            "/cards",
+        ]:
+            return await call_next(request)
+
+        # Kiểm tra token từ header Authorization
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
             raise HTTPException(status_code=401, detail="Không có token")
 
-        if token.startswith("Bearer "):
-            token = token[7:]
+        token = auth_header.split(" ")[1]
 
-        payload = decode_jwt(token)
-        request.state.user = payload
+        # Thực hiện xác thực token (tuỳ chỉnh theo yêu cầu của bạn)
+        if not self.validate_token(token):
+            raise HTTPException(status_code=401, detail="Token không hợp lệ")
 
-        response = call_next(request)
-        return response
+        return await call_next(request)
 
+    def validate_token(self, token: str) -> bool:
+        # Logic xác thực token (tuỳ chỉnh)
+        return token == "your-valid-token"

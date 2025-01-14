@@ -1,5 +1,6 @@
 import re
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
 
 class UserLoginValidation(BaseModel):
     # Tên đăng nhập
@@ -37,3 +38,5 @@ class UserLoginValidation(BaseModel):
             raise ValueError("Mật khẩu phải chứa ít nhất một chữ cái và một số")
         return value
 
+    class Config:
+        from_attributes = True

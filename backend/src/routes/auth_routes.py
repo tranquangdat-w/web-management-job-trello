@@ -1,17 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from src.services.auth_service import AuthService
-
-from src.validations.auth_validation.user_login_validation import (
-    UserLoginValidation,
-)
-from src.validations.auth_validation.user_register_validation import (
-    UserRegisterValidation,
-)
-from src.utils.jwt_util import (
-    create_jwt,
-    decode_jwt,
-)
+from src.validations.auth_validation.user_login_validation import UserLoginValidation
+from src.validations.auth_validation.user_register_validation import (UserRegisterValidation)
+from src.utils.jwt_util import create_jwt, decode_jwt
 
 router = APIRouter()
 
@@ -28,9 +20,7 @@ async def user_login(data: UserLoginValidation):
         user_data = await auth_service.login_user(data)
         if user_data:
             # Tạo JWT token cho người dùng sau khi đăng nhập thành công
-            token = create_jwt(
-                {"user_id": user_data["user_id"], "email": user_data["email"]}
-            )
+            token = user_data["access_token"]
             return {"message": "Đăng nhập thành công", "token": token}
         else:
             raise HTTPException(
