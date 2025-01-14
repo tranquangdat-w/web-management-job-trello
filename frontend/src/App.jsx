@@ -8,7 +8,7 @@ const App = () => {
   return (
     <>
       {/* This is Board details not board list*/}
-      <Home />
+      <LoginPage />
     </>
   )
 }
