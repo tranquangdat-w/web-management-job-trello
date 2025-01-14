@@ -1,7 +1,6 @@
 from src.services.user_service import UserService
 from src.models.user_model import UserModel
 
-
 class UserController:
     """
     Controller để trung gian giữa service và routes

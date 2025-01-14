@@ -12,6 +12,9 @@ class AuthMiddleware(BaseHTTPMiddleware):
             "/redoc",
             "/openapi.json",
             "/user/register",
+            "/boards",
+            "/columns",
+            "/cards",
         ]:
             return await call_next(request)
 

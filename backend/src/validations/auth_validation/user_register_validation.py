@@ -155,3 +155,4 @@ class UserRegisterValidation(BaseModel):
         if not re.match(r"^[\w\s]+$", value):
             raise ValueError("Địa chỉ không hợp lệ.")
         return value
+

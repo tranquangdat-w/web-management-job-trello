@@ -8,15 +8,15 @@ from passlib.context import CryptContext
 from bson import ObjectId
 import pyotp
 from src.models.user_model import UserModel
-from src.config.mongodb import MongoConfig
+from src.config.mongodb import mongodb_connector
 
 USER_COLLECTION = "user_test"  # Đổi tên collection thành 'user_test'
 
 
 class UserService:
     def __init__(self):
-        self.mongo_config = MongoConfig()
-        self.collection_name = USER_COLLECTION  # Sử dụng 'user_test' làm tên collection
+        self.mongo_config = mongodb_connector
+        self.collection_name = USER_COLLECTION
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
     def send_verification_email(self, email: str, verification_code: int) -> bool:
@@ -48,7 +48,7 @@ class UserService:
     async def get_user_by_username(self, username: str) -> dict:
         """Lấy thông tin người dùng theo tên đăng nhập"""
         try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
+            collection = self.mongo_config.get_database_instance()[self.collection_name]
             user = await collection.find_one({"username": username})
             if user:
                 return {"status": "success", "user": user}
@@ -63,7 +63,7 @@ class UserService:
     async def get_user_by_email(self, email: str) -> dict:
         """Lấy thông tin người dùng theo email"""
         try:
-            collection = self.mongo_config.database_instance()[self.collection_name]
+            collection = self.mongo_config.get_database_instance()[self.collection_name]
             user = await collection.find_one({"email": email})
             if user:
                 return {"status": "success", "user": user}

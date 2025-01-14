@@ -1,66 +1,38 @@
 from typing import Optional
 from motor.motor_asyncio import AsyncIOMotorClient
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-MONGO_URI = os.getenv("MONGO_CLOUD_TEST_URI")
+from src.config.environment import env
 
 
-DATABASE_NAME = os.getenv("DATABASE_NAME")
-
-
-class MongoConfig:
+class MongoDbConnector:
     """
     Lớp Singleton quản lý kết nối MongoDB và đảm bảo chỉ có một thể hiện duy nhất.
     - Tạo một thể hiện duy nhất của Mongo client.
     - Cung cấp quyền truy cập vào cơ sở dữ liệu và collection.
     """
 
-    __mongo_client_instance: Optional[AsyncIOMotorClient] = None
-    __database_instance = None
-    __database_name: str
+    def __init__(self):  # Hàm dựng
+        self.__mongo_client_instance: Optional[AsyncIOMotorClient] = None
+        self.__database = None
 
-    def __new__(cls, *args, **kwargs):
-        """Ghi đè __new__ để đảm bảo chỉ có một thể hiện của MongoConfig."""
-        if not cls.__mongo_client_instance:
-            cls.__mongo_client_instance = super().__new__(cls, *args, **kwargs)
-        return cls.__mongo_client_instance
+    async def connect_database(self):  # Hàm định nghĩa kết nối và truy cập cho DATABASE
+            self.__mongo_client_instance = AsyncIOMotorClient(
+                env['MONGODB_URI'],
+                connectTimeOutMS=10000,  # Thời gian timeout khi kết nối (ms)
+                socketTimeOutMS=20000,  # Thời gian timeout khi thao tác dữ liệu (ms)
+            )
 
-    def __init__(self):
-        if not hasattr(self, "__initialized"):
-            self.__database_name = DATABASE_NAME
-            self.__database = None
-            self.__initialized = True
+            await self.__mongo_client_instance.admin.command('ping')
 
-    async def on_module_init(self):
-        """Khởi tạo kết nối MongoDB và cơ sở dữ liệu."""
-        if not self.__database:
-            try:
-                # Tạo kết nối MongoDB (chỉ thực hiện một lần)
-                self.__mongo_client_instance = AsyncIOMotorClient(
-                    MONGO_URI,
-                    connectTimeoutMS=10000,  # Thời gian timeout khi kết nối (ms)
-                    socketTimeoutMS=20000,  # Thời gian timeout khi thao tác dữ liệu (ms)
-                )
+            self.__database = self.__mongo_client_instance.get_database(env['DATABASE_NAME'])
 
-                print("Kết nối đến MongoDB thành công")
-
-                # Truy cập cơ sở dữ liệu
-                self.__database = self.__mongo_client_instance.get_database(
-                    self.__database_name
-                )
-
-            except Exception as error:
-                print(f"Kết nối MongoDB thất bại: {error}")
-
-    async def on_module_destroy(self):
-        """Đóng kết nối MongoDB."""
+    async def close_connect_to_database(self):  # Hàm đóng kết nối DATABASE
         if self.__mongo_client_instance:
-            self.__mongo_client_instance.close()
-            print("Đã ngắt kết nối MongoDB")
+            self.__mongo_client_instance.close()  # Đóng kết nối
 
-    def database_instance(self):
-        """Trả về thể hiện của cơ sở dữ liệu MongoDB."""
+    def get_database_instance(self):  # Hàm tạo thể hiện cho DATABASE
+        if not self.__mongo_client_instance:
+            raise Exception("Must connect to database first!")
+
         return self.__database
+
+mongodb_connector = MongoDbConnector()

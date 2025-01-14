@@ -2,9 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 from src.services.auth_service import AuthService
 from src.validations.auth_validation.user_login_validation import UserLoginValidation
-from src.validations.auth_validation.user_register_validation import (
-    UserRegisterValidation,
-)
+from src.validations.auth_validation.user_register_validation import (UserRegisterValidation)
 from src.utils.jwt_util import create_jwt, decode_jwt
 
 router = APIRouter()
@@ -72,3 +70,4 @@ async def protected_route(token: str = Depends(oauth2_scheme)):
         raise HTTPException(
             status_code=500, detail="Lỗi trong khi truy cập tài nguyên bảo vệ"
         )
+
