@@ -18,11 +18,40 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import ListCards from './ListCards/ListCards'
-import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { useState } from 'react'
+import TextField from '@mui/material/TextField'
+import CloseIcon from '@mui/icons-material/Close'
+import { toast, Bounce } from 'react-toastify'
 
-const Column = ( { column }) => {
+const Column = ( { column, createNewCard }) => {
+  const [isOpenNewCardForm, setIsOpenNewCardForm] = useState(false)
+  const toggleOpenNewCardForm = () => setIsOpenNewCardForm(!isOpenNewCardForm)
+
+  const [newCardTitle, setNewCardTitle] = useState('')
+
+  const addNewCard = async () => {
+    if (!newCardTitle) {
+
+      return
+    }
+
+    await createNewCard({ 'title': newCardTitle, 'columnId': column?._id })
+    toast.success('Created new card!', {
+      position: 'bottom-left',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseonhover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark',
+      transition: Bounce
+    })
+    toggleOpenNewCardForm()
+    setNewCardTitle('')
+  }
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -36,7 +65,7 @@ const Column = ( { column }) => {
     opacity: isDragging ? 0.5 : 1
   }
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column.cards
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [headerHeight, setHeaderHeight] = React.useState(0)
   const headerRef = useRef(null)
@@ -177,25 +206,109 @@ const Column = ( { column }) => {
 
         {/* Footer */}
         <Box sx={{
-          height: (theme) => theme.trelloCustom.columnFooterHeight,
-          p: 2,
+          // height: (theme) => theme.trelloCustom.columnFooterHeight,
+          paddingBottom: 1.5,
+          paddingX: 2,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          mb: 1,
-          mt: 1
+          justifyContent: 'space-between'
         }}>
-          <Button startIcon={<AddIcon />}
-            sx={{
+          {!isOpenNewCardForm
+            ? <Button startIcon={<AddIcon />}
+              sx={{
+                width: '100%',
+                justifyContent: 'flex-start',
+                textAlign: 'left',
+                '&:hover': {
+                  bgcolor: (theme) => theme.palette.mode === 'dark' ? '#282f28' : '#d0d4db'
+                }
+              }}
+              onClick={toggleOpenNewCardForm}
+            >
+              <Typography>Add new card</Typography>
+            </Button>
+            : <Box sx={{
               width: '100%',
-              justifyContent: 'flex-start',
-              textAlign: 'left',
-              '&:hover': {
-                bgcolor: (theme) => theme.palette.mode === 'dark' ? '#282f28' : '#d0d4db'
-              }
-            }}>
-            <Typography>Add new card</Typography>
-          </Button>
+              bgcolor: (theme) => theme.palette.mode === 'dark' ? '#101204' : '#f1f2f4',
+              // marginX: (theme) => theme.trelloCustom.marginLeftColumn,
+              borderRadius: (theme) => theme.trelloCustom.borderRadiusColumn,
+              display: 'flex',
+              alignSelf: 'flex-start',
+              height: 'auto',
+              flexDirection: 'column',
+              gap: 1.5
+            }}
+            >
+              <TextField
+                id="outlined-search"
+                type="search"
+                size="small"
+                placeholder={'Enter card name'}
+                autoFocus
+                value={newCardTitle}
+                onChange={(e) => setNewCardTitle(e.target.value)}
+                inputProps={{
+                  sx: {
+                    '&::placeholder': {
+                      color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black',
+                      opacity: 0.8,
+                      fontSize: '0.875rem'
+                    }
+                  }
+                }}
+                sx={{
+                  width: '100%',
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: 'gray' },
+                    '&:hover fieldset': { borderColor: '#03a9f4' },
+                    '&.Mui-focused fieldset': { borderColor: '#03a9f4' }
+                  },
+                  '& .MuiInputBase-root': {
+                    color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black',
+                    fontSize: '0.875rem'
+                  }
+                }}
+              />
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                gap: 1
+              }}>
+                <Button sx={{
+                  color: 'black',
+                  bgcolor: '#42a5f5',
+                  '&:hover': {
+                    bgcolor: '#64b5f6'
+                  }
+                }}
+                variant="contained"
+                size="small"
+                disableElevation={true}
+                onClick={addNewCard}
+                >
+                  Add Card
+                </Button>
+                <Box sx={{
+                  cursor: 'pointer',
+                  '&:hover': {
+                    bgcolor: (theme) => theme.palette.mode === 'dark' ? 'grey.700' : 'grey.300'
+                  },
+                  display: 'flex',
+                  justifyContent: 'center',
+                  p: '6px',
+                  borderRadius: '4px'
+                }}>
+                  <CloseIcon fontSize="small"
+                    sx={{
+                      color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black'
+                    }}
+                    onClick={toggleOpenNewCardForm}
+                  />
+                </Box>
+              </Box>
+            </Box>
+          }
         </Box>
       </Box>
     </div>

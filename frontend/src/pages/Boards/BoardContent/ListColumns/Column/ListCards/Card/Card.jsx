@@ -23,8 +23,7 @@ const Card = ({ card }) => {
   const dndStyleCard = {
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.2 : 1,
-    border: isDragging ? '1px solid blue' : 'none'
+    opacity: isDragging ? 0.5 : 1
   }
 
   const [hoverCheck, setHoverCheck] = React.useState(false)
@@ -38,12 +37,14 @@ const Card = ({ card }) => {
       ref={setNodeRef} style={dndStyleCard} {...attributes} {...listeners}
       sx={{
         cursor: 'pointer',
-        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)'
+        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
+        border: '1px solid transparent',
+        '&:hover': { borderColor: (theme) => theme.palette.primary.main }
       }}>
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
 
       <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-        <Typography>{card?.title}</Typography>
+        <Typography sx={{ wordBreak: 'break-word' }}>{card?.title}</Typography>
       </CardContent>
 
       {shouldShowCardActions() &&

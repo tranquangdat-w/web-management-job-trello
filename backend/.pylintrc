@@ -1,0 +1,10 @@
+[FORMAT]
+max-line-length=200
+disable=invalid-name
+
+[MESSAGES CONTROL]
+disable=unnecessary-pass, too-few-public-methods, missing-module-docstring, use-dict-literal, trailing-whitespace
+
+[MASTER]
+init-hook="from pylint.config import find_pylintrc; import os, sys; sys.path.append(os.path.dirname(find_pylintrc()))"
+
