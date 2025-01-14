@@ -11,7 +11,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       {/* Need font roboto to use, please download font roboto from goggle */}
       <CssBaseline />
       <App />
-      <ToastContainer />
       <ToastContainer
         position="bottom-left"
         autoClose={5000}

@@ -20,3 +20,12 @@ class ColumnService:
                 'message': f"Error when creating column {str(e)}"
             }
 
+    async def update_column(self, column_id, req_body: dict) -> dict:
+        try:
+            return await ColumnModel.update_column(column_id, req_body)
+        except Exception as e:
+            return {
+                'status': 'error',
+                'message': f"Can't update column with error: {str(e)}"
+            }
+

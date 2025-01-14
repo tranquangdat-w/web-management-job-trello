@@ -10,7 +10,6 @@ class CardService:
             result = await mongodb_connector.get_database_instance()[CardModel.card_collection_name].find_one({"_id" : result.inserted_id})
 
             if result:
-                result['cards'] = []
                 await ColumnModel.push_card_order_ids(result)
 
             return result
@@ -18,5 +17,14 @@ class CardService:
             return {
                 'status': 'error',
                 'message': f"Error when creating card {str(e)}"
+            }
+
+    async def update_card(self, card_id, req_body: dict) -> dict:
+        try:
+            return await CardModel.update_card(card_id, req_body)
+        except Exception as e:
+            return {
+                'status': 'error',
+                'message': f"Can't update card with error: {str(e)}"
             }
 

@@ -10,3 +10,6 @@ class CardController:
 
         return await self.card_service.create_card(card)
 
+    async def update_card(self, card_id, req_body: dict) -> dict:
+        return await self.card_service.update_card(card_id, req_body)
+

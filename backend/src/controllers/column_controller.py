@@ -10,3 +10,6 @@ class ColumnController:
 
         return await self.column_service.create_column(column)
 
+    async def update_column(self, column_id, req_body: dict) -> dict:
+        return await self.column_service.update_column(column_id, req_body)
+

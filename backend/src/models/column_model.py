@@ -44,4 +44,18 @@ class ColumnModel(Document):
             return_document=True
         )
         return result
-  
+
+    @staticmethod
+    async def update_column(column_id, req_body: dict):
+        column_collection = mongodb_connector.get_database_instance()[ColumnModel.column_collection_name]
+
+        req_body['updatedAt'] = datetime.now(timezone.utc)
+
+        result = await column_collection.find_one_and_update(
+                { "_id": column_id },
+                { "$set": req_body },
+                return_document=True
+            )
+
+        return result
+

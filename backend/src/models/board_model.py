@@ -79,10 +79,26 @@ class BoardModel(Document):
     @staticmethod
     async def push_column_order_ids(column):
         board_collection = mongodb_connector.get_database_instance()[BoardModel.board_collection_name]
+
         result = await board_collection.find_one_and_update(
             {"_id": column["boardId"]},
             {"$push": {"columnOrderIds": column["_id"]}},
             return_document=True
         )
+
         return result
     
+    @staticmethod
+    async def update_board(board_id, req_body: dict):
+        board_collection = mongodb_connector.get_database_instance()[BoardModel.board_collection_name]
+
+        req_body['updatedAt'] = datetime.now(timezone.utc)
+
+        result = await board_collection.find_one_and_update(
+                { "_id": board_id },
+                { "$set": req_body },
+                return_document=True
+            )
+
+        return result
+

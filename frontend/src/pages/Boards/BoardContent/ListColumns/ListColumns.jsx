@@ -8,16 +8,18 @@ import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortabl
 import { useState } from 'react'
 import { toast, Bounce } from 'react-toastify'
 
-const ListColumns = ( { columns } ) => {
+const ListColumns = ( { columns, createNewColumn, createNewCard } ) => {
   const [isOpenNewColumnForm, setIsOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setIsOpenNewColumnForm(!isOpenNewColumnForm)
 
   const [newColumnTitle, setNewColumnTitle] = useState('')
 
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if (!newColumnTitle) {
       return
     }
+
+    await createNewColumn({ 'title': newColumnTitle })
 
     toast.success('Created new column!', {
       position: 'bottom-left',
@@ -45,7 +47,7 @@ const ListColumns = ( { columns } ) => {
           overflowX: 'auto',
           overflowY: 'hidden'
         }}>
-          {columns?.map(column => (<Column key ={column._id} column={column} />))}
+          {columns?.map(column => (<Column key={column._id} column={column} createNewCard={createNewCard}/>))}
           {!isOpenNewColumnForm
             ? <Box sx={{
               minWidth: (theme) => theme.trelloCustom.columnWidth,

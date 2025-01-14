@@ -32,6 +32,17 @@ class CardModel(Document):
     async def create_card(card: 'CardModel'):
         return await mongodb_connector.get_database_instance()[CardModel.card_collection_name].insert_one(card.create_card_data())
 
+    @staticmethod
+    async def update_card(card_id, req_body: dict):
+        column_collection = mongodb_connector.get_database_instance()[CardModel.card_collection_name]
 
-    
+        req_body['updatedAt'] = datetime.now(timezone.utc)
+
+        result = await column_collection.find_one_and_update(
+                { "_id": card_id },
+                { "$set": req_body },
+                return_document=True
+            )
+
+        return result
 

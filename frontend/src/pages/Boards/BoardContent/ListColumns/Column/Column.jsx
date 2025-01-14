@@ -18,7 +18,6 @@ import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import ListCards from './ListCards/ListCards'
-import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useState } from 'react'
@@ -26,23 +25,25 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast, Bounce } from 'react-toastify'
 
-const Column = ( { column }) => {
+const Column = ( { column, createNewCard }) => {
   const [isOpenNewCardForm, setIsOpenNewCardForm] = useState(false)
   const toggleOpenNewCardForm = () => setIsOpenNewCardForm(!isOpenNewCardForm)
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
 
       return
     }
+
+    await createNewCard({ 'title': newCardTitle, 'columnId': column?._id })
     toast.success('Created new card!', {
       position: 'bottom-left',
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
-      pauseOnHover: true,
+      pauseonhover: true,
       draggable: true,
       progress: undefined,
       theme: 'dark',
@@ -64,7 +65,7 @@ const Column = ( { column }) => {
     opacity: isDragging ? 0.5 : 1
   }
 
-  const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
+  const orderedCards = column.cards
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [headerHeight, setHeaderHeight] = React.useState(0)
   const headerRef = useRef(null)
@@ -206,12 +207,11 @@ const Column = ( { column }) => {
         {/* Footer */}
         <Box sx={{
           // height: (theme) => theme.trelloCustom.columnFooterHeight,
-          p: 2,
+          paddingBottom: 1.5,
+          paddingX: 2,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          // mb: 1,
-          // mt: 1
+          justifyContent: 'space-between'
         }}>
           {!isOpenNewCardForm
             ? <Button startIcon={<AddIcon />}

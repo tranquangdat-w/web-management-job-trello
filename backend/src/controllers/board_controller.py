@@ -14,3 +14,8 @@ class BoardController:
     async def get_details(self, board_id: str) -> dict:
         return await self.board_service.get_details(board_id)
 
+    async def update_board(self, board_id, req_body: dict) -> dict:
+        return await self.board_service.update_board(board_id, req_body)
+
+    async def move_card_to_different_column(self, req_body: dict) -> dict:
+        return await self.board_service.move_card_to_different_column(req_body)
