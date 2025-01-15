@@ -43,7 +43,6 @@ class ColumnService:
             await CardModel.delete_many_by_column_id(column_id)
 
             # Remove column order in board
-            print(target_column)
             await BoardModel.delete_column_order_id(target_column)
 
             return { "deleteResult": "Column and its cards was delete" }

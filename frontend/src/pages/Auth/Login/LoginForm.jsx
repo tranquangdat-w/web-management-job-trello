@@ -9,6 +9,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import IconButton from '@mui/material/IconButton'
 import { RegisterButton } from '../Register/RegisterButton'
 import { useForm } from 'react-hook-form'
+
 import {
   FIELDS_REQUIRED_MESSAGE,
   EMAIL_RULE,
@@ -25,6 +26,7 @@ export const LoginForm = () => {
     // Em hai call api o day
     console.log(data)
   }
+
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   const togglePasswordVisibility = () => {
@@ -70,6 +72,7 @@ export const LoginForm = () => {
               type={passwordVisible ? 'text' : 'password'}
               variant="outlined"
               margin="normal"
+              error={!!errors['password']}
               sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px' }}
               InputProps={{
                 endAdornment: (

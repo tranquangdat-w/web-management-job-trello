@@ -88,13 +88,6 @@ class UserRegisterValidation(BaseModel):
         description="Số điện thoại hợp lệ (10 - 15 chữ số, bắt đầu với số 0)",
     )
 
-    # Địa chỉ của người dùng (không bắt buộc)
-    # - Nếu nhập thì phải hợp lệ và từ 10 đến 100 ký tự
-    address: Optional[str] = Field(
-        None,
-        description="Địa chỉ (không bắt buộc, nếu có phải hợp lệ và từ 10 - 100 ký tự)",
-    )
-
     # Validator kiểm tra mật khẩu an toàn
     # - Mật khẩu phải chứa ít nhất một chữ cái và một số
     @field_validator("password")
@@ -139,20 +132,5 @@ class UserRegisterValidation(BaseModel):
                 raise ValueError("Ngày sinh không thể ở tương lai")
         except ValueError:
             raise ValueError("Ngày sinh phải đúng định dạng yyyy-mm-dd")
-        return value
-
-    # Validator kiểm tra tính hợp lệ của địa chỉ (nếu có)
-    @field_validator("address")
-    def validate_address(cls, value):
-        """
-        Kiểm tra địa chỉ:
-            - Nếu có nhập địa chỉ, thì địa chỉ phải hợp lệ.
-            - Chỉ cho phép các ký tự hợp lệ và khoảng trắng.
-        """
-        if not value:
-            return value  # Không cần validate nếu địa chỉ trống
-        value = value.strip()
-        if not re.match(r"^[\w\s]+$", value):
-            raise ValueError("Địa chỉ không hợp lệ.")
         return value
 

@@ -3,7 +3,7 @@ from typing import Optional
 from uuid import UUID
 
 class CardValidation(BaseModel):
-    title: str = Field(..., min_length=1, max_length=50)
+    title: str = Field(..., min_length=3, max_length=50)
     boardId:  str =  Field(...)
     columnId: str = Field(...)
 

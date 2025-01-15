@@ -58,7 +58,6 @@ async def move_card_to_different_column(req_body: MoveCardToDifferentValidation 
         for field in list(req_body.__fields__.keys()):
             if getattr(req_body, field) is not None:
                 new_req_body[field] = getattr(req_body, field)
-        print(new_req_body)
 
         await board_controller.move_card_to_different_column(new_req_body)
     except Exception as e:

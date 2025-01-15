@@ -26,7 +26,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
         )
 
 
-@router.post("/users")
+@router.post("/register")
 async def create_user(user_data: dict, current_user: dict = Depends(get_current_user)):
     """
     Tạo người dùng mới (chỉ cho phép người dùng đã đăng nhập).

@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { LoginForm } from './Login/LoginForm'
-import { RegisterForm } from './Register/Register'
+import { RegisterForm } from './Register/RegisterForm'
 import { LoginButton } from './Login/LoginButton'
 import { RegisterButton } from './Register/RegisterButton'
 

@@ -32,7 +32,7 @@ async def user_login(data: UserLoginValidation):
         raise HTTPException(status_code=500, detail=f"Lỗi khi đăng nhập: {str(e)}")
 
 
-@router.post("/register")
+@router.post("/users")
 async def user_register(data: UserRegisterValidation):
     try:
         # Đăng ký người dùng

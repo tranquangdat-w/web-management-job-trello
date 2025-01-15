@@ -157,6 +157,7 @@ const ListColumns = ( { columns } ) => {
                     bgcolor: '#64b5f6'
                   }
                 }}
+                className='interceptor-loading'
                 variant="contained"
                 size="small"
                 disableElevation={true}

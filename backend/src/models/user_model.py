@@ -20,7 +20,6 @@ class UserModel(Document):
     date_of_birth = DateTimeField(required=True)
     sex = StringField(required=True, choices=["male", "female", "other"])
     phone_number = StringField(required=True)
-    address = StringField()
     is_verified = BooleanField(default=False)
     is_active = BooleanField(default=False)
     created_at = DateTimeField(default=datetime.now(timezone.utc))
@@ -34,7 +33,6 @@ class UserModel(Document):
             "date_of_birth": self.date_of_birth,
             "sex": self.sex,
             "phone_number": self.phone_number,
-            "address": self.address,
             "is_verified": self.is_verified,
             "is_active": self.is_active,
             "create_at": self.created_at,
