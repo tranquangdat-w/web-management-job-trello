@@ -14,18 +14,21 @@ import {
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 const Board = () => {
   const dispatch = useDispatch()
 
   const board = useSelector(selectCurrentActiveBoard)
 
+  const { boardId } = useParams()
+
   useEffect(() => {
     // const boardId = '67860a3b3d5db7c574af07b4' // My mongo
-    const boardId = '13be383a-75e4-4025-8de3-ad31c5d79500' // Team mongo
+    // const boardId = '13be383a-75e4-4025-8de3-ad31c5d79500' // Team mongo
 
     dispatch(fetchBoardDetailsAPI(boardId))
-  }, [dispatch])
+  }, [dispatch, boardId])
 
   /* Move column when drag column */
   const moveColumn = (dndOrderedColumns) => {

@@ -43,8 +43,6 @@ const Home = () => {
         </Toolbar>
       </AppBar>
 
-
-
       <Header />
       <Basic_information />
       <Practical />
@@ -54,7 +52,7 @@ const Home = () => {
       <Footer />
 
     </div>
-  );
-};
+  )
+}
 
 export default Home;
