@@ -36,6 +36,12 @@ class ColumnModel(Document):
 
 
     @staticmethod
+    async def find_one_by_id(column_id):
+        result = await mongodb_connector.get_database_instance()[ColumnModel.column_collection_name].find_one({"_id" : column_id})
+
+        return result 
+
+    @staticmethod
     async def push_card_order_ids(card):
         column_collection = mongodb_connector.get_database_instance()[ColumnModel.column_collection_name]
         result = await column_collection.find_one_and_update(
@@ -56,6 +62,14 @@ class ColumnModel(Document):
                 { "$set": req_body },
                 return_document=True
             )
+
+        return result
+
+    @staticmethod
+    async def delete_column(column_id):
+        column_collection = mongodb_connector.get_database_instance()[ColumnModel.column_collection_name]
+
+        result = await column_collection.delete_one({ "_id": column_id })
 
         return result
 

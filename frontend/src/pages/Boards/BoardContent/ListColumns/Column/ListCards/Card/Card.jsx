@@ -2,6 +2,7 @@ import { Card as MuiCard } from '@mui/material'
 import { Box } from '@mui/material'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
+import ModeIcon from '@mui/icons-material/Mode'
 import CardMedia from '@mui/material/CardMedia'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
@@ -43,8 +44,17 @@ const Card = ({ card }) => {
       }}>
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} /> }
 
-      <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
+      <CardContent sx={{
+        p: 1.5,
+        '&:last-child': { p: 1.5 },
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
         <Typography sx={{ wordBreak: 'break-word' }}>{card?.title}</Typography>
+        <Box sx={{ borderRadius: '20px', paddingX: '6px', opacity: 0.1, '&:hover': { bgcolor: 'gray', opacity: 1 } }}>
+          <ModeIcon sx ={{ fontSize: '12px' }}/>
+        </Box>
       </CardContent>
 
       {shouldShowCardActions() &&

@@ -8,7 +8,6 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import ContentCopy from '@mui/icons-material/ContentCopy'
 import ContentPaste from '@mui/icons-material/ContentPaste'
-import Cloud from '@mui/icons-material/Cloud'
 import Divider from '@mui/material/Divider'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import AddCardIcon from '@mui/icons-material/AddCard'
@@ -24,8 +23,9 @@ import { useState } from 'react'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast, Bounce } from 'react-toastify'
+import { useConfirm } from 'material-ui-confirm'
 
-const Column = ( { column, createNewCard }) => {
+const Column = ( { column, createNewCard, deleteColumnDetails }) => {
   const [isOpenNewCardForm, setIsOpenNewCardForm] = useState(false)
   const toggleOpenNewCardForm = () => setIsOpenNewCardForm(!isOpenNewCardForm)
 
@@ -84,6 +84,16 @@ const Column = ( { column, createNewCard }) => {
     const height = headerRef?.current?.offsetHeight + 'px'
     setHeaderHeight(height)
   }, [column.title])
+
+  const confirmDeleteColumn = useConfirm()
+  const handleDeleteColumn = () => {
+    confirmDeleteColumn({
+      title: 'Delete Column',
+      description: 'This action will delete your column! Are you sure'
+    }).then(() => {
+      deleteColumnDetails(column._id)
+    }).catch(() => {})
+  }
 
   return (
     <div ref={setNodeRef} style={style} {...attributes}>
@@ -151,14 +161,24 @@ const Column = ( { column, createNewCard }) => {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               TransitionComponent={Fade}
-              sx={{ mt: 1 }}
+              sx={{
+                mt: 1,
+                '& .MuiMenuItem-root': {
+                  paddingX: 2,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 0.4
+                }
+
+              }}
             >
               <Typography sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', mb: 1 }}>Operation</Typography>
 
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={toggleOpenNewCardForm}>
                 <ListItemIcon> <AddCardIcon /> </ListItemIcon>
-                <ListItemText>Add Cart</ListItemText>
+                <ListItemText>Add Card</ListItemText>
               </MenuItem>
 
               <MenuItem onClick={handleClose}>
@@ -184,18 +204,20 @@ const Column = ( { column, createNewCard }) => {
 
               <Divider />
 
-              <MenuItem onClick={handleClose}>
+              <MenuItem
+                sx={{
+                  '&:hover': {
+                    color: 'warning.dark',
+                    '& .MuiSvgIcon-root': {
+                      color: 'warning.dark'
+                    }
+                  }
+                }}
+                onClick={handleDeleteColumn}>
                 <ListItemIcon>
                   <DeleteForeverIcon fontSize='small'/>
                 </ListItemIcon>
-                <ListItemText>Remove this column</ListItemText>
-              </MenuItem>
-
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <Cloud fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Archive this column</ListItemText>
+                <ListItemText>Delete this List</ListItemText>
               </MenuItem>
             </Menu>
           </Box>

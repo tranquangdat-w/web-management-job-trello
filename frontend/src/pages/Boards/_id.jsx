@@ -6,10 +6,12 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
+import { toast, Bounce } from 'react-toastify'
 import { cloneDeep } from 'lodash'
 // import mockData from '~/apis/mock-data'
 import { useEffect, useState } from 'react'
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis'
+
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI, deleteColumnDetailsAPI } from '~/apis'
 
 const Board = () => {
   const [board, setBoard] = useState(null)
@@ -104,6 +106,29 @@ const Board = () => {
     setBoard(newBoard)
   }
 
+  const deleteColumnDetails = (columnId) => {
+    deleteColumnDetailsAPI(columnId).then((res) => {
+      toast.success(res.deleteResult, {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
+
+    })
+
+    const newBoard = cloneDeep(board)
+    newBoard.columns = newBoard.columns.filter(col => col._id !== columnId)
+    newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
+
+    setBoard(newBoard)
+  }
+
   if (!board) {
     return (
       <Box sx={{
@@ -131,6 +156,7 @@ const Board = () => {
           moveColumn={moveColumn}
           moveCardInSameColumn={moveCardInSameColumn}
           moveCardToDifferentColumn={moveCardToDifferentColumn}
+          deleteColumnDetails={deleteColumnDetails}
         />
       </Container>
     </>

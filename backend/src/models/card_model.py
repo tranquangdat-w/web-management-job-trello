@@ -34,15 +34,23 @@ class CardModel(Document):
 
     @staticmethod
     async def update_card(card_id, req_body: dict):
-        column_collection = mongodb_connector.get_database_instance()[CardModel.card_collection_name]
+        card_collection = mongodb_connector.get_database_instance()[CardModel.card_collection_name]
 
         req_body['updatedAt'] = datetime.now(timezone.utc)
 
-        result = await column_collection.find_one_and_update(
+        result = await card_collection.find_one_and_update(
                 { "_id": card_id },
                 { "$set": req_body },
                 return_document=True
             )
+
+        return result
+
+    @staticmethod
+    async def delete_many_by_column_id(column_id):
+        card_collection = mongodb_connector.get_database_instance()[CardModel.card_collection_name]
+
+        result = await card_collection.delete_many({ "columnId": column_id })
 
         return result
 

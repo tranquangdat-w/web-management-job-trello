@@ -102,3 +102,15 @@ class BoardModel(Document):
 
         return result
 
+    @staticmethod
+    async def delete_column_order_id(column):
+        board_collection = mongodb_connector.get_database_instance()[BoardModel.board_collection_name]
+
+        result = await board_collection.find_one_and_update(
+                { "_id": column['boardId']},
+                { "$pull": { "columnOrderIds" : column['_id']} },
+                return_document=True
+            )
+
+        return result
+

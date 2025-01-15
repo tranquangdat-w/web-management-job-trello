@@ -13,3 +13,6 @@ class ColumnController:
     async def update_column(self, column_id, req_body: dict) -> dict:
         return await self.column_service.update_column(column_id, req_body)
 
+    async def delete_column(self, column_id) -> dict:
+        return await self.column_service.delete_column(column_id)
+

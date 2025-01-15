@@ -1,7 +1,7 @@
 from src.validations.column_validation import ColumnValidation, UpdateColumnValidation
 from src.controllers.column_controller import ColumnController
-
 from fastapi import APIRouter, HTTPException, status, Path, Body
+from uuid import UUID
 
 router = APIRouter()
 
@@ -33,4 +33,13 @@ async def update_column(id: str = Path(...), req_body: UpdateColumnValidation = 
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail = "Can't update column") 
 
     return column
+
+@router.delete("/{id}")
+async def delete_column(id: UUID = Path(...)) -> dict: 
+    column_controller = ColumnController()
+
+    result = await column_controller.delete_column(str(id))
+
+    return result
+
 
