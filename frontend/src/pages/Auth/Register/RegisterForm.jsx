@@ -1,29 +1,30 @@
-import { useState } from 'react'
-import { Box } from '@mui/material'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import MenuItem from '@mui/material/MenuItem'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { LoginButton } from '../Login/LoginButton'
-import { useForm } from 'react-hook-form'
+import { useState } from 'react';
+import { Box, Button, TextField, Typography, Select, MenuItem, FormControl, InputLabel, InputAdornment, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useForm } from 'react-hook-form';
+import { LoginButton } from '../Login/LoginButton';
+import { FIELDS_REQUIRED_MESSAGE, EMAIL_RULE, EMAIL_RULE_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators';
+import { FieldErrorAlert } from '~/components/Form/FieldErrorAlert';
 
 export const RegisterForm =() => {
-  const { register, handleSubmit, formState: { errors }, watch } = useForm()
-
+  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm()
   const [passwordVisible, setPasswordVisible] = useState(false)
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false)
+  const [gender, setGender] = useState('');
 
 
+  const submitRegister = data => {
+    console.log(data);
+  };
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible)
   }
   const toggleConfirmPasswordVisibility = () => {
     setConfirmPasswordVisible(!confirmPasswordVisible)
   }
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
+  };
 
   return (
     <Box
@@ -37,7 +38,7 @@ export const RegisterForm =() => {
         <Typography variant="h4" component="h4" sx={{ mb: 2 }}>
           Sign up
         </Typography>
-        <form>
+        <form onSubmit={handleSubmit(submitRegister)}>
           <TextField
             fullWidth
             label="Tên tài khoản"
@@ -45,8 +46,12 @@ export const RegisterForm =() => {
             margin="normal"
             size='small'
             sx={{ mb: -1, backgroundColor: '#F0EFFF', borderRadius: '5px' }}
-            required
+            {...register('username', {
+              required: FIELDS_REQUIRED_MESSAGE
+            })}
+            error={!!errors['username']}
           />
+          <FieldErrorAlert errors={errors} fieldName={'username'} />
           <TextField
             fullWidth
             label="Mật khẩu"
@@ -65,7 +70,16 @@ export const RegisterForm =() => {
                 </InputAdornment>
               )
             }}
+            {...register('password', {
+              required: FIELDS_REQUIRED_MESSAGE,
+              pattern: {
+                value: PASSWORD_RULE,
+                message: PASSWORD_RULE_MESSAGE
+              }
+            })}
+            error={!!errors['password']}
           />
+          <FieldErrorAlert errors={errors} fieldName={'password'} />
           <TextField
             fullWidth
             label="Xác nhận mật khẩu"
@@ -90,16 +104,26 @@ export const RegisterForm =() => {
                 return 'Password Confirmation does not match'
               }
             })}
+            error={!!errors['password_confirmation']}
           />
+          <FieldErrorAlert errors={errors} fieldName={'password_confirmation'} />
           <TextField
             fullWidth
             label="Email"
             variant="outlined"
             margin="normal"
             size='small'
+            error={!!errors['email']}
             sx={{ mb: -1, backgroundColor: '#F0EFFF', borderRadius: '5px' }}
-            required
+            {...register('email', {
+              required: FIELDS_REQUIRED_MESSAGE,
+              pattern: {
+                value: EMAIL_RULE,
+                message: EMAIL_RULE_MESSAGE
+              }
+            })}
           />
+          <FieldErrorAlert errors={errors} fieldName={'email'}/>
           <TextField
             fullWidth
             label="Họ và tên đầy đủ"
@@ -122,20 +146,33 @@ export const RegisterForm =() => {
             }}
             required
           />
-          <TextField
+          <FormControl
             fullWidth
-            label="Giới tính"
-            select
             variant="outlined"
             margin="normal"
-            size='small'
+            size="small"
             sx={{ mb: -1, backgroundColor: '#F0EFFF', borderRadius: '5px' }}
-            required
+            error={!!errors['gender']}
           >
-            <MenuItem value="Nam">Nam</MenuItem>
-            <MenuItem value="Nữ">Nữ</MenuItem>
-            <MenuItem value="Khác">Khác</MenuItem>
-          </TextField>
+            <InputLabel id="gender-label">Giới tính</InputLabel>
+            <Select
+              labelId="gender-label"
+              value={gender}
+              onChange={(e) => {
+                setGender(e.target.value);
+                setValue('gender', e.target.value);
+              }}
+              label="Giới tính"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="Nam">Nam</MenuItem>
+              <MenuItem value="Nữ">Nữ</MenuItem>
+              <MenuItem value="Khác">Khác</MenuItem>
+            </Select>
+          </FormControl>
+          <FieldErrorAlert errors={errors} fieldName={'gender'} />
           <TextField
             fullWidth
             label="Số điện thoại"
@@ -169,12 +206,10 @@ export const RegisterForm =() => {
             Register
           </Button>
         </form>
-        <Typography variant="body2" sx={{ textAlign: 'center', mt: 2 }}>
-              Already have an account?{' '}
+        <Box sx={{ textAlign: 'center', mt: 2 }}>
           <LoginButton />
-        </Typography>
+        </Box>
       </Box>
     </Box>
-  )
-}
-
+  );
+};

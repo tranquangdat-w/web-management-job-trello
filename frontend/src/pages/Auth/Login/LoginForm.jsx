@@ -42,7 +42,7 @@ export const LoginForm = () => {
           alignItems: 'center',
           padding: 3
         }}>
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', maxWidth: 400 }}>
           <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
             Sign in
           </Typography>
@@ -53,7 +53,7 @@ export const LoginForm = () => {
               variant="outlined"
               margin="normal"
               error={!!errors['email']}
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px' }}
+              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px', width: '400px' }}
               {...register('email', {
                 required: FIELDS_REQUIRED_MESSAGE,
                 pattern: {
@@ -91,7 +91,7 @@ export const LoginForm = () => {
                 }
               })}
             />
-            <FieldErrorAlert errors={errors} fieldName={'email'}/>
+            <FieldErrorAlert errors={errors} fieldName={'password'}/>
           </Box>
           <Box sx={{ mt: 2 }}>
             <Button
