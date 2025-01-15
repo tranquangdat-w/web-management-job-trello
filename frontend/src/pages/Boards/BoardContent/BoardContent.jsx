@@ -25,7 +25,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-const BoardContent = ( { board, createNewColumn, createNewCard, moveColumn, moveCardInSameColumn, moveCardToDifferentColumn, deleteColumnDetails } ) => {
+const BoardContent = ( { board, moveColumn, moveCardInSameColumn, moveCardToDifferentColumn } ) => {
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
@@ -341,12 +341,7 @@ const BoardContent = ( { board, createNewColumn, createNewCard, moveColumn, move
         overflowY: 'hiddent',
         p: '10px 0'
       }}>
-        <ListColumns
-          columns={orderedColumns}
-          createNewColumn={createNewColumn}
-          createNewCard={createNewCard}
-          deleteColumnDetails={deleteColumnDetails}
-        />
+        <ListColumns columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimation}>
           {(!activeDragItemId) && null}
           {(activeDragItemId) && activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItemData} isPreview /> }

@@ -7,8 +7,19 @@ import CloseIcon from '@mui/icons-material/Close'
 import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
 import { useState } from 'react'
 import { toast, Bounce } from 'react-toastify'
+import { createNewColumnAPI } from '~/apis'
+import { cloneDeep } from 'lodash'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
 
-const ListColumns = ( { columns, createNewColumn, createNewCard, deleteColumnDetails } ) => {
+import { useDispatch, useSelector } from 'react-redux'
+
+const ListColumns = ( { columns } ) => {
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
   const [isOpenNewColumnForm, setIsOpenNewColumnForm] = useState(false)
   const toggleOpenNewColumnForm = () => setIsOpenNewColumnForm(!isOpenNewColumnForm)
 
@@ -19,7 +30,18 @@ const ListColumns = ( { columns, createNewColumn, createNewCard, deleteColumnDet
       return
     }
 
-    await createNewColumn({ 'title': newColumnTitle })
+    const newColumnData = {
+      title: newColumnTitle,
+      boardId : board._id
+    }
+
+    const createdColumn = await createNewColumnAPI(newColumnData)
+
+    const newBoard = cloneDeep(board)
+    newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
+
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     toast.success('Created new column!', {
       position: 'bottom-left',
@@ -47,7 +69,7 @@ const ListColumns = ( { columns, createNewColumn, createNewCard, deleteColumnDet
           overflowX: 'auto',
           overflowY: 'hidden'
         }}>
-          {columns?.map(column => (<Column key={column._id} column={column} createNewCard={createNewCard} deleteColumnDetails={deleteColumnDetails}/>))}
+          {columns?.map(column => (<Column key={column._id} column={column} />))}
           {!isOpenNewColumnForm
             ? <Box sx={{
               minWidth: (theme) => theme.trelloCustom.columnWidth,
