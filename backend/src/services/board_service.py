@@ -49,7 +49,7 @@ class BoardService:
                 req_data["nextColumnId"],
                 {
                     'updatedAt': datetime.now(timezone.utc),
-                    'cardOrderIds': req_data['nextColumnId']
+                    'cardOrderIds': req_data['nextCardOrderIds']
                 }
             )
 

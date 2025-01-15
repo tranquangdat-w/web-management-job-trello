@@ -8,6 +8,8 @@ class ColumnService:
             result = await ColumnModel.create_column(column)
 
             result = await mongodb_connector.get_database_instance()[ColumnModel.column_collection_name].find_one({"_id" : result.inserted_id})
+            
+            print(result)
 
             if result:
                 result['cards'] = []
