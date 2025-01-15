@@ -6,6 +6,7 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
+import { cloneDeep } from 'lodash'
 // import mockData from '~/apis/mock-data'
 import { useEffect, useState } from 'react'
 import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis'
@@ -36,9 +37,9 @@ const Board = () => {
 
     const createdColumn = await createNewColumnAPI(newColumnData)
 
-    const newBoard = { ...board }
-    newBoard.columnOrderIds.push(createdColumn._id)
+    const newBoard = cloneDeep(board)
     newBoard.columns.push(createdColumn)
+    newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
 
     setBoard(newBoard)
   }
@@ -51,10 +52,10 @@ const Board = () => {
 
     const createdCard = await createNewCardAPI(newCardData)
 
-    const newBoard = { ...board }
+    const newBoard = cloneDeep(board)
     const columnHadNewCard = newBoard.columns.find(column => column._id === createdCard?.columnId)
-    columnHadNewCard?.cards.push(createdCard)
-    columnHadNewCard?.cardOrderIds.push(createdCard?._id)
+    columnHadNewCard.cards.push(createdCard)
+    columnHadNewCard.cardOrderIds = columnHadNewCard.cards.map(card => card._id)
 
     setBoard(newBoard)
   }
@@ -67,9 +68,10 @@ const Board = () => {
     newBoard.columns = dndOrderedColumns
     newBoard.columnOrderIds = dndOrderedColumnsIds
 
-    setBoard(newBoard)
 
     updateBoardDetailsAPI(newBoard?._id, { columnOrderIds: dndOrderedColumnsIds })
+
+    setBoard(newBoard)
   }
 
   const moveCardInSameColumn = (dndOrderedCards, columnId) => {
@@ -80,9 +82,9 @@ const Board = () => {
     columnToUpdate.cards = dndOrderedCards
     columnToUpdate.cardOrderIds = dndOrderedCardsIds
 
-    setBoard(newBoard)
-
     updateColumnDetailsAPI(columnId, { cardOrderIds: dndOrderedCardsIds })
+
+    setBoard(newBoard)
   }
 
   const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
@@ -98,6 +100,8 @@ const Board = () => {
       nextColumnId,
       nextCardOrderIds: dndOrderedColumns.find(c => c._id === nextColumnId)?.cardOrderIds
     })
+
+    setBoard(newBoard)
   }
 
   if (!board) {
