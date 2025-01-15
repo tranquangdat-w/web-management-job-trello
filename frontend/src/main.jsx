@@ -5,9 +5,11 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material'
 import theme from './theme.js'
 import { ToastContainer, Bounce } from 'react-toastify'
 import { ConfirmProvider } from 'material-ui-confirm'
+import { Provider } from 'react-redux'
+import { store } from '~/redux/store.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <>
+  <Provider store={store}>
     <CssVarsProvider theme ={theme}>
       {/* Need font roboto to use, please download font roboto from goggle */}
       <ConfirmProvider defaultOptions={{
@@ -31,6 +33,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         />
       </ConfirmProvider>
     </CssVarsProvider>
-  </>
+  </Provider>
 )
 

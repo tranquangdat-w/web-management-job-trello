@@ -24,8 +24,19 @@ import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { toast, Bounce } from 'react-toastify'
 import { useConfirm } from 'material-ui-confirm'
+import { useDispatch, useSelector } from 'react-redux'
+import { createNewCardAPI } from '~/apis'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { cloneDeep } from 'lodash'
+import { deleteColumnDetailsAPI } from '~/apis'
 
-const Column = ( { column, createNewCard, deleteColumnDetails }) => {
+const Column = ( { column }) => {
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
+
   const [isOpenNewCardForm, setIsOpenNewCardForm] = useState(false)
   const toggleOpenNewCardForm = () => setIsOpenNewCardForm(!isOpenNewCardForm)
 
@@ -37,7 +48,21 @@ const Column = ( { column, createNewCard, deleteColumnDetails }) => {
       return
     }
 
-    await createNewCard({ 'title': newCardTitle, 'columnId': column?._id })
+    const cardData = {
+      title: newCardTitle,
+      columnId: column?._id,
+      boardId : board._id
+    }
+
+    const createdCard = await createNewCardAPI(cardData)
+
+    const newBoard = cloneDeep(board)
+    const columnHadNewCard = newBoard.columns.find(column => column._id === createdCard?.columnId)
+    columnHadNewCard.cards.push(createdCard)
+    columnHadNewCard.cardOrderIds = columnHadNewCard.cards.map(card => card._id)
+
+    dispatch(updateCurrentActiveBoard(newBoard))
+
     toast.success('Created new card!', {
       position: 'bottom-left',
       autoClose: 3000,
@@ -49,6 +74,7 @@ const Column = ( { column, createNewCard, deleteColumnDetails }) => {
       theme: 'dark',
       transition: Bounce
     })
+
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
@@ -91,7 +117,27 @@ const Column = ( { column, createNewCard, deleteColumnDetails }) => {
       title: 'Delete Column',
       description: 'This action will delete your column! Are you sure'
     }).then(() => {
-      deleteColumnDetails(column._id)
+
+      deleteColumnDetailsAPI(column._id).then((res) => {
+        toast.success(res.deleteResult, {
+          position: 'bottom-left',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+          transition: Bounce
+        })
+
+      })
+
+      const newBoard = cloneDeep(board)
+      newBoard.columns = newBoard.columns.filter(col => col._id !== column._id)
+      newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
+
+      dispatch(updateCurrentActiveBoard(newBoard))
     }).catch(() => {})
   }
 
