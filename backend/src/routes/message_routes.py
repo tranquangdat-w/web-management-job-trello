@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from src.controllers.message_controller import MessageController
-from src.validations import MessageValidation
+from src.validations.message_validation import MessageValidation
 
 router = APIRouter()
 
@@ -8,7 +8,7 @@ router = APIRouter()
 message_controller = MessageController()
 
 
-@router.post("/messages")
+@router.post("/send_messages")
 async def send_message(sender: str, receiver: str, message_data: MessageValidation):
     """
     Gửi tin nhắn giữa hai người dùng.

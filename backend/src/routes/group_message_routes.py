@@ -1,6 +1,6 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException
 from src.controllers.group_message_controller import GroupController
-from src.validations import GroupValidation, MessageValidation
+from src.validations.message_validation import GroupValidation, MessageValidation
 
 router = APIRouter()
 
@@ -8,12 +8,12 @@ router = APIRouter()
 group_controller = GroupController()
 
 
-@router.post("/groups")
+@router.post("/create_group")
 async def create_group(creator: str, group_data: GroupValidation):
     """
     Tạo một nhóm mới.
     """
-    response = await group_controller.create_group(creator, group_data.dict())
+    response = await group_controller.create_group(creator, group_data.model_dump())
     if response["status"] == "error":
         raise HTTPException(status_code=400, detail=response["message"])
     return response
@@ -49,7 +49,7 @@ async def send_group_message(
     Gửi tin nhắn vào nhóm.
     """
     response = await group_controller.send_group_message(
-        sender, group_id, message_data.dict()
+        sender, group_id, message_data.model_dump()
     )
     if response["status"] == "error":
         raise HTTPException(status_code=400, detail=response["message"])

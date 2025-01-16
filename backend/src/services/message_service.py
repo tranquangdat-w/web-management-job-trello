@@ -5,13 +5,18 @@ from src.providers.websocket_provider import WebSocketProvider
 
 class MessageService:
     def __init__(self, websocket_provider: WebSocketProvider):
+        self.websocket_provider = websocket_provider
+        self.__message_collection = None
+        self.__blocked_users_collection = None
+
+    async def connect_to_database(self):
+        await mongodb_connector.connect_database()
         self.__message_collection = mongodb_connector.get_database_instance()[
             MessageModel.message_collection_name
         ]
         self.__blocked_users_collection = mongodb_connector.get_database_instance()[
             "blocked_users"
         ]
-        self.websocket_provider = websocket_provider
 
     async def send_message(self, sender, receiver, content, mess_type="text"):
         # Kiểm tra xem sender có bị chặn bởi receiver không

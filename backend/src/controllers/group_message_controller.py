@@ -1,9 +1,11 @@
+from src.providers.websocket_provider import WebSocketProvider
 from src.services.group_message_service import GroupService
 
 
 class GroupController:
     def __init__(self):
-        self.group_service = GroupService()
+        websocket_provider = WebSocketProvider()
+        self.group_service = GroupService(websocket_provider)
 
     async def create_group(self, creator, group_data: dict) -> dict:
         """

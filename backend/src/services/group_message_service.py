@@ -1,3 +1,4 @@
+from uuid import uuid4
 from src.config.mongodb import mongodb_connector
 from src.models.group_message_model import GroupMessageModel
 from src.models.message_model import MessageModel
@@ -6,22 +7,45 @@ from src.providers.websocket_provider import WebSocketProvider
 
 class GroupService:
     def __init__(self, websocket_provider: WebSocketProvider):
+        self.websocket_provider = websocket_provider
+        self.__group_collection = None
+        self.__message_collection = None
+
+    async def connect_to_database(self):
+        await mongodb_connector.connect_database()
         self.__group_collection = mongodb_connector.get_database_instance()[
             GroupMessageModel.group_message_collection_name
         ]
         self.__message_collection = mongodb_connector.get_database_instance()[
             MessageModel.message_collection_name
         ]
-        self.websocket_provider = websocket_provider
 
     async def create_group(self, creator, group_name, description=None):
+        try:
+            await self.connect_to_database()
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": str(e),
+            }
+
+        group_id = uuid4()
+
         group = GroupMessageModel(
+            id=group_id,
             group_name=group_name,
             group_description=description,
             participants=[creator],
             admin=[creator],
         )
-        await self.__group_collection.insert_one(group.to_mongo().to_dict())
+
+        try:
+            await self.__group_collection.insert_one(group.to_mongo().to_dict())
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": str(e),
+            }
 
         # Gửi thông báo WebSocket tới tất cả client
         await self.websocket_provider.broadcast_message(
@@ -31,7 +55,6 @@ class GroupService:
         return {
             "status": "success",
             "message": "Group created successfully.",
-            "group": group.group_conversation_dict(),
         }
 
     async def add_participant(self, group_id, user_id):

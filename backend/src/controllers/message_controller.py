@@ -1,10 +1,12 @@
 from src.services.message_service import MessageService
+from src.providers.websocket_provider import WebSocketProvider
 
 
 class MessageController:
 
     def __init__(self):
-        self.message_service = MessageService()
+        websocket_provider = WebSocketProvider()  # Tạo đối tượng WebSocketProvider
+        self.message_service = MessageService(websocket_provider)  # Truyền tham số vào
 
     async def send_message(
         self, sender: str, receiver: str, message_data: dict

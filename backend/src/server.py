@@ -63,7 +63,7 @@ app.include_router(user_router, prefix="/dashboard")
 app.include_router(board_router, prefix="/boards")
 app.include_router(card_router, prefix="/cards")
 app.include_router(column_router, prefix="/columns")
-app.include_router(message_router, prefix="message")
+app.include_router(message_router, prefix="/message")
 app.include_router(group_message_router, prefix="/group_message")
 
 

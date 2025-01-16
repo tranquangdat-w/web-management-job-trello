@@ -9,9 +9,8 @@ from mongoengine import (
 )
 from datetime import datetime, timezone
 import uuid
-from backend.src.models import group_message_model
-from models import UserModel
 from src.config.environment import env
+from src.models.user_model import UserModel
 
 
 class MessageModel(Document):
@@ -21,7 +20,7 @@ class MessageModel(Document):
         UserModel, required=False
     )  # Người nhận (dành cho tin nhắn giữa 2 người)
     group = ReferenceField(
-        group_message_model, required=False
+        "GroupMessageModel", required=False
     )  # Nhóm trò chuyện (dành cho tin nhắn nhóm)
     content = StringField(required=True)  # Nội dung tin nhắn
     timestamp = DateTimeField(default=datetime.now(timezone.utc))  # Thời gian gửi
@@ -36,6 +35,10 @@ class MessageModel(Document):
     message_collection_name = env["MESSAGE_COLLECTION_NAME"]
 
     def message_dict(self):
+        from src.models.group_message_model import (
+            GroupMessageModel,
+        )
+
         return {
             "id": str(self.id),
             "sender": str(self.sender.id),
