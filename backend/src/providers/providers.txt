@@ -1,3 +1,0 @@
-Dependency Injection (DI): Giúp giảm coupling giữa các module và cải thiện khả năng kiểm thử (testing).
-Cung cấp dữ liệu từ service: Kết nối logic với dịch vụ bên ngoài như database, API, hoặc các dịch vụ cloud.
-Quản lý thông tin chung trong các tầng backend.
