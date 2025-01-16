@@ -1,5 +1,3 @@
-# src/services/message_service.py
-
 from src.models.message_model import MessageModel
 from src.config.mongodb import mongodb_connector
 from src.providers.websocket_provider import WebSocketProvider
