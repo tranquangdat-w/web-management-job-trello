@@ -1,6 +1,7 @@
 from src.services.board_service import BoardService
 from src.models.board_model import BoardModel
 from src.utils.formatters import slugify
+from uuid import UUID
 
 class BoardController:
     def __init__(self):
@@ -11,8 +12,8 @@ class BoardController:
 
         return await self.board_service.create_board(board)
 
-    async def get_details(self, board_id: str) -> dict:
-        return await self.board_service.get_details(board_id)
+    async def get_details(self, board_id: UUID) -> dict:
+        return await self.board_service.get_details(str(board_id))
 
     async def update_board(self, board_id, req_body: dict) -> dict:
         return await self.board_service.update_board(board_id, req_body)

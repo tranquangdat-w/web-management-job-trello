@@ -1,6 +1,6 @@
 from src.utils.constants import BOARD_TYPES
 from typing import Optional
-from pydantic import BaseModel, Extra, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator
 from uuid import UUID
 
 class CreateBoardValidation(BaseModel):

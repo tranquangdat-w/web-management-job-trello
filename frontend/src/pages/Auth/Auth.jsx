@@ -1,16 +1,24 @@
-import { useLocation } from 'react-router-dom'
+import { useLocation, Navigate } from 'react-router-dom'
 import { Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
 import { LoginForm } from './Login/LoginForm'
 import { RegisterForm } from './Register/RegisterForm'
 import { LoginButton } from './Login/LoginButton'
 import { RegisterButton } from './Register/RegisterButton'
+import { selectCurrentUser } from '~/redux/user/userSlice'
+import { useSelector } from 'react-redux'
 
 export const Auth = () => {
   const location = useLocation()
 
   const isLogin = location.pathname === '/login'
   const isRegister = location.pathname === '/register'
+
+  const currentUser = useSelector(selectCurrentUser)
+
+  if (currentUser) {
+    return <Navigate to='/' replace={true} />
+  }
 
   return (
     <Box

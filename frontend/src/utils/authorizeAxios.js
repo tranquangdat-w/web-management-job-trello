@@ -30,10 +30,15 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
   intercepterLoadingElements(false)
+
   let errorMessage = error?.message
 
   if (error.response?.data?.detail[0]?.msg) {
     errorMessage = error.response?.data?.detail[0]?.msg
+  }
+
+  if (error.response?.data?.detail) {
+    errorMessage = error.response?.data?.detail
   }
 
   if (error.response?.status !== 410) {
@@ -48,6 +53,8 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
       theme: 'dark',
       transition: Bounce
     })
+  } else {
+    console.log(error)
   }
 
   return Promise.reject(error)

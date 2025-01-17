@@ -1,17 +1,19 @@
 import sys
 from src.config.environment import env
 from src.utils.constants import WHITElIST_DOMAINS
+from src.utils.jwt_util import verify_token
 import uvicorn
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request, requests
+# from src.middlewares.auth_middleware import AuthMiddleware
 from fastapi.middleware.cors import CORSMiddleware
-from src.middlewares.auth_middleware import AuthMiddleware
-from src.routes.auth_routes import (router as register_or_login_router)
+# from src.routes.auth_routes import (router as register_or_login_router)
 from src.routes.board_routes import (router as board_router)
 from src.routes.card_routes import (router as card_router)
 from src.routes.column_routes import (router as column_router)
 from src.config.mongodb import mongodb_connector
 from src.routes.user_routes import (router as user_router)  # Import router cho các route bảo vệ
+# from src.middlewares.auth_middleware import AuthMiddleware
 
 APP_HOST = env['APP_HOST']
 APP_PORT = env['APP_PORT']
@@ -36,6 +38,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=WHITElIST_DOMAINS,  # Domain
@@ -44,22 +47,12 @@ app.add_middleware(
     allow_headers=["*"],  # Cho phép tất cả các header
 )
 
-# Thêm AuthMiddleware để xử lý xác thực token
-# app.add_middleware(AuthMiddleware)
-
-# Đăng ký các route vào ứng dụng FastAPI
-app.include_router(
-    register_or_login_router, prefix="/user"
-)  # Route đăng ký, đăng nhập người dùng
-
-# Đưa ra các route dành cho dashboard hoặc các tài nguyên bảo vệ khác (nếu có)
-app.include_router(
-    user_router, prefix="/dashboard"
-)
-
+# # Thêm AuthMiddleware để xử lý xác thực token
+app.include_router(user_router, prefix="/users")
 app.include_router(board_router, prefix="/boards")
 app.include_router(card_router, prefix="/cards")
 app.include_router(column_router, prefix="/columns")
+
 
 @app.get("/")
 async def get_root():

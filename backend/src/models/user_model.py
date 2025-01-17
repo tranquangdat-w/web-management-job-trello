@@ -1,4 +1,6 @@
 from mongoengine import Document
+from src.config.mongodb import mongodb_connector
+from src.config.environment import env
 from mongoengine.fields import (
     UUIDField,
     StringField,
@@ -11,29 +13,65 @@ import uuid
 
 
 class UserModel(Document):
-
-    id = UUIDField(default=uuid.uuid4, primary_key=True)
-    username = StringField(required=True, unique=True)
-    password = StringField(required=True)
+    _id = UUIDField(default=uuid.uuid4, primary_key=True)
     email = EmailField(required=True, unique=True)
-    fullname = StringField(required=True)
-    date_of_birth = DateTimeField(required=True)
-    sex = StringField(required=True, choices=["male", "female", "other"])
-    phone_number = StringField(required=True)
-    is_verified = BooleanField(default=False)
-    is_active = BooleanField(default=False)
-    created_at = DateTimeField(default=datetime.now(timezone.utc))
+    password = StringField(required=True)
 
-    def user_dict(self):
+    displayName = StringField(required=True, unique=True)
+    username = StringField(required=True, unique=True)
+    avatar = StringField(default="")
+    role = StringField(required=True, default="client", choices=["client", "admin"])
+
+    verifyToken = StringField()
+    isActive = BooleanField(default=False)
+
+    createdAt = DateTimeField(default=datetime.now(timezone.utc))
+    updatedAt = DateTimeField(default=None)
+    user_collection_name = env['USER_COLLECTION_NAME']
+
+    def create_user_data(self):
         return {
-            "id": str(self.id),
-            "username": self.username,
+            "_id": str(self._id),
             "email": self.email,
-            "fullname": self.fullname,
-            "date_of_birth": self.date_of_birth,
-            "sex": self.sex,
-            "phone_number": self.phone_number,
-            "is_verified": self.is_verified,
-            "is_active": self.is_active,
-            "create_at": self.created_at,
+            "password": self.password,
+            "displayName": self.displayName,
+            "username": self.username,
+            "avatar": self.avatar,
+            "role": self.role,
+            "isActive": self.isActive,
+            "verifyToken": self.verifyToken,
+            "createAt": self.createdAt,
+            "updatedAt": self.updatedAt,
         }
+
+    @staticmethod
+    async def create_user(user: 'UserModel'):
+        return await mongodb_connector.get_database_instance()[UserModel.user_collection_name].insert_one(user.create_user_data())
+
+    @staticmethod
+    async def find_one_by_id(user_id):
+        result = await mongodb_connector.get_database_instance()[UserModel.user_collection_name].find_one({"_id" : user_id})
+
+        return result 
+
+    @staticmethod
+    async def find_one_by_email(email):
+        result = await mongodb_connector.get_database_instance()[UserModel.user_collection_name].find_one({"email" : email})
+
+        return result 
+
+    @staticmethod
+    async def update_user(user_id, req_body: dict):
+        user_collection = mongodb_connector.get_database_instance()[UserModel.user_collection_name]
+
+        req_body['updatedAt'] = datetime.now(timezone.utc)
+
+        result = await user_collection.find_one_and_update(
+                { "_id": user_id },
+                { "$set": req_body },
+                return_document=True
+            )
+
+        return result
+
+

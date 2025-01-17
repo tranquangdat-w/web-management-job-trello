@@ -1,12 +1,14 @@
 from src.validations.column_validation import ColumnValidation, UpdateColumnValidation
 from src.controllers.column_controller import ColumnController
-from fastapi import APIRouter, HTTPException, status, Path, Body
+from src.middlewares.auth_middleware import auth_middleware
+from fastapi import APIRouter, HTTPException, status, Path, Body, Header
 from uuid import UUID
 
 router = APIRouter()
 
 @router.post("/")
-async def create_column(column: ColumnValidation):
+async def create_column(column: ColumnValidation, authorization: str = Header(None)):
+    auth_middleware(authorization)
     try:
         column_controller = ColumnController()
         result = await column_controller.create_column({
@@ -19,7 +21,8 @@ async def create_column(column: ColumnValidation):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't create column: {e}")
         
 @router.put("/{id}")
-async def update_column(id: str = Path(...), req_body: UpdateColumnValidation = Body(...)) -> dict: 
+async def update_column(id: UUID = Path(...), req_body: UpdateColumnValidation = Body(...), authorization: str = Header(None)) -> dict: 
+    auth_middleware(authorization)
     column_controller = ColumnController()
 
     new_req_body = {}
@@ -35,7 +38,8 @@ async def update_column(id: str = Path(...), req_body: UpdateColumnValidation = 
     return column
 
 @router.delete("/{id}")
-async def delete_column(id: UUID = Path(...)) -> dict: 
+async def delete_column(id: UUID = Path(...), authorization: str = Header(None)) -> dict: 
+    auth_middleware(authorization)
     column_controller = ColumnController()
 
     result = await column_controller.delete_column(str(id))

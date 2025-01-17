@@ -1,45 +1,81 @@
 import authorizedAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
+import { toast } from 'react-toastify'
+
+// Hàm dùng token cho các request cần authentication
+export const getAuthHeader = () => {
+  const accessToken = localStorage.getItem('accessToken')
+
+  return accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}
+}
 
 export const fetchBoardDetailsAPI = async (boardId) => {
-  const response = await authorizedAxiosInstance .get(`${API_ROOT}/boards/${boardId}`)
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/boards/${boardId}`,
+    { headers: getAuthHeader() }
+  )
 
   return response.data
 }
 
 export const updateBoardDetailsAPI = async (boardId, columnOrderIdsData) => {
-  const response = await authorizedAxiosInstance .put(`${API_ROOT}/boards/${boardId}`, columnOrderIdsData)
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/boards/${boardId}`, columnOrderIdsData, {
+    headers: getAuthHeader()
+  })
 
   return response.data
 }
 
 export const moveCardToDifferentColumnAPI = async (updateData) => {
-  const response = await authorizedAxiosInstance .put(`${API_ROOT}/boards/supports/moving_card`, updateData)
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/boards/supports/moving_card`, updateData, {
+    headers: getAuthHeader()
+  })
 
   return response.data
 }
 
 export const updateColumnDetailsAPI = async (columnId, cardOrderIdsData) => {
-  const response = await authorizedAxiosInstance .put(`${API_ROOT}/columns/${columnId}`, cardOrderIdsData)
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/columns/${columnId}`, cardOrderIdsData, {
+    headers: getAuthHeader()
+  })
 
   return response.data
 }
 
 export const deleteColumnDetailsAPI = async (columnId) => {
-  const response = await authorizedAxiosInstance .delete(`${API_ROOT}/columns/${columnId}`)
+  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/columns/${columnId}`, {
+    headers: getAuthHeader()
+  })
 
   return response.data
 }
 
 export const createNewColumnAPI = async (columnData) => {
-  const createdNewColumn = await authorizedAxiosInstance .post(`${API_ROOT}/columns`, columnData)
+  const createdNewColumn = await authorizedAxiosInstance.post(`${API_ROOT}/columns`, columnData, {
+    headers: getAuthHeader()
+  })
 
   return createdNewColumn.data
 }
 
 export const createNewCardAPI = async (cardData) => {
-  const createdNewCard = await authorizedAxiosInstance .post(`${API_ROOT}/cards`, cardData)
+  const createdNewCard = await authorizedAxiosInstance.post(`${API_ROOT}/cards`, cardData, {
+    headers: getAuthHeader()
+  })
 
   return createdNewCard.data
+}
+
+export const registerUserAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/users/register`, data)
+  toast.success('Account created! Please check email and verify your account', { theme: 'colored' })
+
+  return response.data
+}
+
+export const verifyUserAPI = async (data) => {
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/users/verify`, data)
+  toast.success('Account verified successfully!', { theme: 'colored' })
+
+  return response.data
 }
 

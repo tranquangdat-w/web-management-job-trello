@@ -1,12 +1,15 @@
 from src.validations.card_validation import CardValidation, UpdateCardValidation
 from src.controllers.card_controller import CardController
-
-from fastapi import APIRouter, HTTPException, status, Path, Body
+from src.middlewares.auth_middleware import auth_middleware
+from fastapi import APIRouter, HTTPException, status, Path, Body, Header
+from src.middlewares.auth_middleware import auth_middleware
+from uuid import UUID
 
 router = APIRouter()
 
 @router.post("/")
-async def create_card(card: CardValidation):
+async def create_card(card: CardValidation, authorization: str = Header(None)):
+    auth_middleware(authorization)
     try:
         card_controller = CardController()
         result = await card_controller.create_card({
@@ -20,7 +23,8 @@ async def create_card(card: CardValidation):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't create card: {e}")
 
 @router.put("/{id}")
-async def update_card(id: str = Path(...), req_body: UpdateCardValidation = Body(...)) -> dict: 
+async def update_card(id: UUID = Path(...), req_body: UpdateCardValidation = Body(...), authorization: str = Header(None)) -> dict: 
+    auth_middleware(authorization)
     card_controller = CardController()
 
     new_req_body = {}
