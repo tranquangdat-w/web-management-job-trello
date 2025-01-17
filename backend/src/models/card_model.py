@@ -1,4 +1,5 @@
 import uuid
+
 from src.config.mongodb import mongodb_connector
 from src.config.environment import env
 from mongoengine import Document
@@ -17,12 +18,16 @@ class CardModel(Document):
     columnId = UUIDField(required=True)
     createdAt = DateTimeField(default=datetime.now(timezone.utc))
     updatedAt = DateTimeField(default=None)
+    cover= StringField(default="")
+    duaDate = DateTimeField(default=None)
     card_collection_name = env['CARD_COLLECTION_NAME']
 
     def create_card_data(self):
         return {
             '_id': str(self._id),
             'title': self.title,
+            'cover': self.cover,
+            'duaDate': self.duaDate,
             'boardId': self.boardId,
             'columnId': self.columnId,
             'createdAt': self.createdAt,

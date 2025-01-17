@@ -343,17 +343,19 @@ const Column = ( { column }) => {
                 justifyContent: 'flex-start',
                 gap: 1
               }}>
-                <Button sx={{
-                  color: 'black',
-                  bgcolor: '#42a5f5',
-                  '&:hover': {
-                    bgcolor: '#64b5f6'
-                  }
-                }}
-                variant="contained"
-                size="small"
-                disableElevation={true}
-                onClick={addNewCard}
+                <Button
+                  className='interceptor-loading'
+                  sx={{
+                    color: 'black',
+                    bgcolor: '#42a5f5',
+                    '&:hover': {
+                      bgcolor: '#64b5f6'
+                    }
+                  }}
+                  variant="contained"
+                  size="small"
+                  disableElevation={true}
+                  onClick={addNewCard}
                 >
                   Add Card
                 </Button>

@@ -1,2 +1,0 @@
-Kết nối client-server theo thời gian thực.
-WebSocket: Thường được sử dụng trong các giao diện thời gian thực (real-time UI, trò chuyện, hoặc cập nhật dữ liệu theo thời gian thực).

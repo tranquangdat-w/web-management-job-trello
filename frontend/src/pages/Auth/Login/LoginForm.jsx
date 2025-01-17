@@ -9,6 +9,12 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import IconButton from '@mui/material/IconButton'
 import { RegisterButton } from '../Register/RegisterButton'
 import { useForm } from 'react-hook-form'
+import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { loginUserAPI } from '~/redux/user/userSlice'
+import { toast } from 'react-toastify'
+
+
 import {
   FIELDS_REQUIRED_MESSAGE,
   EMAIL_RULE,
@@ -19,12 +25,25 @@ import {
 import { FieldErrorAlert } from '~/components/Form/FieldErrorAlert'
 
 export const LoginForm = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  let [searchParams] = useSearchParams()
+
+  const registeredEmail = searchParams.get('registeredEmail')
+  const verifiedEmail = searchParams.get('verifiedEmail')
+
   const { register, handleSubmit, formState: { errors } } = useForm()
 
   const submitLogin = (data) => {
-    // Em hai call api o day
-    console.log(data)
+    const { email, password } = data
+    toast.promise(
+      dispatch(loginUserAPI({ email, password })),
+      { pending: 'Login is in progress... ' }).then(res => {
+      if (!res.error) navigate('/')
+    })
   }
+
   const [passwordVisible, setPasswordVisible] = useState(false)
 
   const togglePasswordVisibility = () => {
@@ -44,6 +63,16 @@ export const LoginForm = () => {
           <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
             Sign in
           </Typography>
+          {verifiedEmail &&
+            <Box>
+              heeh
+            </Box>
+          }
+          {registeredEmail &&
+            <Box>
+              haha
+            </Box>
+          }
           <Box>
             <TextField
               fullWidth

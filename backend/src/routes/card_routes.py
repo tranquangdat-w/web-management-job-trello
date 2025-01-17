@@ -1,12 +1,18 @@
 from src.validations.card_validation import CardValidation, UpdateCardValidation
 from src.controllers.card_controller import CardController
-
-from fastapi import APIRouter, HTTPException, status, Path, Body
+from src.middlewares.auth_middleware import auth_middleware
+from fastapi import APIRouter, HTTPException, status, Path, Body, Depends
+from src.middlewares.auth_middleware import auth_middleware
+from uuid import UUID
+from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
+
 @router.post("/")
-async def create_card(card: CardValidation):
+async def create_card(card: CardValidation, token: str = Depends(oauth2_scheme)):
+    auth_middleware(token)
     try:
         card_controller = CardController()
         result = await card_controller.create_card({
@@ -20,7 +26,8 @@ async def create_card(card: CardValidation):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't create card: {e}")
 
 @router.put("/{id}")
-async def update_card(id: str = Path(...), req_body: UpdateCardValidation = Body(...)) -> dict: 
+async def update_card(id: UUID = Path(...), req_body: UpdateCardValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict: 
+    auth_middleware(token)
     card_controller = CardController()
 
     new_req_body = {}

@@ -36,3 +36,4 @@ class MongoDbConnector:
         return self.__database
 
 mongodb_connector = MongoDbConnector()
+

@@ -1,10 +1,9 @@
 // Details board
+import { PageLoading } from '~/components/Loading/PageLoading'
 import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
 import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
-import CircularProgress from '@mui/material/CircularProgress'
-import Box from '@mui/material/Box'
 import { cloneDeep } from 'lodash'
 import { useEffect } from 'react'
 import { updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis'
@@ -24,9 +23,6 @@ const Board = () => {
   const { boardId } = useParams()
 
   useEffect(() => {
-    // const boardId = '67860a3b3d5db7c574af07b4' // My mongo
-    // const boardId = '13be383a-75e4-4025-8de3-ad31c5d79500' // Team mongo
-
     dispatch(fetchBoardDetailsAPI(boardId))
   }, [dispatch, boardId])
 
@@ -76,16 +72,7 @@ const Board = () => {
 
   if (!board) {
     return (
-      <Box sx={{
-        display: 'flex',
-        widht: '100vh',
-        height: '100vh',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bgcolor: (theme) => theme.palette.primary.main
-      }}>
-        <CircularProgress sx={{ color: 'white' }} />
-      </Box>
+      <PageLoading />
     )
   }
 
