@@ -14,8 +14,16 @@ import Typography from '@mui/material/Typography'
 import * as React from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-const Card = ({ card }) => {
+
+
+const Card = () => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data : { ...card }
@@ -31,6 +39,23 @@ const Card = ({ card }) => {
 
   const shouldShowCardActions = () => {
     return Boolean(card?.memberIds?.length) || !!card?.comments?.length || !!card?.attachments?.length
+  }
+
+  //code moi them
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const [selectedDate, setSelectedDate] = React.useState(null)
+  const [showDatePicker, setShowDatePicker] = React.useState(false)
+
+  const open = Boolean(anchorEl)
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+  const handleDateSelect = (date) => {
+    setSelectedDate(date)
+    setShowDatePicker(false)
   }
 
   return (
@@ -49,12 +74,50 @@ const Card = ({ card }) => {
         '&:last-child': { p: 1.5 },
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        width: '272px',
       }}>
         <Typography sx={{ wordBreak: 'break-word' }}>{card?.title}</Typography>
-        <Box sx={{ borderRadius: '20px', paddingX: '6px', opacity: 0.1, '&:hover': { bgcolor: 'gray', opacity: 1 } }}>
+        <Box sx={{ borderRadius: '20px', paddingX: '6px', opacity: 0.1, '&:hover': { bgcolor: 'gray', opacity: 1 }}} onClick={handleClick}>
           <ModeIcon sx ={{ fontSize: '12px' }}/>
         </Box>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          sx={{
+            mt: 1,
+            '& .MuiPaper-root': {
+              borderRadius: '12px',
+              minWidth: '200px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              padding: '8px 0',
+            },
+            '& .MuiMenuItem-root': {
+              padding: '8px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              fontSize: '14px',
+              color: '#333',
+              transition: 'background-color 0.3s',
+              '&:hover': {
+                backgroundColor: '#f5f5f5',
+              },
+              '& svg': {
+                fontSize: '20px',
+                color: '#888',
+              },
+            },
+          }}
+        >
+          <MenuItem onClick={() => { setShowDatePicker(true); handleClose(); }}>
+            <CalendarMonthIcon /> Chọn lịch
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <DeleteIcon /> Xóa
+          </MenuItem>
+        </Menu>
       </CardContent>
 
       {shouldShowCardActions() &&
@@ -102,6 +165,17 @@ const Card = ({ card }) => {
           </CardActions>
         </Box>
       }
+
+      {showDatePicker && (
+        <Box sx={{ p: 2, position: 'absolute', zIndex: 999 }}>
+          <DatePicker
+            selected={selectedDate}
+            onChange={handleDateSelect}
+            inline
+            dateFormat="dd/MM/yyyy"
+          />
+        </Box>
+      )}
     </MuiCard>
   )
 }
