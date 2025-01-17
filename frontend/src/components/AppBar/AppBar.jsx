@@ -20,6 +20,7 @@ import More from './Menus/Responsive/More'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const AppBar = () => {
   const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
@@ -49,11 +50,12 @@ const AppBar = () => {
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <AppsIcon sx={{ color: colorComponents }}/>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white' }}/>
-            <Typography sx={{ display: 'inline', fontSize: '1.2rem', fontWeight: 'bold', color: colorComponents }}>Trello</Typography>
-          </Box>
-
+          <Link to="/">
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white' }}/>
+              <Typography sx={{ display: 'inline', fontSize: '1.2rem', fontWeight: 'bold', color: colorComponents }}>Trello</Typography>
+            </Box>
+          </Link>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
             <WorkSpaces />
             <Recent />

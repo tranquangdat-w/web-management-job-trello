@@ -5,6 +5,8 @@ import { Auth } from './pages/Auth/Auth'
 import { AccountVerification } from '~/pages/Auth/AccountVerification'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector } from 'react-redux'
+import { Settings } from '~/pages/Settings/Settings'
+
 // import BoardPage from '~/pages/BoardPage/boardPage'
 // import Home from '~/pages/HomePages/home'
 
@@ -29,6 +31,8 @@ const App = () => {
       <Route element={<ProtectedRoute user={currentUser} />}>
         {/*Board Details*/}
         <Route path='/boards/:boardId' element={<Board />}/>
+        <Route path='/setting/account' element={<Settings />} />
+        <Route path='/setting/security' element={<Settings />} />
       </Route>
 
 

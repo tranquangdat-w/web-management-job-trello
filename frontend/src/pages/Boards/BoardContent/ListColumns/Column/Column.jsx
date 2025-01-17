@@ -163,7 +163,8 @@ const Column = ( { column }) => {
           sx={{
             height: 'auto',
             paddingX: 2,
-            pt: 2,
+            paddingTop: 1.5,
+            paddiingBottom: 1,
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between'

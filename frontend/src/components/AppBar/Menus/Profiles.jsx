@@ -15,6 +15,7 @@ import { logOutUser, selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useConfirm } from 'material-ui-confirm'
 import { toast, Bounce } from 'react-toastify'
+import { Link } from 'react-router-dom'
 
 const Profiles = () => {
   const dispatch = useDispatch()
@@ -79,23 +80,26 @@ const Profiles = () => {
         open={open}
         onClose={handleClose}
         TransitionComponent={Fade}
+        sx={{ minWidth: 100 }}
       >
         <MenuItem onClick={handleClose}>
           <Avatar sx={{ width :'30px', height: '30px', mr: 2 }} src={user?.avatar}/>
-          Profile
+          {user?.displayName} Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
+        <MenuItem onClick={handleClose} sx={{
+          display: 'flex',
+          '& a': {
+            textDecoration: 'none',
+            color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black'
+          }
+        }}>
+          <Link to='/setting/account' >
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Settings
+          </Link>
         </MenuItem>
         <MenuItem
           sx={{
