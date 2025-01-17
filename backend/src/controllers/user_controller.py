@@ -1,5 +1,7 @@
 from src.services.user_service import UserService
 from fastapi import Response
+from src.utils.jwt_util import verify_token
+from src.config.environment import env
 
 class UserController:
     """
@@ -31,6 +33,14 @@ class UserController:
             return result
         except Exception as e:
             raise e
+    async def refesh_access_token(self, token: str):
+        try:
+            return await self.user_service.refesh_access_token(token)
+        except Exception as e:
+            raise e 
+
+        
+
 
     # async def get_user_by_id(self, user_id: str):
     #     """

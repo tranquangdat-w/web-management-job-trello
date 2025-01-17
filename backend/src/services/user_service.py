@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from src.models.user_model import UserModel
 from src.config.environment import env
-from src.utils.jwt_util import create_token
+from src.utils.jwt_util import create_token, verify_token
 
 USER_COLLECTION = "user_test"  # Đổi tên collection thành 'user_test'
 
@@ -88,11 +88,11 @@ class UserService:
                 "_id" : exist_user['_id'],
                 "email" : exist_user['email']
             }
-            user_info['exp'] = datetime.now(timezone.utc) + timedelta(seconds=100000000000) 
+            user_info['exp'] = datetime.now(timezone.utc) + timedelta(days=env['ACCESS_TOKEN_TIME_LIFE']) 
 
             access_token = create_token(user_info, env['ACCESS_TOKEN_SECRET_KEY'])
 
-            user_info['exp'] = datetime.now(timezone.utc) + timedelta(days=14) 
+            user_info['exp'] = datetime.now(timezone.utc) + timedelta(days=env['ACCESS_TOKEN_TIME_LIFE']) 
             refesh_token = create_token(user_info, env['REFESH_TOKEN_SECRET_KEY'])
 
             del exist_user['password']
@@ -103,6 +103,15 @@ class UserService:
             return exist_user
         except Exception as e:
             raise e
+    async def refesh_access_token(self, token: str):
+        play_load = verify_token(token, env['REFESH_TOKEN_SECRET_KEY'])
+        if not play_load:
+            raise Exception
+
+        play_load['exp'] = datetime.now(timezone.utc) + timedelta(days=env['ACCESS_TOKEN_TIME_LIFE'])
+        new_access_token = create_token(play_load, env['ACCESS_TOKEN_SECRET_KEY'])
+
+        return new_access_token
 
     def send_verification_email(self, email: str, user_data: dict) -> bool:
         """Gửi email xác thực với mã xác nhận."""

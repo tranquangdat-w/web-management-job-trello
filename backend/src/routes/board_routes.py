@@ -42,7 +42,7 @@ async def get_details(id: UUID = Path(...), authorization : str = Header(None)) 
     auth_middleware(authorization) 
     try:
         board_controller = BoardController()
-        board = await board_controller.get_details(id)
+        board = await board_controller.get_details(str(id))
 
         if not board:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found Board")
@@ -60,7 +60,7 @@ async def update_board(id: UUID = Path(...), req_body: UpdateBoardValidation = B
         if getattr(req_body, field) is not None:
             new_req_body[field] = getattr(req_body, field)
 
-    board = await board_controller.update_board(id, new_req_body)
+    board = await board_controller.update_board(str(id), new_req_body)
 
     if not board:
         raise HTTPException(

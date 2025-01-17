@@ -12,8 +12,8 @@ class BoardController:
 
         return await self.board_service.create_board(board)
 
-    async def get_details(self, board_id: UUID) -> dict:
-        return await self.board_service.get_details(str(board_id))
+    async def get_details(self, board_id) -> dict:
+        return await self.board_service.get_details(board_id)
 
     async def update_board(self, board_id, req_body: dict) -> dict:
         return await self.board_service.update_board(board_id, req_body)

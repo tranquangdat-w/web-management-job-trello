@@ -1,8 +1,4 @@
 import jwt
-from dotenv import load_dotenv
-
-load_dotenv()
-
 
 def create_token(payload, secret_key):
     try:
@@ -12,7 +8,8 @@ def create_token(payload, secret_key):
 
 def verify_token(token, secret_key) -> dict:
     try:
-        return jwt.decode(token, secret_key, algorithms="HS256")
+        payload = jwt.decode(token, secret_key, algorithms=["HS256"])
+        return payload
 
     except jwt.ExpiredSignatureError:
         raise ValueError("Token hết hạn")

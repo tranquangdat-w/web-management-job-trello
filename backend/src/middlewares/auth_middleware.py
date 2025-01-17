@@ -10,5 +10,11 @@ def auth_middleware(authorization: str = Header(None)):
         client_token_decode = verify_token(authorization.split()[1], env['ACCESS_TOKEN_SECRET_KEY'])
 
         return client_token_decode
-    except Exception:
-        raise HTTPException(status_code=410, detail='You need to refesh token')
+
+    except Exception as e:
+        # call refeshToken
+        if str(e) == 'Token hết hạn':
+            raise HTTPException(status_code=410)
+        else:
+            raise HTTPException(status_code=401, detail='You need log in again!!!!')
+

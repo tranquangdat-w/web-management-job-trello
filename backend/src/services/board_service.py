@@ -3,6 +3,7 @@ from src.models.board_model import BoardModel
 from src.models.column_model import ColumnModel
 from src.models.card_model import CardModel
 from datetime import datetime, timezone
+from uuid import UUID
 
 class BoardService:
     async def create_board(self, board: BoardModel) -> dict:
