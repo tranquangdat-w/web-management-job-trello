@@ -21,7 +21,7 @@ async def create_user(user_data: UserRegisterValidation) -> dict:
 
         return result
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't create user: {e}")
+        raise e
   
 @router.put("/verify")
 async def verify_user(user_data: UserVerifyAcountValidation):
@@ -36,16 +36,16 @@ async def verify_user(user_data: UserVerifyAcountValidation):
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't verify user: {e}")
 
 @router.post("/login")
-async def login_user(user_data: UserLoginValidation, res: Response):
+async def login_user(user_data: UserLoginValidation):
     try:
         result = await user_controller.login_user({
             'email': user_data.email,
             'password': user_data.password,
-        }, res)
+        })
 
         return result
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't login user: {e}")
+        raise e
 
 @router.get("/refesh_token")
 async def refesh_access_token(token: str = Depends(oauth2_scheme)):

@@ -23,16 +23,14 @@ class UserController:
         except Exception as e:
             raise e
 
-    async def login_user(self, user_data, res: Response):
+    async def login_user(self, user_data):
         try:
             result = await self.user_service.login_user(user_data)
-
-            res.set_cookie(key='accessToken',value=result['accessToken'], httponly=False, max_age=1000000)
-            res.set_cookie(key='refeshToken',value=result['refeshToken'], httponly=False, max_age=1209600)
 
             return result
         except Exception as e:
             raise e
+
     async def refesh_access_token(self, token: str):
         try:
             return await self.user_service.refesh_access_token(token)

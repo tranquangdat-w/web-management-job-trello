@@ -1,10 +1,11 @@
-from src.validations.card_validation import CardValidation, UpdateCardValidation
+from src.validations.card_validation import CardValidation, UpdateCardValidation, DeleteCardValidation
 from src.controllers.card_controller import CardController
 from src.middlewares.auth_middleware import auth_middleware
 from fastapi import APIRouter, HTTPException, status, Path, Body, Depends
 from src.middlewares.auth_middleware import auth_middleware
 from uuid import UUID
 from fastapi.security import OAuth2PasswordBearer
+
 
 router = APIRouter()
 
@@ -39,6 +40,23 @@ async def update_card(id: UUID = Path(...), req_body: UpdateCardValidation = Bod
 
     if not card:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail = "Can't update card") 
+
+    return card
+
+@router.delete("/{id}")
+async def delete_card(id: UUID = Path(...), req_body: DeleteCardValidation = Body(...),token: str = Depends(oauth2_scheme)) -> dict: 
+    auth_middleware(token)
+    card_controller = CardController()
+
+    new_req_body = {}
+    for field in list(req_body.__fields__.keys()):
+        if getattr(req_body, field) is not None:
+            new_req_body[field] = getattr(req_body, field)
+
+    card = await card_controller.delete_card(str(id), new_req_body['columnId'])
+
+    if not card:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail = "Can't delete card") 
 
     return card
 

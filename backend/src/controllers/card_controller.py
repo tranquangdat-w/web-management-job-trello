@@ -13,3 +13,6 @@ class CardController:
     async def update_card(self, card_id, req_body: dict) -> dict:
         return await self.card_service.update_card(card_id, req_body)
 
+    async def delete_card(self, card_id, columnId) -> dict:
+        return await self.card_service.delete_card(card_id, columnId)
+

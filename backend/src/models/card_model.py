@@ -52,10 +52,22 @@ class CardModel(Document):
         return result
 
     @staticmethod
+    async def find_one_by_id(card_id):
+        result = await mongodb_connector.get_database_instance()[Card.card_collection_name].find_one({"_id" : card_id})
+
+        return result 
+
+    @staticmethod
     async def delete_many_by_column_id(column_id):
         card_collection = mongodb_connector.get_database_instance()[CardModel.card_collection_name]
 
         result = await card_collection.delete_many({ "columnId": column_id })
 
         return result
+
+    @staticmethod
+    async def delete_card(card_id):
+        card_collection = mongodb_connector.get_database_instance()[CardModel.card_collection_name]
+
+        await card_collection.delete_one({ "_id": card_id })
 

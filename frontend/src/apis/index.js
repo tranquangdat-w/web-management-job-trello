@@ -64,3 +64,10 @@ export const refeshTokenAPI = async () => {
 
   return response.data
 }
+
+export const deleteCardAPI = async (cardId, column_data) => {
+  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/cards/${cardId}`, { data: column_data })
+
+  return response.data
+}
+
