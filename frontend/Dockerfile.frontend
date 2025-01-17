@@ -1,0 +1,24 @@
+# Dockerfile.frontend
+
+FROM node:18 as frontend
+
+WORKDIR /app/frontend
+
+# Copy package.json và yarn.lock
+COPY frontend/package.json frontend/yarn.lock /app/frontend/
+RUN yarn install
+
+# Copy mã nguồn frontend vào container
+COPY frontend /app/frontend
+
+# Build frontend
+RUN yarn build
+
+# Sử dụng nginx để phục vụ frontend
+FROM nginx:alpine as final
+
+COPY --from=frontend /app/frontend/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

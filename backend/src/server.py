@@ -40,6 +40,7 @@ async def lifespan(app: FastAPI):
     await mongodb_connector.close_connect_to_database()
     print("Disconnected to database MongoDb")
 
+
 app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
@@ -54,9 +55,8 @@ app.include_router(user_router, prefix="/users")
 app.include_router(board_router, prefix="/boards")
 app.include_router(card_router, prefix="/cards")
 app.include_router(column_router, prefix="/columns")
-app.include_router(message_router, prefix="/message")
-app.include_router(group_message_router, prefix="/group_message")
+# app.include_router(message_router, prefix="/message")
+# app.include_router(group_message_router, prefix="/group_message")
 
 if __name__ == "__main__":
     uvicorn.run("server:app", host=APP_HOST, port=APP_PORT, reload=True)
-
