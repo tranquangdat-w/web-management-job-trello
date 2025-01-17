@@ -49,7 +49,7 @@ export const RegisterForm =() => {
         <form onSubmit={handleSubmit(submitRegister)}>
           <TextField
             fullWidth
-            label="Tên tài khoản"
+            label="Username"
             variant="outlined"
             margin="normal"
             size='small'
@@ -62,7 +62,7 @@ export const RegisterForm =() => {
           <FieldErrorAlert errors={errors} fieldName={'username'} />
           <TextField
             fullWidth
-            label="Mật khẩu"
+            label="Password"
             type={passwordVisible ? 'text' : 'password'}
             variant="outlined"
             margin="normal"
@@ -90,7 +90,7 @@ export const RegisterForm =() => {
           <FieldErrorAlert errors={errors} fieldName={'password'} />
           <TextField
             fullWidth
-            label="Xác nhận mật khẩu"
+            label="Confirm Password"
             type={confirmPasswordVisible ? 'text' : 'password'}
             variant="outlined"
             margin="normal"
