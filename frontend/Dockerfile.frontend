@@ -1,24 +1,20 @@
-# Dockerfile.frontend
-
+# Sử dụng Node.js image để phát triển frontend
 FROM node:18 as frontend
 
+# Đặt thư mục làm việc trong container cho frontend
 WORKDIR /app/frontend
 
-# Copy package.json và yarn.lock
-COPY frontend/package.json frontend/yarn.lock /app/frontend/
+# Copy package.json và yarn.lock vào container
+COPY package.json yarn.lock ./
+
+# Cài đặt dependencies
 RUN yarn install
 
-# Copy mã nguồn frontend vào container
-COPY frontend /app/frontend
+# Copy toàn bộ mã nguồn frontend vào container
+COPY . /app/frontend
 
-# Build frontend
-RUN yarn build
+# Mở cổng 5173 (hoặc cổng mà ứng dụng của bạn đang chạy)
+EXPOSE 5173
 
-# Sử dụng nginx để phục vụ frontend
-FROM nginx:alpine as final
-
-COPY --from=frontend /app/frontend/dist /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+# Chạy ứng dụng frontend với lệnh `yarn dev`
+CMD ["yarn", "dev"]
