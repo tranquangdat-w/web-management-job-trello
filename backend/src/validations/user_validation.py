@@ -64,3 +64,4 @@ class UserRegisterValidation(BaseModel):
 class UserVerifyAcountValidation(BaseModel):
     email: EmailStr = Field(...)
     token: str = Field(...)
+

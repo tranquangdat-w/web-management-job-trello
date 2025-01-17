@@ -1,15 +1,12 @@
 import smtplib
 from email.mime.text import MIMEText
-from random import randint
 from datetime import datetime, timedelta, timezone
 import uuid
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
-import pyotp
 from src.models.user_model import UserModel
 from src.config.environment import env
-from src.config.mongodb import mongodb_connector
-from src.utils.jwt_util import create_token, verify_token
+from src.utils.jwt_util import create_token
 
 USER_COLLECTION = "user_test"  # Đổi tên collection thành 'user_test'
 
@@ -122,7 +119,6 @@ class UserService:
             return True
         except Exception as e:
             print(f"Error sending email: {str(e)}")
-    #
     # def generate_otp_secret(self, user_id: str) -> str:
     #     """Tạo mã OTP cho người dùng"""
     #     totp = pyotp.TOTP(user_id)
