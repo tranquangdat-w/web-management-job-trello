@@ -59,3 +59,8 @@ export const verifyUserAPI = async (data) => {
   return response.data
 }
 
+export const refeshTokenAPI = async () => {
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/users/refesh_token`)
+
+  return response.data
+}

@@ -7,7 +7,7 @@ from src.utils.jwt_util import verify_token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
 def auth_middleware(token: str = Depends(oauth2_scheme)):
     if not token:
-        raise HTTPException(status_code=401, detail='Not found access token')
+        raise HTTPException(status_code=410, detail='Not found access token')
     try:
         client_token_decode = verify_token(token, env['ACCESS_TOKEN_SECRET_KEY'])
 
@@ -18,5 +18,6 @@ def auth_middleware(token: str = Depends(oauth2_scheme)):
         if str(e) == 'Token hết hạn':
             raise HTTPException(status_code=410)
         else:
+            print(e)
             raise HTTPException(status_code=401, detail='You need log in again!!!!')
 
