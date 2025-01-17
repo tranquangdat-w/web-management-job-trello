@@ -55,6 +55,7 @@ async def refesh_access_token(token: str = Depends(oauth2_scheme)):
         if not new_access_token:
             raise Exception 
 
+        print(new_access_token)
         return new_access_token
     except Exception:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Sign in! (Error refesh token)")
