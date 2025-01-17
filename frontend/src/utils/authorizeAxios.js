@@ -1,6 +1,13 @@
 import axios from 'axios'
 import { toast, Bounce } from 'react-toastify'
 import { intercepterLoadingElements } from '~/utils/formatters'
+import { logOutUser, selectCurrentUser } from '~/redux/user/userSlice'
+import { useSelector } from 'react-redux'
+import localStorage from 'redux-persist/es/storage'
+
+let axiosReduxStore
+
+export const injectStore = (mainStore) => { axiosReduxStore = mainStore}
 
 let authorizedAxiosInstance = axios.create()
 
@@ -10,9 +17,16 @@ authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10
 authorizedAxiosInstance.defaults.withCredentials = true
 
 // Add a request interceptor
-authorizedAxiosInstance.interceptors.request.use((config) => {
+
+authorizedAxiosInstance.interceptors.request.use(async (config) => {
   // Do something before request is sent
   intercepterLoadingElements(true)
+  config.headers.Authorization
+
+  const accessToken = localStorage.getItem('accessToken')
+  config.headers = {
+    'Authorization': `Bearer ${accessToken}`
+  }
 
   return config
 }, (error) => {
@@ -20,10 +34,12 @@ authorizedAxiosInstance.interceptors.request.use((config) => {
   return Promise.reject(error)
 })
 
+
 // Add a response interceptor
 authorizedAxiosInstance.interceptors.response.use((response) => {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
+  //
   intercepterLoadingElements(false)
   return response
 }, (error) => {
@@ -41,6 +57,17 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
     errorMessage = error.response?.data?.detail
   }
 
+  if (error.response?.status === 401) {
+  }
+
+  // const originalRequest = error.config
+  if (error.response?.status === 410) {
+
+    // axiosReduxStore.dispatch(logOutUser(useSelector(selectCurrentUser)))
+    // originalRequest._retry = true
+  }
+
+
   if (error.response?.status !== 410) {
     toast.error(errorMessage, {
       position: 'bottom-left',
@@ -53,8 +80,6 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
       theme: 'dark',
       transition: Bounce
     })
-  } else {
-    console.log(error)
   }
 
   return Promise.reject(error)

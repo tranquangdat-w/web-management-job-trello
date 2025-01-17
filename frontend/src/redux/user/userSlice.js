@@ -28,6 +28,12 @@ export const userSlice = createSlice({
 
   // Xu li du lieu dong bo
   reducers: {
+    logOutUser: (state) => {
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refeshToken')
+
+      state.currentUser = null
+    }
   },
   // ExtraReducers: Xu li du lieu bat dong bo api
   extraReducers: (builder) => {
@@ -49,4 +55,6 @@ export const selectCurrentUser = (state) => {
 }
 
 export const userReducer = userSlice.reducer
+
+export const { logOutUser } = userSlice.actions
 

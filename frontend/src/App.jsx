@@ -5,7 +5,6 @@ import { Auth } from './pages/Auth/Auth'
 import { AccountVerification } from '~/pages/Auth/AccountVerification'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector } from 'react-redux'
-
 // import BoardPage from '~/pages/BoardPage/boardPage'
 // import Home from '~/pages/HomePages/home'
 

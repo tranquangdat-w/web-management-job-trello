@@ -3,64 +3,44 @@ import { API_ROOT } from '~/utils/constants'
 import { toast } from 'react-toastify'
 
 // Hàm dùng token cho các request cần authentication
-export const getAuthHeader = () => {
-  const accessToken = localStorage.getItem('accessToken')
-
-  return accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}
-}
-
 export const fetchBoardDetailsAPI = async (boardId) => {
-  const response = await authorizedAxiosInstance.get(`${API_ROOT}/boards/${boardId}`,
-    { headers: getAuthHeader() }
-  )
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/boards/${boardId}`)
 
   return response.data
 }
 
 export const updateBoardDetailsAPI = async (boardId, columnOrderIdsData) => {
-  const response = await authorizedAxiosInstance.put(`${API_ROOT}/boards/${boardId}`, columnOrderIdsData, {
-    headers: getAuthHeader()
-  })
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/boards/${boardId}`, columnOrderIdsData)
 
   return response.data
 }
 
 export const moveCardToDifferentColumnAPI = async (updateData) => {
-  const response = await authorizedAxiosInstance.put(`${API_ROOT}/boards/supports/moving_card`, updateData, {
-    headers: getAuthHeader()
-  })
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/boards/supports/moving_card`, updateData)
 
   return response.data
 }
 
 export const updateColumnDetailsAPI = async (columnId, cardOrderIdsData) => {
-  const response = await authorizedAxiosInstance.put(`${API_ROOT}/columns/${columnId}`, cardOrderIdsData, {
-    headers: getAuthHeader()
-  })
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/columns/${columnId}`, cardOrderIdsData)
 
   return response.data
 }
 
 export const deleteColumnDetailsAPI = async (columnId) => {
-  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/columns/${columnId}`, {
-    headers: getAuthHeader()
-  })
+  const response = await authorizedAxiosInstance.delete(`${API_ROOT}/columns/${columnId}`)
 
   return response.data
 }
 
 export const createNewColumnAPI = async (columnData) => {
-  const createdNewColumn = await authorizedAxiosInstance.post(`${API_ROOT}/columns`, columnData, {
-    headers: getAuthHeader()
-  })
+  const createdNewColumn = await authorizedAxiosInstance.post(`${API_ROOT}/columns`, columnData)
 
   return createdNewColumn.data
 }
 
 export const createNewCardAPI = async (cardData) => {
-  const createdNewCard = await authorizedAxiosInstance.post(`${API_ROOT}/cards`, cardData, {
-    headers: getAuthHeader()
-  })
+  const createdNewCard = await authorizedAxiosInstance.post(`${API_ROOT}/cards`, cardData)
 
   return createdNewCard.data
 }
