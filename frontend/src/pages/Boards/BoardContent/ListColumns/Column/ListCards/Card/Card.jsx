@@ -22,10 +22,6 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-const card = {
-  _id: "1",
-  title: "Card Title",
-}
 
 const Card = () => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
