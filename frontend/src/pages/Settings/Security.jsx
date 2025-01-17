@@ -1,8 +1,16 @@
 import { Box, Typography, TextField, Button, InputAdornment, IconButton } from '@mui/material'
+import { useTheme } from '@mui/material/styles';
 import { useState } from 'react'
 
 
+
 export const Security = () => {
+  const theme = useTheme();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <form>
       <Box
@@ -22,7 +30,11 @@ export const Security = () => {
               label="Old password"
               variant="outlined"
               margin="normal"
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px', width: '400px' }}
+              sx={{ 
+                mb: 2, 
+                backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
+                borderRadius: '5px', 
+                width: '400px' }}
             />
           </Box>
 
@@ -32,7 +44,11 @@ export const Security = () => {
               label="New password"
               variant="outlined"
               margin="normal"
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px', width: '400px' }}
+              sx={{ 
+                mb: 2, 
+                backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
+                borderRadius: '5px', 
+                width: '400px' }}
             />
           </Box>
 
@@ -42,7 +58,11 @@ export const Security = () => {
               label="Reenter new password"
               variant="outlined"
               margin="normal"
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px', width: '400px' }}
+              sx={{ 
+                mb: 2, 
+                backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
+                borderRadius: '5px', 
+                width: '400px' }}
             />
           </Box>
           
@@ -53,7 +73,8 @@ export const Security = () => {
               color="primary"
               sx={{
                 backgroundColor: '#6C63FF',
-                color: '#fff',
+                backgroundColor: theme.palette.mode === 'dark' ? '#F0EFFF' : '#7d3c98',
+                color: theme.palette.mode === 'dark' ? '#000' : '#FFF',
                 padding: '10px'
               }}
               type="submit"

@@ -1,6 +1,13 @@
 import { Box, Typography, Avatar, Grid  } from '@mui/material'
+import { useTheme } from '@mui/material/styles';
 
 export const Account = () => {
+  //color in darkmode
+  const theme = useTheme();
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <Box sx={{ display: 'flex',height:'100%', justifyContent: 'center', alignItems: 'center'}}>
       <Box sx={{ width: '100%', maxWidth: 600 }}>
@@ -12,7 +19,7 @@ export const Account = () => {
             borderRadius: 2,
             cursor: 'pointer',
             padding: 3,
-            backgroundColor: 'white',
+            backgroundColor: theme.palette.mode === 'dark' ? '#283747' : '#fff', 
             boxShadow: 3,
             '&:before': {
               content: '""',
@@ -21,7 +28,7 @@ export const Account = () => {
               top: 0,
               width: 4,
               height: '100%',
-              backgroundColor: '#E1BEE7',
+              backgroundColor: theme.palette.mode === 'dark' ? '#808b96' : '#E1BEE7', 
               transform: 'scaleY(1)',
               transition: 'all 0.5s',
               transformOrigin: 'bottom',

@@ -26,29 +26,32 @@ const App = () => {
   const currentUser = useSelector(selectCurrentUser)
 
   return (
-    <Routes>
-      {/* Redirect Route */}
-      <Route path='/' element={
-        <Navigate to='/boards/13be383a-75e4-4025-8de3-ad31c5d79500' replace={true} />
-      }/>
+    // <Routes>
+    //   {/* Redirect Route */}
+    //   <Route path='/' element={
+    //     <Navigate to='/boards/13be383a-75e4-4025-8de3-ad31c5d79500' replace={true} />
+    //   }/>
 
-      <Route element={<ProtectedRoute user={currentUser} />}>
-        {/*Board Details*/}
-        <Route path='/boards/:boardId' element={<Board />}/>
-        <Route path='/setting/account' element={<Settings />} />
-        <Route path='/setting/security' element={<Settings />} />
-      </Route>
+    //   <Route element={<ProtectedRoute user={currentUser} />}>
+    //     {/*Board Details*/}
+    //     <Route path='/boards/:boardId' element={<Board />}/>
+    //     <Route path='/setting/account' element={<Settings />} />
+    //     <Route path='/setting/security' element={<Settings />} />
+    //   </Route>
 
 
-      {/*Auth*/}
-      <Route path='/login' element={<Auth />} />
-      <Route path='/register' element={<Auth />} />
-      <Route path='/account/verification' element={<AccountVerification />} />
+    //   {/*Auth*/}
+    //   <Route path='/login' element={<Auth />} />
+    //   <Route path='/register' element={<Auth />} />
+    //   <Route path='/account/verification' element={<AccountVerification />} />
 
-      {/* 404 Not found */}
-      <Route path='*' element={<NotFound />}/>
-    </Routes>
-    
+    //   {/* 404 Not found */}
+    //   <Route path='*' element={<NotFound />}/>
+    // </Routes>
+    // <Box sx ={{ display: 'flex', minWidth: '500px', maxWidth: '272px' }}>
+    //   <Card />
+    //   </Box>
+    <Settings />
   );
 };
 
