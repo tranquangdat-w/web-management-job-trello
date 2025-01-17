@@ -1,14 +1,16 @@
 from src.validations.column_validation import ColumnValidation, UpdateColumnValidation
 from src.controllers.column_controller import ColumnController
 from src.middlewares.auth_middleware import auth_middleware
-from fastapi import APIRouter, HTTPException, status, Path, Body, Header
+from fastapi import APIRouter, HTTPException, status, Path, Body, Depends
 from uuid import UUID
-
+from fastapi.security import OAuth2PasswordBearer
 router = APIRouter()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
+
 @router.post("/")
-async def create_column(column: ColumnValidation, authorization: str = Header(None)):
-    auth_middleware(authorization)
+async def create_column(column: ColumnValidation, token: str = Depends(oauth2_scheme)):
+    auth_middleware(token)
     try:
         column_controller = ColumnController()
         result = await column_controller.create_column({
@@ -21,8 +23,8 @@ async def create_column(column: ColumnValidation, authorization: str = Header(No
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't create column: {e}")
         
 @router.put("/{id}")
-async def update_column(id: UUID = Path(...), req_body: UpdateColumnValidation = Body(...), authorization: str = Header(None)) -> dict: 
-    auth_middleware(authorization)
+async def update_column(id: UUID = Path(...), req_body: UpdateColumnValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict: 
+    auth_middleware(token)
     column_controller = ColumnController()
 
     new_req_body = {}
@@ -38,8 +40,8 @@ async def update_column(id: UUID = Path(...), req_body: UpdateColumnValidation =
     return column
 
 @router.delete("/{id}")
-async def delete_column(id: UUID = Path(...), authorization: str = Header(None)) -> dict: 
-    auth_middleware(authorization)
+async def delete_column(id: UUID = Path(...), token: str = Depends(oauth2_scheme)) -> dict: 
+    auth_middleware(token)
     column_controller = ColumnController()
 
     result = await column_controller.delete_column(str(id))

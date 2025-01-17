@@ -8,9 +8,7 @@ router = APIRouter()
 # Khởi tạo controller
 user_controller = UserController()
 
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="token"
-)  # OAuth2PasswordBearer sẽ giúp nhận token từ header
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
 
 @router.post("/register")
 async def create_user(user_data: UserRegisterValidation) -> dict:

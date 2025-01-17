@@ -3,8 +3,10 @@ from src.validations.board_validation import (
     UpdateBoardValidation,
     MoveCardToDifferentValidation,
 )
+
+from fastapi.security import OAuth2PasswordBearer
 from src.controllers.board_controller import BoardController
-from fastapi import APIRouter, HTTPException, status, Path, Body, Header
+from fastapi import APIRouter, HTTPException, status, Path, Body, Depends
 from src.middlewares.auth_middleware import auth_middleware
 from uuid import UUID
 
@@ -15,10 +17,11 @@ router = APIRouter()
 def get_boards():
     return {"GET": "APIs for list of boards"}
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
 
 @router.post("/")
-async def create_board(board: CreateBoardValidation, authorization :str = Header(None)):
-    auth_middleware(authorization) 
+async def create_board(board: CreateBoardValidation, token: str = Depends(oauth2_scheme)):
+    auth_middleware(token) 
     try:
         board_controller = BoardController()
         result = await board_controller.create_board(
@@ -38,8 +41,8 @@ async def create_board(board: CreateBoardValidation, authorization :str = Header
 
 
 @router.get("/{id}")
-async def get_details(id: UUID = Path(...), authorization : str = Header(None)) -> dict:
-    auth_middleware(authorization) 
+async def get_details(id: UUID = Path(...), token : str = Depends(oauth2_scheme)) -> dict:
+    auth_middleware(token) 
     try:
         board_controller = BoardController()
         board = await board_controller.get_details(str(id))
@@ -51,8 +54,8 @@ async def get_details(id: UUID = Path(...), authorization : str = Header(None)) 
         raise Exception
 
 @router.put("/{id}")
-async def update_board(id: UUID = Path(...), req_body: UpdateBoardValidation = Body(...), authorization : str = Header(None)) -> dict: 
-    auth_middleware(authorization)
+async def update_board(id: UUID = Path(...), req_body: UpdateBoardValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict: 
+    auth_middleware(token)
     board_controller = BoardController()
 
     new_req_body = {}
@@ -72,8 +75,8 @@ async def update_board(id: UUID = Path(...), req_body: UpdateBoardValidation = B
 
 
 @router.put("/supports/moving_card")
-async def move_card_to_different_column(req_body: MoveCardToDifferentValidation = Body(...), authorization: str = Header(None)) -> dict:
-    auth_middleware(authorization)
+async def move_card_to_different_column(req_body: MoveCardToDifferentValidation = Body(...),token : str = Depends(oauth2_scheme)) -> dict:
+    auth_middleware(token)
     try:
         board_controller = BoardController()
 

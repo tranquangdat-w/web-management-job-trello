@@ -23,7 +23,7 @@ authorizedAxiosInstance.interceptors.request.use(async (config) => {
   intercepterLoadingElements(true)
   config.headers.Authorization
 
-  const accessToken = localStorage.getItem('accessToken')
+  const accessToken = await localStorage.getItem('accessToken')
   config.headers = {
     'Authorization': `Bearer ${accessToken}`
   }
