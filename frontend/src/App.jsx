@@ -13,7 +13,7 @@ const App = () => {
       <Route path='/' element={
         <Navigate to='/boards/13be383a-75e4-4025-8de3-ad31c5d79500' replace={true} />
       }/>
-
+      
       {/*Board Details*/}
       <Route path='/boards/:boardId' element={<Board />}/>
 
