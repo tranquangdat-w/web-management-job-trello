@@ -35,6 +35,7 @@ class UserService:
 
         if is_send:
             result = await UserModel.create_user(new_user)
+
             result = await UserModel.find_one_by_id(result.inserted_id)
 
             del result['password']
@@ -103,6 +104,7 @@ class UserService:
             return exist_user
         except Exception as e:
             raise e
+
     async def refesh_access_token(self, token: str):
         play_load = verify_token(token, env['REFESH_TOKEN_SECRET_KEY'])
         if not play_load:

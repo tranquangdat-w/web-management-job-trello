@@ -164,7 +164,7 @@ const Column = ( { column }) => {
             height: 'auto',
             paddingX: 2,
             paddingTop: 1.5,
-            paddiingBottom: 1,
+            paddiingBottom: 1.3,
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between'

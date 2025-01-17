@@ -73,3 +73,12 @@ class ColumnModel(Document):
 
         return result
 
+    @staticmethod
+    async def delete_one_card(card_id, column_id):
+        column_collection = mongodb_connector.get_database_instance()[ColumnModel.column_collection_name]
+
+        return await column_collection.update_one(
+            {"_id": column_id},  # Tìm cột có chứa card_id
+            {"$pull": {"cardOrderIds": card_id}}  # Xóa card_id khỏi mảng
+        )
+

@@ -40,3 +40,15 @@ class UpdateCardValidation(BaseModel):
     class Config:
         extra = "forbid"
 
+class DeleteCardValidation(BaseModel):
+    columnId: str = Field(...)
+
+    @field_validator("columnId", mode="before")
+    def validate_uuid(cls, value):
+        try:
+            UUID(value)
+        except ValueError:
+            raise ValueError(f"{value} is not a valid UUID")
+
+        return value
+

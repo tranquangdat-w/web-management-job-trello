@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from src.config.mongodb import mongodb_connector
 from src.models.card_model import CardModel
 from src.models.column_model import ColumnModel
@@ -28,3 +29,9 @@ class CardService:
                 'message': f"Can't update card with error: {str(e)}"
             }
 
+    async def delete_card(self, card_id, columnId) -> dict:
+        await CardModel.delete_card(card_id)
+
+        await ColumnModel.delete_one_card(card_id, columnId)
+
+        return {"status" : "card was delete"}

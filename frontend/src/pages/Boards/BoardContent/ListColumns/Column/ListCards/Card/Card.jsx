@@ -16,14 +16,22 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import DeleteIcon from '@mui/icons-material/Delete'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { deleteCardAPI } from '~/apis'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { cloneDeep } from 'lodash'
 
+const Card = ({ card }) => {
+  const dispatch = useDispatch()
+  const board = useSelector(selectCurrentActiveBoard)
 
-
-const Card = () => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data : { ...card }
@@ -39,6 +47,22 @@ const Card = () => {
 
   const shouldShowCardActions = () => {
     return Boolean(card?.memberIds?.length) || !!card?.comments?.length || !!card?.attachments?.length
+  }
+
+  const deleteCard = async () => {
+    await deleteCardAPI(card._id, { columnId: card.columnId })
+
+    const newBoard = cloneDeep(board)
+    const columns = newBoard.columns
+    const columnHadCard = columns.find(column => {
+      const cards = column.cards
+      return cards.find(c => c._id == card._id)
+    })
+
+    columnHadCard.cards = columnHadCard.cards.filter(c => c._id !== card._id)
+    columnHadCard.cardOrderIds = columnHadCard.cards.map(c => c._id)
+
+    dispatch(updateCurrentActiveBoard(newBoard))
   }
 
   //code moi them
@@ -74,8 +98,7 @@ const Card = () => {
         '&:last-child': { p: 1.5 },
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '272px',
+        justifyContent: 'space-between'
       }}>
         <Typography sx={{ wordBreak: 'break-word' }}>{card?.title}</Typography>
         <Box sx={{ borderRadius: '20px', paddingX: '6px', opacity: 0.1, '&:hover': { bgcolor: 'gray', opacity: 1 }}} onClick={handleClick}>
@@ -91,7 +114,7 @@ const Card = () => {
               borderRadius: '12px',
               minWidth: '200px',
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-              padding: '8px 0',
+              padding: '8px 0'
             },
             '& .MuiMenuItem-root': {
               padding: '8px 16px',
@@ -102,19 +125,19 @@ const Card = () => {
               color: '#333',
               transition: 'background-color 0.3s',
               '&:hover': {
-                backgroundColor: '#f5f5f5',
+                backgroundColor: '#f5f5f5'
               },
               '& svg': {
                 fontSize: '20px',
-                color: '#888',
-              },
-            },
+                color: '#888'
+              }
+            }
           }}
         >
-          <MenuItem onClick={() => { setShowDatePicker(true); handleClose(); }}>
+          <MenuItem onClick={() => { setShowDatePicker(true); handleClose() }}>
             <CalendarMonthIcon /> Chọn lịch
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={deleteCard}>
             <DeleteIcon /> Xóa
           </MenuItem>
         </Menu>
