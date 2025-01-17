@@ -6,10 +6,12 @@ import { AccountVerification } from '~/pages/Auth/AccountVerification'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector } from 'react-redux'
 import { Settings } from '~/pages/Settings/Settings'
+import Security from './pages/Settings/Security'
+import Account from './pages/Settings/Account'
 
 // import BoardPage from '~/pages/BoardPage/boardPage'
 // import Home from '~/pages/HomePages/home'
-import Card from './pages/Boards/BoardContent/ListColumns/Column/ListCards/Card/Card'
+
 import { Box } from '@mui/material'
 
 const ProtectedRoute = ({ user }) => {
@@ -46,9 +48,7 @@ const App = () => {
       {/* 404 Not found */}
       <Route path='*' element={<NotFound />}/>
     </Routes>
-    // <Box sx ={{ display: 'flex', minWidth: '500px', maxWidth: '272px' }}>
-    //   <Card />
-    //   </Box>
+    
   );
 };
 

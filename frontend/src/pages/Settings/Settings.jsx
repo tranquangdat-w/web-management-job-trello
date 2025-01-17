@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import { Box } from '@mui/material'
+import { Box, Tabs, Tab} from '@mui/material';
 import AppBar from '~/components/AppBar/AppBar'
 import { Account } from './Account'
 import { Security } from './Security'
@@ -14,17 +14,42 @@ export const Settings = () => {
   return (
     <Box>
       <AppBar />
-      <Box>
-        <Link to='/setting/account'>
-          Account
-        </Link>
-        |
-        <Link to='/setting/security'>
-          Security
-        </Link>
+      <Box sx={{ backgroundColor: '#f0f0f0', p: 0.5, }}>
+        <Tabs value={location.pathname} 
+            sx={{ justifyContent: 'flex-start', ml:2 }}>
+
+          <Tab
+            label="Account"
+            value="/setting/account"
+            component={Link}
+            to="/setting/account"
+            sx={{
+              color: 'black',
+              '&.Mui-selected': {
+                color: 'black',
+                borderBottom: '2px solid black',
+              },
+            }}
+          />
+          <Tab
+            label="Security"
+            value="/setting/security"
+            component={Link}
+            to="/setting/security"
+            sx={{
+              color: 'black',
+              '&.Mui-selected': {
+                color: 'black',
+                borderBottom: '2px solid black',
+              },
+            }}
+          />
+        </Tabs>
       </Box>
-      {isAccount && <Account />}
-      {isSecurity && <Security />}
+      <Box sx={{ p: 3 }}>
+        {isAccount && <Account />}
+        {isSecurity && <Security />}
+      </Box>
     </Box>
   )
 }
