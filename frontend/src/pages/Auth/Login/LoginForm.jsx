@@ -15,6 +15,7 @@ import { loginUserAPI } from '~/redux/user/userSlice'
 import { toast } from 'react-toastify'
 
 
+
 import {
   FIELDS_REQUIRED_MESSAGE,
   EMAIL_RULE,
@@ -64,13 +65,39 @@ export const LoginForm = () => {
             Sign in
           </Typography>
           {verifiedEmail &&
-            <Box>
-              heeh
+            <Box 
+              sx={{
+                backgroundColor: '#CDE8F6',
+                borderRadius: '8px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                padding: '16px',
+                color: '#447EAF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                Bạn đã xác nhận email thành công, hãy đăng nhập
+              </Box>
             </Box>
           }
           {registeredEmail &&
-            <Box>
-              haha
+            <Box 
+              sx={{
+                backgroundColor: '#DDF3D5',
+                borderRadius: '8px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                padding: '16px',
+                color: '#597151',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                Bạn đã đăng ký thành công, hãy check email để xác nhận tài khoản
+              </Box>
             </Box>
           }
           <Box>
