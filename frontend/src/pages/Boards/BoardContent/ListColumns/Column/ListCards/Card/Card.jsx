@@ -141,7 +141,7 @@ const Card = ({ card }) => {
             <Typography>Duo Date</Typography>
           </MenuItem>
 
-          <MenuItem onClick={deleteCard} sx= {{ '& p' : { color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' } }}>
+          <MenuItem onClick={() => {deleteCard(); handleClose()}} sx= {{ '& p' : { color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' } }}>
             <DeleteIcon />
 
             <Typography>Delete Card</Typography>
