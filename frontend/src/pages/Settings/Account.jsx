@@ -1,11 +1,15 @@
 import { Box, Typography, Avatar } from '@mui/material'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector } from 'react-redux'
+import { useTheme } from '@mui/material/styles';
 
 export const Account = () => {
   const user = useSelector(selectCurrentUser)
+
+  const theme = useTheme()
+
   return (
-    <Box sx={{ display: 'flex',height:'100%', justifyContent: 'center', alignItems: 'center'}}>
+    <Box sx={{ display: 'flex',height:'100%', justifyContent: 'center', alignItems: 'center' }}>
       <Box sx={{ width: '100%', maxWidth: 600 }}>
         <Box
           sx={{
@@ -15,7 +19,7 @@ export const Account = () => {
             borderRadius: 2,
             cursor: 'pointer',
             padding: 3,
-            backgroundColor: 'white',
+            backgroundColor: theme.palette.mode === 'dark' ? '#283747' : '#fff',
             boxShadow: 3,
             '&:before': {
               content: '""',
@@ -24,7 +28,7 @@ export const Account = () => {
               top: 0,
               width: 4,
               height: '100%',
-              backgroundColor: '#E1BEE7',
+              backgroundColor: theme.palette.mode === 'dark' ? '#808b96' : '#E1BEE7',
               transform: 'scaleY(1)',
               transition: 'all 0.5s',
               transformOrigin: 'bottom'

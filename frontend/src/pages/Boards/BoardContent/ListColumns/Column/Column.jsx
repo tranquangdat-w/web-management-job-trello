@@ -228,27 +228,6 @@ const Column = ( { column }) => {
                 <ListItemText>Add Card</ListItemText>
               </MenuItem>
 
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <ContentCutIcon fontSize='small'/>
-                </ListItemIcon>
-                <ListItemText>Cut</ListItemText>
-              </MenuItem>
-
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <ContentCopy fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Copy</ListItemText>
-              </MenuItem>
-
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <ContentPaste fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>Paste</ListItemText>
-              </MenuItem>
-
               <Divider />
 
               <MenuItem

@@ -6,6 +6,9 @@ import { toast } from 'react-toastify'
 import { updatePasswordAPI } from '~/apis'
 import { logOutUser, selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import { useTheme } from '@mui/material/styles'
+import { useState } from 'react'
+
 
 export const Security = () => {
   const dispatch = useDispatch()
@@ -21,6 +24,12 @@ export const Security = () => {
     })
   }
 
+  const theme = useTheme();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  }
   return (
     <form onSubmit={handleSubmit(handleChangePassWord)}>
       <Box
@@ -44,7 +53,11 @@ export const Security = () => {
               {...register('oldPassword', {
                 required: FIELDS_REQUIRED_MESSAGE
               })}
-              error={!!errors['oldPassword']}
+              sx={{ 
+                mb: 2, 
+                backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
+                borderRadius: '5px', 
+                width: '400px' }}
             />
             <FieldErrorAlert errors={errors} fieldName={'oldPassword'} />
           </Box>
@@ -63,6 +76,11 @@ export const Security = () => {
                   message: PASSWORD_RULE_MESSAGE
                 }
               })}
+              sx={{ 
+                mb: 2, 
+                backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
+                borderRadius: '5px', 
+                width: '400px' }}
             />
             <FieldErrorAlert errors={errors} fieldName={'newPassword'} />
           </Box>
@@ -73,7 +91,6 @@ export const Security = () => {
               label="Reenter new password"
               variant="outlined"
               margin="normal"
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px', width: '400px' }}
               {...register('password_confirmation', {
                 validate: (value) => {
                   if (value === watch('newPassword')) return true
@@ -81,6 +98,11 @@ export const Security = () => {
                 }
               })}
               error={!!errors['password_confirmation']}
+              sx= {{
+                mb: 2,
+                backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
+                borderRadius: '5px',
+                width: '400px' }}
             />
             <FieldErrorAlert errors={errors} fieldName={'password_confirmation'} />
           </Box>
@@ -90,8 +112,8 @@ export const Security = () => {
               variant="contained"
               color="primary"
               sx={{
-                backgroundColor: '#6C63FF',
-                color: '#fff',
+                backgroundColor: theme.palette.mode === 'dark' ? '#F0EFFF' : '#7d3c98',
+                color: theme.palette.mode === 'dark' ? '#000' : '#FFF',
                 padding: '10px'
               }}
               type="submit"

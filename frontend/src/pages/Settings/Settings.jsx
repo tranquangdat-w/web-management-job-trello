@@ -4,6 +4,7 @@ import AppBar from '~/components/AppBar/AppBar'
 import { Account } from './Account'
 import { Security } from './Security'
 import { Link } from 'react-router-dom'
+import { useTheme } from '@mui/material/styles';
 
 export const Settings = () => {
   const location = useLocation()
@@ -11,22 +12,28 @@ export const Settings = () => {
   const isAccount = location.pathname === '/setting/account'
   const isSecurity = location.pathname === '/setting/security'
 
+  //color in darkmode
+  const theme = useTheme();
+
   return (
     <Box>
       <AppBar />
-      <Box sx={{ backgroundColor: '#f0f0f0', p: 0.5, }}>
-        <Tabs value={location.pathname} sx={{ justifyContent: 'flex-start', ml:2 }}>
+      <Box sx={{
+        backgroundColor: theme.palette.mode === 'dark' ? '#212f3d ' : '#f0f0f0', 
+        p: 0.5}}>
+        <Tabs value={location.pathname}
+          sx={{ justifyContent: 'flex-start', ml:2 }}>
           <Tab
             label="Account"
             value="/setting/account"
             component={Link}
             to="/setting/account"
             sx={{
-              color: 'black',
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
               '&.Mui-selected': {
-                color: 'black',
-                borderBottom: '2px solid black',
-              },
+                color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                borderBottom: '2px solid black'
+              }
             }}
           />
           <Tab
@@ -35,10 +42,10 @@ export const Settings = () => {
             component={Link}
             to="/setting/security"
             sx={{
-              color: 'black',
+              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
               '&.Mui-selected': {
-                color: 'black',
-                borderBottom: '2px solid black',
+                color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+                borderBottom: '2px solid black'
               },
             }}
           />
@@ -51,3 +58,4 @@ export const Settings = () => {
     </Box>
   )
 }
+
