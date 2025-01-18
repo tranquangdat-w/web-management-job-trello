@@ -98,7 +98,7 @@ class UserService:
 
             # Tao token tra ve cho frontend
             # Tao thong tin dinh kem JWT gom _id va email
-            user_info = {"_id": exist_user["_id"], "email": exist_user["email"]}
+            user_info = {"_id": exist_user["_id"], "email": exist_user["email"], 'role': exist_user['role']}
             user_info["exp"] = datetime.now(timezone.utc) + timedelta(
                 days=env["ACCESS_TOKEN_TIME_LIFE"]
             )

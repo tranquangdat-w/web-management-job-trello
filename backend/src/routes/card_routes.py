@@ -45,7 +45,10 @@ async def update_card(id: UUID = Path(...), req_body: UpdateCardValidation = Bod
 
 @router.delete("/{id}")
 async def delete_card(id: UUID = Path(...), req_body: DeleteCardValidation = Body(...),token: str = Depends(oauth2_scheme)) -> dict: 
-    auth_middleware(token)
+    play_load = auth_middleware(token)
+    if play_load['role'] == 'client':
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail = "You cant' delete this column. Because you are not admin") 
+
     card_controller = CardController()
 
     new_req_body = {}

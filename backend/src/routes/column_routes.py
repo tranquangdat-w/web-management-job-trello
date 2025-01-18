@@ -41,7 +41,10 @@ async def update_column(id: UUID = Path(...), req_body: UpdateColumnValidation =
 
 @router.delete("/{id}")
 async def delete_column(id: UUID = Path(...), token: str = Depends(oauth2_scheme)) -> dict: 
-    auth_middleware(token)
+    play_load = auth_middleware(token)
+    if play_load['role'] == 'client':
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail = "You cant' delete this column. Because you are not admin") 
+
     column_controller = ColumnController()
 
     result = await column_controller.delete_column(str(id))
