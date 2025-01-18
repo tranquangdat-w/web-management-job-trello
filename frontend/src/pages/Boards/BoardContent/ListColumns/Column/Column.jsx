@@ -6,12 +6,9 @@ import MenuItem from '@mui/material/MenuItem'
 import Fade from '@mui/material/Fade'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import ContentCopy from '@mui/icons-material/ContentCopy'
-import ContentPaste from '@mui/icons-material/ContentPaste'
 import Divider from '@mui/material/Divider'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import AddCardIcon from '@mui/icons-material/AddCard'
-import ContentCutIcon from '@mui/icons-material/ContentCut'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import Typography from '@mui/material/Typography'
 import { Box } from '@mui/material'
@@ -113,32 +110,35 @@ const Column = ( { column }) => {
 
   const confirmDeleteColumn = useConfirm()
   const handleDeleteColumn = () => {
-    confirmDeleteColumn({
-      title: 'Delete Column',
-      description: 'This action will delete your column! Are you sure'
-    }).then(() => {
+    try {
+      confirmDeleteColumn({
+        title: 'Delete Column',
+        description: 'This action will delete your column! Are you sure'
+      }).then(async () => {
 
-      deleteColumnDetailsAPI(column._id).then((res) => {
-        toast.success(res.deleteResult, {
-          position: 'bottom-left',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-          transition: Bounce
+        await deleteColumnDetailsAPI(column._id).then((res) => {
+          toast.success(res.deleteResult, {
+            position: 'bottom-left',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+            transition: Bounce
+          })
         })
 
-      })
+        const newBoard = cloneDeep(board)
+        newBoard.columns = newBoard.columns.filter(col => col._id !== column._id)
+        newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
 
-      const newBoard = cloneDeep(board)
-      newBoard.columns = newBoard.columns.filter(col => col._id !== column._id)
-      newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
-
-      dispatch(updateCurrentActiveBoard(newBoard))
-    }).catch(() => {})
+        dispatch(updateCurrentActiveBoard(newBoard))
+      }).catch(() => {})
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   return (
