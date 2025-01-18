@@ -5,7 +5,6 @@ import Fade from '@mui/material/Fade'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Divider from '@mui/material/Divider'
 import { Box } from '@mui/material'
-import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
 import Avatar from '@mui/material/Avatar'
@@ -87,20 +86,19 @@ const Profiles = () => {
           {user?.displayName} Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose} sx={{
-          display: 'flex',
-          '& a': {
-            textDecoration: 'none',
-            color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black'
-          }
-        }}>
-          <Link to='/setting/account' >
+        <Link to='/setting/account' style={{ textDecoration: 'none' }}>
+          <MenuItem onClick={handleClose} sx={{
+            display: 'flex',
+            '& .st': {
+              color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black',
+            }
+          }}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
-            Settings
-          </Link>
-        </MenuItem>
+            <Box className="st">Settings</Box>
+          </MenuItem>
+        </Link>
         <MenuItem
           sx={{
             '&:hover': {

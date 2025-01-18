@@ -135,10 +135,11 @@ const Card = ({ card }) => {
           }}
         >
           <MenuItem onClick={() => { setShowDatePicker(true); handleClose() }}>
-            <CalendarMonthIcon /> Chọn lịch
+            <CalendarMonthIcon /> Duo Date
           </MenuItem>
+
           <MenuItem onClick={deleteCard}>
-            <DeleteIcon /> Xóa
+            <DeleteIcon /> Delete Card
           </MenuItem>
         </Menu>
       </CardContent>

@@ -71,3 +71,10 @@ export const deleteCardAPI = async (cardId, column_data) => {
   return response.data
 }
 
+export const updatePasswordAPI = async (passwordData) => {
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/users/change_password`, passwordData)
+  toast.success('Password change successfully', { theme: 'colored' })
+
+  return response.data
+}
+

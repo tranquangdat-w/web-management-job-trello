@@ -83,7 +83,7 @@ export const LoginForm = () => {
             </Box>
           }
           {registeredEmail &&
-            <Box 
+            <Box
               sx={{
                 backgroundColor: '#DDF3D5',
                 borderRadius: '8px',

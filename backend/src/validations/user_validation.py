@@ -65,3 +65,27 @@ class UserVerifyAcountValidation(BaseModel):
     email: EmailStr = Field(...)
     token: str = Field(...)
 
+class ChangePasswordValidation(BaseModel):
+    # Mật khẩu: password
+    # - Bắt buộc
+    # - Độ dài từ 8 đến 64 ký tự
+    oldPassword: str = Field(...)
+    newPassword: str = Field(
+        ...,
+        min_length=8,
+        max_length=64,
+        description="Mật khẩu (từ 8 - 64 ký tự, phải chứa ít nhất một chữ cái và một số)",
+    )
+
+
+    # - Mật khẩu phải chứa ít nhất một chữ cái và một số
+    @field_validator("newPassword")
+    def validate_password(cls, value):
+        """
+        Kiểm tra xem mật khẩu có chứa ít nhất một chữ cái và một số hay không.
+        Nếu không thỏa mãn, ném lỗi.
+        """
+        if not re.search(r"[A-Za-z]", value) or not re.search(r"\d", value):
+            raise ValueError("Mật khẩu phải chứa ít nhất một chữ cái và một số")
+        return value
+

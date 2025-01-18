@@ -1,6 +1,9 @@
-import { Box, Typography, Avatar, Grid  } from '@mui/material'
+import { Box, Typography, Avatar } from '@mui/material'
+import { selectCurrentUser } from '~/redux/user/userSlice'
+import { useSelector } from 'react-redux'
 
 export const Account = () => {
+  const user = useSelector(selectCurrentUser)
   return (
     <Box sx={{ display: 'flex',height:'100%', justifyContent: 'center', alignItems: 'center'}}>
       <Box sx={{ width: '100%', maxWidth: 600 }}>
@@ -24,7 +27,7 @@ export const Account = () => {
               backgroundColor: '#E1BEE7',
               transform: 'scaleY(1)',
               transition: 'all 0.5s',
-              transformOrigin: 'bottom',
+              transformOrigin: 'bottom'
             },
             '&:after': {
               content: '""',
@@ -46,27 +49,30 @@ export const Account = () => {
           <Box sx={{ textAlign: 'center' }}>
             <Avatar
               alt="User Avatar"
-              src="https://i.pinimg.com/originals/7f/e7/96/7fe796f542d596e3ca075edfbc69c7d5.jpg"
+              src={user.avatar}
               sx={{ width: 100, height: 100, margin: '0 auto', borderRadius: '50%' }}
             />
           </Box>
 
           <Box sx={{ textAlign: 'center', marginTop: 3 }}>
             <Typography variant="body" sx={{ backgroundColor: '#8E24AA', color: 'white', padding: '2px 10px', borderRadius: 2, width: '200px', alignItems: 'center', display: 'inline-flex', justifyContent: 'center' }}>
-              Role: Admin
+              Role: {user.role}
             </Typography>
             <Typography variant="h4" sx={{ marginTop: 2, marginBottom: 1 }}>
               {/* userName */}
-              Shin Nosuke 
+              {user.username}
             </Typography>
             <Typography variant="body" sx={{fontSize: '18px'}}>
-              Email: abc123@gmail.com <br />
+              Email: {user.email} <br />
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              DislayName: Tran Quang Dat
+              DislayName: {user.displayName}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              UserName: Shin Nosuke
+              UserName: {user.username}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              Create at: {new Date(user.createAt).toLocaleDateString('en-GB')}
             </Typography>
           </Box>
         </Box>

@@ -6,13 +6,6 @@ import { AccountVerification } from '~/pages/Auth/AccountVerification'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector } from 'react-redux'
 import { Settings } from '~/pages/Settings/Settings'
-import Security from './pages/Settings/Security'
-import Account from './pages/Settings/Account'
-
-// import BoardPage from '~/pages/BoardPage/boardPage'
-// import Home from '~/pages/HomePages/home'
-
-import { Box } from '@mui/material'
 
 const ProtectedRoute = ({ user }) => {
   if (!user) {
@@ -48,9 +41,8 @@ const App = () => {
       {/* 404 Not found */}
       <Route path='*' element={<NotFound />}/>
     </Routes>
-    
-  );
-};
+  )
+}
 
 export default App
 

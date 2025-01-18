@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, status, Response, Depends
+from fastapi import APIRouter, HTTPException, status, Depends, Body
 from fastapi.security import OAuth2PasswordBearer
 from src.controllers.user_controller import UserController
-from src.validations.user_validation import UserLoginValidation, UserRegisterValidation, UserVerifyAcountValidation
+from src.validations.user_validation import UserLoginValidation, UserRegisterValidation, UserVerifyAcountValidation, ChangePasswordValidation
+from src.middlewares.auth_middleware import auth_middleware
 
 router = APIRouter()
 
@@ -59,4 +60,16 @@ async def refesh_access_token(token: str = Depends(oauth2_scheme)):
         return new_access_token
     except Exception:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Sign in! (Error refesh token)")
+
+@router.put("/change_password")
+async def change_password(passwordData: ChangePasswordValidation, token: str = Depends(oauth2_scheme)):
+    payload = auth_middleware(token)
+    try:
+        await user_controller.change_password(payload, {
+            'oldPassword': passwordData.oldPassword,
+            'newPassword': passwordData.newPassword
+        })
+
+    except Exception as e:
+        raise e
 

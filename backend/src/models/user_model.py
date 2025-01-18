@@ -74,4 +74,16 @@ class UserModel(Document):
 
         return result
 
+    @staticmethod
+    async def change_password(user_id, hashed_password):
+        user_collection = mongodb_connector.get_database_instance()[UserModel.user_collection_name]
+
+        result = await user_collection.find_one_and_update(
+                { "_id": user_id },
+                { "$set": { "password": hashed_password, 'updatedAt': datetime.now(timezone.utc)} },
+                return_document=True
+            )
+
+        return result
+
 
