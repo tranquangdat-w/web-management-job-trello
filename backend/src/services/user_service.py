@@ -8,6 +8,7 @@ from src.models.user_model import UserModel
 from src.config.environment import env
 from src.utils.jwt_util import create_token, verify_token
 
+
 class UserService:
     def __init__(self):
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -148,21 +149,6 @@ class UserService:
         except Exception as e:
             print(f"Error sending email: {str(e)}")
 
-<<<<<<< HEAD
-    async def change_password(self, payload, password_data):
-        user = await UserModel.find_one_by_id(payload['_id'])
-
-        if not user:
-            raise HTTPException(status_code=422, detail='Some errror occer when change password')
-        
-        if not self.pwd_context.verify(password_data['oldPassword'], user['password']):
-            raise HTTPException(status_code=422, detail='Old password is not correct')
-        
-        await UserModel.change_password(user['_id'], self.pwd_context.hash(password_data['newPassword']))
-        
-        return { "status": "change password successfully"}
-        
-=======
     # def generate_otp_secret(self, user_id: str) -> str:
     #     """Tạo mã OTP cho người dùng"""
     #     totp = pyotp.TOTP(user_id)
@@ -300,4 +286,3 @@ class UserService:
     #             return {"status": "fail", "message": "Người dùng không tồn tại."}
     #     except Exception as e:
     #         return {"status": "error", "message": f"Lỗi khi xóa người dùng: {str(e)}"}
->>>>>>> 03d57b3 (test)
