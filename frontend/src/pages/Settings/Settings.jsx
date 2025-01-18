@@ -45,13 +45,17 @@ export const Settings = () => {
               color: theme.palette.mode === 'dark' ? '#fff' : '#000',
               '&.Mui-selected': {
                 color: theme.palette.mode === 'dark' ? '#fff' : '#000',
-                borderBottom: '2px solid black'
+                borderBottom: '2px solid black',
               },
             }}
           />
         </Tabs>
       </Box>
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ p: 3 ,
+        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#005485' : '#0079bf',
+        width: '100%vh',
+        height: '100vh'
+      }}>
         {isAccount && <Account />}
         {isSecurity && <Security />}
       </Box>

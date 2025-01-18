@@ -134,12 +134,17 @@ const Card = ({ card }) => {
             }
           }}
         >
-          <MenuItem onClick={() => { setShowDatePicker(true); handleClose() }}>
-            <CalendarMonthIcon /> Duo Date
+          <MenuItem onClick={() => { setShowDatePicker(true); handleClose() }}
+            sx= {{ '& p' : { color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' } }}
+          >
+            <CalendarMonthIcon />
+            <Typography>Duo Date</Typography>
           </MenuItem>
 
-          <MenuItem onClick={deleteCard}>
-            <DeleteIcon /> Delete Card
+          <MenuItem onClick={deleteCard} sx= {{ '& p' : { color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' } }}>
+            <DeleteIcon />
+
+            <Typography>Delete Card</Typography>
           </MenuItem>
         </Menu>
       </CardContent>

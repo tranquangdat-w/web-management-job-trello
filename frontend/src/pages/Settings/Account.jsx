@@ -9,7 +9,7 @@ export const Account = () => {
   const theme = useTheme()
 
   return (
-    <Box sx={{ display: 'flex',height:'100%', justifyContent: 'center', alignItems: 'center' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Box sx={{ width: '100%', maxWidth: 600 }}>
         <Box
           sx={{

@@ -39,7 +39,10 @@ export const Security = () => {
           alignItems: 'center',
           padding: 3
         }}>
-        <Box sx={{ width: '100%', maxWidth: 400 }}>
+        <Box sx={{
+          width: '100%',
+          maxWidth: 400,
+        }}>
           <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
             Change your password
           </Typography>
@@ -49,14 +52,13 @@ export const Security = () => {
               label="Old password"
               variant="outlined"
               margin="normal"
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px', width: '400px', className: 'newPassword' }}
               {...register('oldPassword', {
                 required: FIELDS_REQUIRED_MESSAGE
               })}
-              sx={{ 
-                mb: 2, 
+              sx={{
+                mb: 2,
                 backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
-                borderRadius: '5px', 
+                borderRadius: '5px',
                 width: '400px' }}
             />
             <FieldErrorAlert errors={errors} fieldName={'oldPassword'} />
