@@ -1,7 +1,7 @@
 import { Box, Typography, Avatar } from '@mui/material'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector } from 'react-redux'
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles'
 
 export const Account = () => {
   const user = useSelector(selectCurrentUser)
@@ -17,7 +17,6 @@ export const Account = () => {
             position: 'relative',
             overflow: 'hidden',
             borderRadius: 2,
-            cursor: 'pointer',
             padding: 3,
             backgroundColor: theme.palette.mode === 'dark' ? '#283747' : '#fff',
             boxShadow: 3,
@@ -43,18 +42,20 @@ export const Account = () => {
               backgroundColor: '#8E24AA',
               transform: 'scaleY(0)',
               transition: 'all 0.5s',
-              transformOrigin: 'bottom',
+              transformOrigin: 'bottom'
             },
             '&:hover:after': {
-              transform: 'scaleY(1)',
-            },
+              transform: 'scaleY(1)'
+            }
           }}
         >
-          <Box sx={{ textAlign: 'center' }}>
+          <Box sx={{
+            textAlign: 'center'
+          }}>
             <Avatar
               alt="User Avatar"
               src={user.avatar}
-              sx={{ width: 100, height: 100, margin: '0 auto', borderRadius: '50%' }}
+              sx={{ width: 100, height: 100, margin: '0 auto', borderRadius: '50%', cursor: 'pointer' }}
             />
           </Box>
 
@@ -66,7 +67,7 @@ export const Account = () => {
               {/* userName */}
               {user.username}
             </Typography>
-            <Typography variant="body" sx={{fontSize: '18px'}}>
+            <Typography variant="body" sx={{ fontSize: '18px' }}>
               Email: {user.email} <br />
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
@@ -85,4 +86,4 @@ export const Account = () => {
   )
 }
 
-export default Account;
+export default Account

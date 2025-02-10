@@ -1,7 +1,4 @@
 from src.services.user_service import UserService
-from fastapi import Response
-from src.utils.jwt_util import verify_token
-from src.config.environment import env
 
 class UserController:
     """

@@ -1,64 +1,65 @@
 import { useLocation } from 'react-router-dom'
-import { Box, Tabs, Tab } from '@mui/material'
 import AppBar from '~/components/AppBar/AppBar'
 import { Account } from './Account'
 import { Security } from './Security'
+import Tab from '@mui/material/Tab'
+import { useState } from 'react'
+import TabContext from '@mui/lab/TabContext'
+import TabList from '@mui/lab/TabList'
+import TabPanel from '@mui/lab/TabPanel'
+import { Box } from '@mui/material'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import SecurityIcon from '@mui/icons-material/Security'
 import { Link } from 'react-router-dom'
-import { useTheme } from '@mui/material/styles';
 
 export const Settings = () => {
   const location = useLocation()
 
-  const isAccount = location.pathname === '/setting/account'
-  const isSecurity = location.pathname === '/setting/security'
+  const getDefaultTabFromURL = () => {
+    if (location.pathname === '/setting/account') {
+      return '1'
+    }
 
-  //color in darkmode
-  const theme = useTheme();
+    return '2'
+  }
+
+  const [tab, setTab] = useState(getDefaultTabFromURL())
+
+  const handleChange = (event, newValue) => {
+    setTab(newValue)
+  }
 
   return (
-    <Box>
+    <Box sx={{ width: '100%', typography: 'body1' }}>
       <AppBar />
-      <Box sx={{
-        backgroundColor: theme.palette.mode === 'dark' ? '#212f3d ' : '#f0f0f0', 
-        p: 0.5}}>
-        <Tabs value={location.pathname}
-          sx={{ justifyContent: 'flex-start', ml:2 }}>
-          <Tab
-            label="Account"
-            value="/setting/account"
-            component={Link}
-            to="/setting/account"
-            sx={{
-              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
-              '&.Mui-selected': {
-                color: theme.palette.mode === 'dark' ? '#fff' : '#000',
-                borderBottom: '2px solid black'
-              }
-            }}
-          />
-          <Tab
-            label="Security"
-            value="/setting/security"
-            component={Link}
-            to="/setting/security"
-            sx={{
-              color: theme.palette.mode === 'dark' ? '#fff' : '#000',
-              '&.Mui-selected': {
-                color: theme.palette.mode === 'dark' ? '#fff' : '#000',
-                borderBottom: '2px solid black',
-              },
-            }}
-          />
-        </Tabs>
-      </Box>
-      <Box sx={{ p: 3 ,
-        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#005485' : '#0079bf',
-        width: '100%vh',
-        height: '100vh'
-      }}>
-        {isAccount && <Account />}
-        {isSecurity && <Security />}
-      </Box>
+      <TabContext value={tab}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="Tab">
+            <Tab
+              icon={<AccountCircleIcon />}
+              iconPosition="start"
+              label="Account"
+              value="1"
+              component={Link}
+              to="/setting/account" />
+            <Tab
+              icon={<SecurityIcon />}
+              iconPosition="start"
+              label="Security"
+              value="2"
+              component={Link}
+              to="/setting/security" />
+          </TabList>
+        </Box>
+
+        <TabPanel value="1">
+          <Account />
+        </TabPanel>
+
+        <TabPanel value="2">
+          <Security />
+        </TabPanel>
+      </TabContext>
     </Box>
   )
 }

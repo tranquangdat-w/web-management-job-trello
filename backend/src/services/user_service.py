@@ -98,7 +98,7 @@ class UserService:
 
             # Tao token tra ve cho frontend
             # Tao thong tin dinh kem JWT gom _id va email
-            user_info = {"_id": exist_user["_id"], "email": exist_user["email"], 'role': exist_user['role']}
+            user_info = {"_id": exist_user["_id"], "email": exist_user["email"]}
             user_info["exp"] = datetime.now(timezone.utc) + timedelta(
                 days=env["ACCESS_TOKEN_TIME_LIFE"]
             )
@@ -119,6 +119,14 @@ class UserService:
         except Exception as e:
             raise e
 
+    async def change_password(self, play_load, passwordData):
+        user = await UserModel.find_one_by_email(play_load['email'])
+
+        if (self.pwd_context.verify(passwordData['oldPassword'], user['password'])):
+            await UserModel.update_user(user['_id'], {"password": self.pwd_context.hash(passwordData['newPassword'])})
+        else: 
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password not correct")
+
     async def refesh_access_token(self, token: str):
         play_load = verify_token(token, env["REFESH_TOKEN_SECRET_KEY"])
         if not play_load:
@@ -131,7 +139,8 @@ class UserService:
 
         return new_access_token
 
-    def send_verification_email(self, email: str, user_data: dict) -> bool:
+
+    def send_verification_email(self, email: str, user_data: dict):
         """Gửi email xác thực với mã xác nhận."""
         msg = MIMEText(
             f"Mã xác thực của bạn là: {env['WEBSITE_DOMAIN_DEV']}/account/verification?email={user_data["email"]}&token={user_data['verifyToken']}"
@@ -149,140 +158,3 @@ class UserService:
         except Exception as e:
             print(f"Error sending email: {str(e)}")
 
-    # def generate_otp_secret(self, user_id: str) -> str:
-    #     """Tạo mã OTP cho người dùng"""
-    #     totp = pyotp.TOTP(user_id)
-    #     return totp.now()  # Tạo mã OTP
-    #
-    # def verify_otp(self, user_id: str, otp: str) -> bool:
-    #     """Xác minh mã OTP"""
-    #     totp = pyotp.TOTP(user_id)
-    #     return totp.verify(otp)
-    #
-    # async def get_user_by_username(self, username: str) -> dict:
-    #     """Lấy thông tin người dùng theo tên đăng nhập"""
-    #     try:
-    #         collection = self.mongo_config.get_database_instance()[self.collection_name]
-    #         user = await collection.find_one({"username": username})
-    #         if user:
-    #             return {"status": "success", "user": user}
-    #         else:
-    #             return {"status": "fail", "message": "Người dùng không tồn tại."}
-    #     except Exception as e:
-    #         return {
-    #             "status": "error",
-    #             "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
-    #         }
-    #
-    # async def get_user_by_email(self, email: str) -> dict:
-    #     """Lấy thông tin người dùng theo email"""
-    #     try:
-    #         collection = self.mongo_config.get_database_instance()[self.collection_name]
-    #         user = await collection.find_one({"email": email})
-    #         if user:
-    #             return {"status": "success", "user": user}
-    #         else:
-    #             return {"status": "fail", "message": "Email không tồn tại."}
-    #     except Exception as e:
-    #         return {
-    #             "status": "error",
-    #             "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
-    #         }
-    #
-    #
-    # async def reset_password(self, email: str) -> dict:
-    #     """Khôi phục mật khẩu thông qua email."""
-    #     try:
-    #         collection = self.mongo_config.database_instance()[self.collection_name]
-    #         user = await collection.find_one({"email": email})
-    #         if user:
-    #             reset_code = randint(100000, 999999)
-    #             # Gửi mã khôi phục mật khẩu qua email
-    #             email_sent = self.send_verification_email(email, reset_code)
-    #             if email_sent:
-    #                 await collection.update_one(
-    #                     {"email": email},
-    #                     {"$set": {"reset_code": reset_code}},
-    #                 )
-    #                 return {
-    #                     "status": "success",
-    #                     "message": "Mã khôi phục mật khẩu đã được gửi.",
-    #                 }
-    #             else:
-    #                 return {
-    #                     "status": "fail",
-    #                     "message": "Không thể gửi email khôi phục.",
-    #                 }
-    #         else:
-    #             return {"status": "fail", "message": "Email không tồn tại."}
-    #     except Exception as e:
-    #         return {
-    #             "status": "error",
-    #             "message": f"Lỗi khi khôi phục mật khẩu: {str(e)}",
-    #         }
-    #
-    # async def assign_role(self, user_id: str, role: str) -> dict:
-    #     """Gán vai trò cho người dùng"""
-    #     try:
-    #         collection = self.mongo_config.database_instance()[self.collection_name]
-    #         result = await collection.update_one(
-    #             {"_id": ObjectId(user_id)},
-    #             {"$set": {"role": role}},
-    #         )
-    #         if result.matched_count:
-    #             return {
-    #                 "status": "success",
-    #                 "message": f"Vai trò {role} đã được gán cho người dùng.",
-    #             }
-    #         else:
-    #             return {"status": "fail", "message": "Người dùng không tồn tại."}
-    #     except Exception as e:
-    #         return {"status": "error", "message": f"Lỗi khi gán vai trò: {str(e)}"}
-    #
-    # async def get_user_by_id(self, user_id: str) -> dict:
-    #     """Lấy thông tin người dùng theo ID"""
-    #     try:
-    #         collection = self.mongo_config.database_instance()[self.collection_name]
-    #         user = await collection.find_one({"_id": ObjectId(user_id)})
-    #         if user:
-    #             return {"status": "success", "user": user}
-    #         else:
-    #             return {"status": "fail", "message": "Người dùng không tồn tại."}
-    #     except Exception as e:
-    #         return {
-    #             "status": "error",
-    #             "message": f"Lỗi khi lấy thông tin người dùng: {str(e)}",
-    #         }
-    #
-    # async def update_user(self, user_id: str, updated_data: dict) -> dict:
-    #     """Cập nhật thông tin người dùng"""
-    #     try:
-    #         collection = self.mongo_config.database_instance()[self.collection_name]
-    #         result = await collection.update_one(
-    #             {"_id": ObjectId(user_id)},
-    #             {"$set": updated_data},
-    #         )
-    #         if result.matched_count:
-    #             return {
-    #                 "status": "success",
-    #                 "message": "Thông tin người dùng đã được cập nhật.",
-    #             }
-    #         else:
-    #             return {"status": "fail", "message": "Người dùng không tồn tại."}
-    #     except Exception as e:
-    #         return {
-    #             "status": "error",
-    #             "message": f"Lỗi khi cập nhật thông tin người dùng: {str(e)}",
-    #         }
-    #
-    # async def delete_user(self, user_id: str) -> dict:
-    #     """Xóa người dùng"""
-    #     try:
-    #         collection = self.mongo_config.database_instance()[self.collection_name]
-    #         result = await collection.delete_one({"_id": ObjectId(user_id)})
-    #         if result.deleted_count:
-    #             return {"status": "success", "message": "Người dùng đã được xóa."}
-    #         else:
-    #             return {"status": "fail", "message": "Người dùng không tồn tại."}
-    #     except Exception as e:
-    #         return {"status": "error", "message": f"Lỗi khi xóa người dùng: {str(e)}"}

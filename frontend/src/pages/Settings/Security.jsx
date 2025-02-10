@@ -7,8 +7,6 @@ import { updatePasswordAPI } from '~/apis'
 import { logOutUser, selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTheme } from '@mui/material/styles'
-import { useState } from 'react'
-
 
 export const Security = () => {
   const dispatch = useDispatch()
@@ -24,12 +22,8 @@ export const Security = () => {
     })
   }
 
-  const theme = useTheme();
-  const [showPassword, setShowPassword] = useState(false);
+  const theme = useTheme()
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  }
   return (
     <form onSubmit={handleSubmit(handleChangePassWord)}>
       <Box
@@ -78,11 +72,6 @@ export const Security = () => {
                   message: PASSWORD_RULE_MESSAGE
                 }
               })}
-              sx={{ 
-                mb: 2, 
-                backgroundColor: theme.palette.mode === 'dark' ? '#512e5f' : '#F0EFFF',
-                borderRadius: '5px', 
-                width: '400px' }}
             />
             <FieldErrorAlert errors={errors} fieldName={'newPassword'} />
           </Box>
