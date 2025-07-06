@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 const Board = () => {
+  // like store.dispatch
   const dispatch = useDispatch()
 
   const board = useSelector(selectCurrentActiveBoard)

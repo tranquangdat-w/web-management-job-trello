@@ -20,10 +20,35 @@ const theme = extendTheme({
     barPadding: 2
   },
   colorSchemes: {
-    light: {},
-    dark: {}
+    light: {
+      palette: {
+        background: {
+          default: '#f7f9fc' // A slightly off-white for a softer look
+        }
+      }
+    },
+    dark: {
+      palette: {
+        background: {
+          default: '#1a2027' // A dark, cool gray
+        }
+      }
+    }
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: (theme) => `
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px ${theme.palette.background.paper} inset !important;
+            -webkit-text-fill-color: ${theme.palette.text.primary} !important;
+            transition: background-color 5000s ease-in-out 0s;
+            caret-color: ${theme.palette.text.primary};
+        }
+      `
+    },
     MuiButton: {
       styleOverrides: {
         root: {

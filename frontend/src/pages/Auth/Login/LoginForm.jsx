@@ -1,174 +1,123 @@
+/* eslint-disable react/no-unescaped-entities */
 import { useState } from 'react'
-import { Box } from '@mui/material'
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import InputAdornment from '@mui/material/InputAdornment'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import IconButton from '@mui/material/IconButton'
-import { RegisterButton } from '../Register/RegisterButton'
+import { Box, TextField, Button, Typography, Link as MuiLink, InputAdornment, IconButton } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { loginUserAPI } from '~/redux/user/userSlice'
 import { toast } from 'react-toastify'
-
-
-
-import {
-  FIELDS_REQUIRED_MESSAGE,
-  EMAIL_RULE,
-  EMAIL_RULE_MESSAGE,
-  PASSWORD_RULE,
-  PASSWORD_RULE_MESSAGE
-} from '~/utils/validators'
+import { FIELDS_REQUIRED_MESSAGE } from '~/utils/validators'
 import { FieldErrorAlert } from '~/components/Form/FieldErrorAlert'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+
+const RedAsterisk = () => <Typography component="span" sx={{ color: 'red' }}>*</Typography>
 
 export const LoginForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
   let [searchParams] = useSearchParams()
-
   const registeredEmail = searchParams.get('registeredEmail')
+
   const verifiedEmail = searchParams.get('verifiedEmail')
 
   const { register, handleSubmit, formState: { errors } } = useForm()
+  const [passwordVisible, setPasswordVisible] = useState(false)
 
   const submitLogin = (data) => {
-    const { email, password } = data
+    const { username, password } = data
     toast.promise(
-      dispatch(loginUserAPI({ email, password })),
-      { pending: 'Login is in progress... ' }).then(res => {
+      dispatch(loginUserAPI({ username, password })),
+      { pending: 'Logging in...' }
+    ).then(res => {
       if (!res.error) navigate('/')
     })
   }
 
-  const [passwordVisible, setPasswordVisible] = useState(false)
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible)
-  }
-
   return (
-    <form onSubmit={handleSubmit(submitLogin)}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: 3
-        }}>
-        <Box sx={{ width: '100%', maxWidth: 400 }}>
-          <Typography variant="h5" component="h2" sx={{ mb: 2 }}>
-            Sign in
-          </Typography>
-          {verifiedEmail &&
-            <Box 
-              sx={{
-                backgroundColor: '#CDE8F6',
-                borderRadius: '8px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                padding: '16px',
-                color: '#447EAF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                Bạn đã xác nhận email thành công, hãy đăng nhập
-              </Box>
-            </Box>
-          }
-          {registeredEmail &&
-            <Box
-              sx={{
-                backgroundColor: '#DDF3D5',
-                borderRadius: '8px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                padding: '16px',
-                color: '#597151',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                Bạn đã đăng ký thành công, hãy check email để xác nhận tài khoản
-              </Box>
-            </Box>
-          }
-          <Box>
-            <TextField
-              fullWidth
-              label="Enter email or user name"
-              variant="outlined"
-              margin="normal"
-              error={!!errors['email']}
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px', width: '400px' }}
-              {...register('email', {
-                required: FIELDS_REQUIRED_MESSAGE,
-                pattern: {
-                  value: EMAIL_RULE,
-                  message: EMAIL_RULE_MESSAGE
-                }
-              })}
-            />
+    <Box component="form" onSubmit={handleSubmit(submitLogin)} sx={{ mt: 1 }}>
+      {verifiedEmail &&
+        <Typography sx={{ mb: 1, p: 1, borderRadius: '4px', bgcolor: '#CDE8F6', color: '#447EAF' }}>
+          Account verified successfully. Please log in.
+        </Typography>
+      }
+      {registeredEmail &&
+        <Typography sx={{ mb: 1, p: 1, borderRadius: '4px', bgcolor: '#DDF3D5', color: '#597151' }}>
+          Registration successful. Please check your email {registeredEmail} to verify your account.`
+        </Typography>
+      }
 
-            <FieldErrorAlert errors={errors} fieldName={'email'}/>
-          </Box>
-          <Box>
-            <TextField
-              fullWidth
-              label="Password"
-              type={passwordVisible ? 'text' : 'password'}
-              variant="outlined"
-              margin="normal"
-              error={!!errors['password']}
-              sx={{ mb: 2, backgroundColor: '#F0EFFF', borderRadius: '5px' }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={togglePasswordVisibility}>
-                      {passwordVisible ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-              {...register('password', {
-                required: FIELDS_REQUIRED_MESSAGE,
-                pattern: {
-                  value: PASSWORD_RULE,
-                  message: PASSWORD_RULE_MESSAGE
-                }
-              })}
-            />
-            <FieldErrorAlert errors={errors} fieldName={'password'}/>
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              sx={{
-                backgroundColor: '#6C63FF',
-                color: '#fff',
-                padding: '10px'
-              }}
-              type="submit"
-            >
-              Login
-            </Button>
-          </Box>
+      <Typography sx={{ fontWeight: 'bold', mb: 0.2 }}>Username <RedAsterisk /></Typography>
+      <TextField
+        fullWidth
+        placeholder="Enter email"
+        variant="outlined"
+        margin="normal"
+        size="small"
+        error={!!errors['email']}
+        sx={{ mt: 0, '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: '#DFE1E6' } } }}
+        {...register('username', {
+          required: FIELDS_REQUIRED_MESSAGE
+        })}
+      />
+      <FieldErrorAlert errors={errors} fieldName={'username'} />
 
-          <Box sx={{ mt: 2, textAlign: 'center' }}>
-            <RegisterButton />
-          </Box>
-        </Box>
+      <Typography sx={{ fontWeight: 'bold', mt: 0.5, mb: 0.2 }}>Password <RedAsterisk /></Typography>
+      <TextField
+        fullWidth
+        placeholder="Enter password"
+        type={passwordVisible ? 'text' : 'password'}
+        variant="outlined"
+        margin="normal"
+        size="small"
+        error={!!errors['password']}
+        sx={{ mt: 0, '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: '#DFE1E6' } } }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => setPasswordVisible(!passwordVisible)}
+                onMouseDown={(e) => e.preventDefault()}
+                edge="end"
+              >
+                {passwordVisible ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>
+          )
+        }}
+        {...register('password', { required: FIELDS_REQUIRED_MESSAGE })}
+      />
+      <FieldErrorAlert errors={errors} fieldName={'password'} />
+
+      <Button
+        fullWidth
+        variant="contained"
+        color="success"
+        type="submit"
+        sx={{ mt: 1.5, mb: 1.5, bgcolor: '#026AA7', '&:hover': { bgcolor: '#005B9A' } }}
+      >
+        Log In
+      </Button>
+
+      <Box sx={{ mt: 1.5, textAlign: 'center' }}>
+        <MuiLink component={Link} to="#" variant="body2">
+          Can't log in?
+        </MuiLink>
+        <Typography variant="body2" component="span" sx={{ mx: 1 }}>•</Typography>
+        <MuiLink component={Link} to="/register" variant="body2">
+          Sign up for an account
+        </MuiLink>
       </Box>
-    </form>
+
+      <Box sx={{ mt: 2, pt: 1.5, borderTop: '1px solid #ccc', textAlign: 'center' }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#172B4D' }}>
+          Trello helps teams move work forward.
+        </Typography>
+        <Typography variant="caption" sx={{ color: '#5E6C84', px: 2 }}>
+          Collaborate, manage projects, and reach new productivity peaks. From high rises to the home office, the way your team works is unique—accomplish it all with Trello.
+        </Typography>
+      </Box>
+    </Box>
   )
 }
-

@@ -1,11 +1,10 @@
 import { activeBoardReducer } from './activeBoard/activeBoardSlice'
+
 import { userReducer } from './user/userSlice'
 
 import { combineReducers } from 'redux'
 import storage from 'redux-persist/lib/storage'
-import {
-  configureStore
-} from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 
 import {
   persistReducer,
@@ -17,10 +16,10 @@ import {
   REGISTER
 } from 'redux-persist'
 
-
 const rootPersistConfig = {
   key: 'root',
   storage: storage,
+  // Cho phép lưu trữ các Slice nào
   whitelist: ['user']
 }
 

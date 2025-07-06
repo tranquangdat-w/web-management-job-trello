@@ -1,17 +1,23 @@
-import CircularProgress from '@mui/material/CircularProgress'
-import Box from '@mui/material/Box'
+import { Box, LinearProgress, Typography } from '@mui/material'
 
 export const PageLoading = () => {
   return (
     <Box sx={{
       display: 'flex',
-      widht: '100vh',
-      height: '100vh',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      bgcolor: (theme) => theme.palette.primary.main
+      height: '100vh',
+      width: '100vw',
+      backgroundColor: '#f0f2f5'
     }}>
-      <CircularProgress sx={{ color: 'white' }} />
+      <Box sx={{ width: '50%', textAlign: 'center' }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#172B4D', mb: 2 }}>
+          Loading...
+        </Typography>
+        <LinearProgress />
+      </Box>
     </Box>
   )
 }
+

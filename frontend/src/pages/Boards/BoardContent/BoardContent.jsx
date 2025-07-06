@@ -212,6 +212,7 @@ const BoardContent = ( { board, moveColumn, moveCardInSameColumn, moveCardToDiff
 
     if (!active || !over) return
 
+    // When draging card
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
       const { id: activeDraggingCardId, data: { current: activeDraggingCardData } } = active
       const { id: overCardId } = over
@@ -222,6 +223,7 @@ const BoardContent = ( { board, moveColumn, moveCardInSameColumn, moveCardToDiff
       if (!overColumn || !activeColumn) return
 
       if (oldColumnWhenDraggingCard._id !== overColumn._id) {
+        // Move card in difference columns
         moveCardBetweenDiffCol(
           active,
           over,
@@ -234,6 +236,7 @@ const BoardContent = ( { board, moveColumn, moveCardInSameColumn, moveCardToDiff
         )
 
       } else {
+        // Move Card in same column
         const oldCardIndex = oldColumnWhenDraggingCard?.cards.findIndex(card => card._id === activeDragItemId)
         const newCardIndex = overColumn?.cards.findIndex(card => card._id === overCardId)
 
@@ -249,6 +252,7 @@ const BoardContent = ( { board, moveColumn, moveCardInSameColumn, moveCardToDiff
           return nextColumns
         })
 
+        // Call Api and update board
         moveCardInSameColumn(dndOrderedCards, oldColumnWhenDraggingCard?._id)
       }
     }
@@ -262,6 +266,7 @@ const BoardContent = ( { board, moveColumn, moveCardInSameColumn, moveCardToDiff
 
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex)
 
+        // Call api to change columnOrderIds
         moveColumn(dndOrderedColumns)
 
         setOrderedColumns(dndOrderedColumns)

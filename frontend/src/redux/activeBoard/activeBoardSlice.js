@@ -1,26 +1,24 @@
 import { mapOrder } from '~/utils/sorts'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { API_ROOT } from '~/utils/constants'
+import { API_ROOT, API_VERSION } from '~/utils/constants'
 import authorizedAxiosInstance from '~/utils/authorizeAxios'
-
-// Khoi tao gia tri State cua slice trong redux
-const initialState = {
-  currentActiveBoard: null
-}
 
 export const fetchBoardDetailsAPI = createAsyncThunk(
   'activeBoard/fetchBoardDetailsAPI',
   async (boardId) => {
-    const response = await authorizedAxiosInstance.get(`${API_ROOT}/boards/${boardId}`)
+    const response = await authorizedAxiosInstance
+      .get(`${API_ROOT}/${API_VERSION}/boards/${boardId}`)
 
     return response.data
   }
 )
 
-// Khoi tao slice trong kho luu tru redux
+// Khoi tao Slice trong kho luu tru redux
 export const activeBoardSlice = createSlice({
   name: 'activeBoard',
-  initialState,
+  initialState: {
+    currentActiveBoard: null
+  },
 
   // Xu li du lieu dong bo
   reducers: {
@@ -30,6 +28,7 @@ export const activeBoardSlice = createSlice({
       state.currentActiveBoard = fullBoard
     }
   },
+
   // ExtraReducers: Xu li du lieu bat dong bo api
   extraReducers: (builder) => {
     builder.addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
@@ -52,7 +51,7 @@ export const { updateCurrentActiveBoard } = activeBoardSlice.actions
 
 // Selectors
 export const selectCurrentActiveBoard = (state) => {
-  // State.nameslice.
+  // State.nameSlice.tencuaState
   return state.activeBoard.currentActiveBoard
 }
 

@@ -1,48 +1,33 @@
 import axios from 'axios'
 import { toast, Bounce } from 'react-toastify'
 import { intercepterLoadingElements } from '~/utils/formatters'
-import { logOutUser, selectCurrentUser } from '~/redux/user/userSlice'
+import { logoutUserAPI, selectCurrentUser } from '~/redux/user/userSlice'
 import localStorage from 'redux-persist/es/storage'
-import { refeshTokenAPI } from '~/apis'
+import { refreshTokenAPI } from '~/apis'
+import { API_ROOT, API_VERSION } from './constants'
 
 let axiosReduxStore
 
 export const injectStore = (mainStore) => { axiosReduxStore = mainStore}
 
-let authorizedAxiosInstance = axios.create()
+let authorizedAxiosInstance = axios.create({
+  baseURL: `${API_ROOT}/${API_VERSION}`
+})
 
 // Thoi gian doi req cua server
 authorizedAxiosInstance.defaults.timeout = 1000 * 60 * 10
 
+// Tự động đính kèm cookie vào trong request
 authorizedAxiosInstance.defaults.withCredentials = true
 
 // Add a request interceptor
-
 authorizedAxiosInstance.interceptors.request.use(async (config) => {
-  // Do something before request is sent
+  // Không cho bấm khi mà bấm nút addCard hoặc add cột
+  // để tránh bị gọi api 2 lần.
   intercepterLoadingElements(true)
-
-  const isRefreshTokenRequest = config.url.includes('/refesh_token')
-
-  if (isRefreshTokenRequest) {
-    // Sử dụng refreshToken nếu là API refresh token
-    const refeshToken = await localStorage.getItem('refeshToken')
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${refeshToken}`
-    }
-  } else {
-    // Sử dụng accessToken cho các API khác
-    const accessToken = await localStorage.getItem('accessToken')
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${accessToken}`
-    }
-  }
 
   return config
 }, (error) => {
-  // Do something with request error
   return Promise.reject(error)
 })
 
@@ -52,47 +37,46 @@ let refeshTokenPromise = null
 authorizedAxiosInstance.interceptors.response.use((response) => {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
-  //
+
+  // Cho bấm trở lại.
   intercepterLoadingElements(false)
   return response
 }, (error) => {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
+
+  // Cho phép bấm trở lại.
   intercepterLoadingElements(false)
 
   let errorMessage = error?.message
 
-  if (error.response?.data?.detail[0]?.msg) {
-    errorMessage = error.response?.data?.detail[0]?.msg
-  }
-
-  if (error.response?.data?.detail) {
-    errorMessage = error.response?.data?.detail
+  if (error.response?.data?.message) {
+    errorMessage = error.response?.data?.message
   }
 
   // 401 thi se dang xuat user ra luon
   if (error.response?.status === 401) {
     let user = selectCurrentUser(axiosReduxStore.getState())
-    axiosReduxStore.dispatch(logOutUser(user))
+    axiosReduxStore.dispatch(logoutUserAPI(user))
   }
 
-  // 410 tu backend thi goi api refeshToken
+  // 410 GONE tu backend thi goi api refeshToken
   const originalRequest = error.config
   if (error.response?.status === 410 && originalRequest) {
+
     // Goi 1 lan duy nhat tai moi thoi diem
     originalRequest._retry = true
 
     if (!refeshTokenPromise) {
-      refeshTokenPromise = refeshTokenAPI()
+      refeshTokenPromise = refreshTokenAPI()
         .then(newAccessToken => {
           return newAccessToken
         })
-        .catch((_error) => {
+        .catch((error) => {
           // Log out if error occer when call refeshToken
-          let user = selectCurrentUser(axiosReduxStore.getState())
-          axiosReduxStore.dispatch(logOutUser(user))
+          axiosReduxStore.dispatch(logoutUserAPI())
 
-          return Promise.reject(_error)
+          return Promise.reject(error)
         })
         .finally(() => {
           refeshTokenPromise = null
@@ -100,9 +84,8 @@ authorizedAxiosInstance.interceptors.response.use((response) => {
     }
 
     // Goi tiep API neu ma refesh token thanh cong
-    return refeshTokenPromise.then(async accessToken => {
+    return refeshTokenPromise.then(async () => {
       // Luu lai accessToken
-      await localStorage.setItem('accessToken', accessToken)
 
       return authorizedAxiosInstance(originalRequest)
     })

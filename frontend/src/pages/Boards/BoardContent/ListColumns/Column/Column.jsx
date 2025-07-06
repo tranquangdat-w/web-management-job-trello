@@ -30,7 +30,7 @@ import {
 import { cloneDeep } from 'lodash'
 import { deleteColumnDetailsAPI } from '~/apis'
 
-const Column = ( { column }) => {
+const Column = ({ column }) => {
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
 
@@ -41,14 +41,13 @@ const Column = ( { column }) => {
 
   const addNewCard = async () => {
     if (!newCardTitle) {
-
       return
     }
 
     const cardData = {
       title: newCardTitle,
       columnId: column?._id,
-      boardId : board._id
+      boardId: board._id
     }
 
     const createdCard = await createNewCardAPI(cardData)
@@ -75,6 +74,7 @@ const Column = ( { column }) => {
     toggleOpenNewCardForm()
     setNewCardTitle('')
   }
+
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -109,11 +109,13 @@ const Column = ( { column }) => {
   }, [column.title])
 
   const confirmDeleteColumn = useConfirm()
+
+  // Xu li xoa column va card trong no
   const handleDeleteColumn = () => {
     try {
       confirmDeleteColumn({
         title: 'Delete Column',
-        description: 'This action will delete your column! Are you sure'
+        description: 'This action will delete your column and all cards in this column! Are you sure'
       }).then(async () => {
 
         await deleteColumnDetailsAPI(column._id).then((res) => {
@@ -131,11 +133,12 @@ const Column = ( { column }) => {
         })
 
         const newBoard = cloneDeep(board)
+        // column la cai column se duoc xoa.
         newBoard.columns = newBoard.columns.filter(col => col._id !== column._id)
         newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
 
         dispatch(updateCurrentActiveBoard(newBoard))
-      }).catch(() => {})
+      }).catch(() => { })
     } catch (error) {
       throw new Error(error)
     }
@@ -176,7 +179,7 @@ const Column = ( { column }) => {
               cursor: 'pointer',
               wordBreak: 'break-word'
             }}>
-              { column?.title }
+              {column?.title}
             </Typography>
           </Box>
 
@@ -193,11 +196,8 @@ const Column = ( { column }) => {
                 '&:hover': { bgcolor: '#d0d4db' },
                 paddingX: '4px',
                 paddingY: '5px'
-              }}
-            >
-              <MoreHorizIcon
-                sx={{ color: open ? 'white' : '#8c9bab' }}
-              />
+              }}>
+              <MoreHorizIcon sx={{ color: open ? 'white' : '#8c9bab' }} />
             </Button>
 
             <Menu
@@ -234,14 +234,12 @@ const Column = ( { column }) => {
                 sx={{
                   '&:hover': {
                     color: 'warning.dark',
-                    '& .MuiSvgIcon-root': {
-                      color: 'warning.dark'
-                    }
+                    '& .MuiSvgIcon-root': { color: 'warning.dark' }
                   }
                 }}
                 onClick={handleDeleteColumn}>
                 <ListItemIcon>
-                  <DeleteForeverIcon fontSize='small'/>
+                  <DeleteForeverIcon fontSize='small' />
                 </ListItemIcon>
                 <ListItemText>Delete this List</ListItemText>
               </MenuItem>
@@ -250,7 +248,7 @@ const Column = ( { column }) => {
         </Box>
 
         {/* ListCards */}
-        <ListCards headerHeight={headerHeight} cards={orderedCards}/>
+        <ListCards headerHeight={headerHeight} cards={orderedCards} />
 
         {/* Footer */}
         <Box sx={{
@@ -315,14 +313,15 @@ const Column = ( { column }) => {
                     color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black',
                     fontSize: '0.875rem'
                   }
-                }}
-              />
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                gap: 1
-              }}>
+                }}/>
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  gap: 1
+                }}>
                 <Button
                   className='interceptor-loading'
                   sx={{
@@ -335,20 +334,20 @@ const Column = ( { column }) => {
                   variant="contained"
                   size="small"
                   disableElevation={true}
-                  onClick={addNewCard}
-                >
+                  onClick={addNewCard}>
                   Add Card
                 </Button>
-                <Box sx={{
-                  cursor: 'pointer',
-                  '&:hover': {
-                    bgcolor: (theme) => theme.palette.mode === 'dark' ? 'grey.700' : 'grey.300'
-                  },
-                  display: 'flex',
-                  justifyContent: 'center',
-                  p: '6px',
-                  borderRadius: '4px'
-                }}>
+                <Box
+                  sx={{
+                    cursor: 'pointer',
+                    '&:hover': {
+                      bgcolor: (theme) => theme.palette.mode === 'dark' ? 'grey.700' : 'grey.300'
+                    },
+                    display: 'flex',
+                    justifyContent: 'center',
+                    p: '6px',
+                    borderRadius: '4px'
+                  }}>
                   <CloseIcon fontSize="small"
                     sx={{
                       color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black'

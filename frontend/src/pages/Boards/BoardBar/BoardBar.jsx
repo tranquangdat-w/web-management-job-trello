@@ -118,46 +118,36 @@ const BoardBar = ({ board }) => {
             '.MuiAvatar-colorDefault': {
               bgcolor: 'grey'
             }
-          }}
-        >
+          }}>
           <Tooltip title={'name of user'}>
             <Avatar
               alt="Remy Sharp"
-              src="https://yt3.ggpht.com/9qASLSpof72HuZY9Q085U0k_EhBSldutj2khX7dNHPy75dXU-0vTi_Pk8jcrn5ypC-tonjL0TA=s88-c-k-c0x00ffffff-no-rj"
-            />
-          </Tooltip>
-          <Tooltip title={'name of user'}>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://yt3.ggpht.com/9qASLSpof72HuZY9Q085U0k_EhBSldutj2khX7dNHPy75dXU-0vTi_Pk8jcrn5ypC-tonjL0TA=s88-c-k-c0x00ffffff-no-rj"
+              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
             />
           </Tooltip>
 
           <Tooltip title={'name of user'}>
             <Avatar
               alt="Remy Sharp"
-              src="https://yt3.ggpht.com/9qASLSpof72HuZY9Q085U0k_EhBSldutj2khX7dNHPy75dXU-0vTi_Pk8jcrn5ypC-tonjL0TA=s88-c-k-c0x00ffffff-no-rj"
+              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
             />
           </Tooltip>
-
           <Tooltip title={'name of user'}>
             <Avatar
               alt="Remy Sharp"
-              src="https://yt3.ggpht.com/9qASLSpof72HuZY9Q085U0k_EhBSldutj2khX7dNHPy75dXU-0vTi_Pk8jcrn5ypC-tonjL0TA=s88-c-k-c0x00ffffff-no-rj"
+              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
             />
           </Tooltip>
-
           <Tooltip title={'name of user'}>
             <Avatar
               alt="Remy Sharp"
-              src="https://yt3.ggpht.com/9qASLSpof72HuZY9Q085U0k_EhBSldutj2khX7dNHPy75dXU-0vTi_Pk8jcrn5ypC-tonjL0TA=s88-c-k-c0x00ffffff-no-rj"
+              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
             />
           </Tooltip>
-
           <Tooltip title={'name of user'}>
             <Avatar
               alt="Remy Sharp"
-              src="https://yt3.ggpht.com/9qASLSpof72HuZY9Q085U0k_EhBSldutj2khX7dNHPy75dXU-0vTi_Pk8jcrn5ypC-tonjL0TA=s88-c-k-c0x00ffffff-no-rj"
+              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
             />
           </Tooltip>
         </AvatarGroup>

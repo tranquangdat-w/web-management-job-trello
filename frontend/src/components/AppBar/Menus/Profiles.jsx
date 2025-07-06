@@ -10,7 +10,7 @@ import Logout from '@mui/icons-material/Logout'
 import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
-import { logOutUser, selectCurrentUser } from '~/redux/user/userSlice'
+import { logoutUserAPI, selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { useConfirm } from 'material-ui-confirm'
 import { toast, Bounce } from 'react-toastify'
@@ -35,7 +35,7 @@ const Profiles = () => {
         description: 'Are you sure?',
         buttonOrder: ['confirm', 'cancel']
       }).then(() => {
-      dispatch(logOutUser(user))
+      dispatch(logoutUserAPI())
       toast.success('Logout successfully', {
         position: 'bottom-left',
         autoClose: 3000,

@@ -41,6 +41,9 @@ const ListColumns = ( { columns } ) => {
     newBoard.columns.push(createdColumn)
     newBoard.columnOrderIds = newBoard.columns.map(col => col._id)
 
+    // Khi ma call reducer the nay thi newBoard se duoc gan
+    // cho action.payload chu khong phai la bien so
+    // cua updateCurrentActiveBoard
     dispatch(updateCurrentActiveBoard(newBoard))
 
     toast.success('Created new column!', {

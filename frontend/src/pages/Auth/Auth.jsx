@@ -1,68 +1,53 @@
-import { useLocation, Navigate } from 'react-router-dom'
-import { Box } from '@mui/material'
-import Typography from '@mui/material/Typography'
+import { Box, Typography, SvgIcon } from '@mui/material'
+import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import { LoginForm } from './Login/LoginForm'
 import { RegisterForm } from './Register/RegisterForm'
-import { LoginButton } from './Login/LoginButton'
-import { RegisterButton } from './Register/RegisterButton'
-import { selectCurrentUser } from '~/redux/user/userSlice'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { selectCurrentUser } from '~/redux/user/userSlice'
 
 export const Auth = () => {
   const location = useLocation()
-
   const isLogin = location.pathname === '/login'
-  const isRegister = location.pathname === '/register'
 
-  const currentUser = useSelector(selectCurrentUser)
+  const user = useSelector(selectCurrentUser)
 
-  if (currentUser) {
-    return <Navigate to='/' replace={true} />
-  }
+  if (user) return <Navigate to='/' replace={true} />
 
   return (
-    <Box
-      sx={{
+    <Box sx={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      minHeight: '100vh',
+      backgroundColor: '#F9FAFC'
+    }}>
+      <Box sx={{
         display: 'flex',
-        height: '100vh',
-        backgroundColor: '#ffffff',
-        boxShadow: 3,
-        borderRadius: 2,
-        overflow: 'hidden',
         alignItems: 'center',
-        gap: 2,
-        paddingRight: 3
-      }}
-    >
-      {/* Phần bên trái */}
-      <Box
-        sx={{
-          width: '50%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          padding: 3
-        }}>
-        <Typography variant="h3" component="h2" sx={{ mb: 2, ml: 35 }}>
-          {isLogin && 'Sign in' } {isRegister && 'Register'} to<br />Trello easily
+        justifyContent: 'center',
+        gap: 1,
+        mb: 3
+      }}>
+        <SvgIcon component={TrelloIcon} inheritViewBox sx={{ fontSize: '2.5rem', color: '#172B4D' }} />
+        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#172B4D' }}>
+          Trello
         </Typography>
-        <Box variant="body1" sx={{ mb: 2, ml: 35 }}>
-          {isLogin && 'If you don’t have an account, register now.'}
-          {isRegister && 'If you have an account, login now.'}
-          <br />
-          {isLogin && <RegisterButton />}
-          {isRegister && <LoginButton />}
-        </Box>
-        <img
-          src="https://s3-alpha-sig.figma.com/img/feb1/4138/168afcca4345533683f89bb42220b2ef?Expires=1737331200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=a2wSYz06xTL4qW5NosTgNm2z25e1hEpR7GSXSHr-6TCZK4cgvm6rl8be0E9tDIkrm5xkYH6ZlH2Vur9xCg8akt4dOwOK3a16x0~LYvlCmaVAtRFn15XRMUK4pk0j9W7FzAnXbJZbYeYCn4wiB9CPHWNtc~r7Cj5SYrExcdhWQNjxaZndA1iL7VJMXFGgUFg3dVon-BSA8W5itiJg-KyakphPeRk~F6E28DYkV~mkK1C8sT9sIt5Dhozu6zbFbCBpo5LHiHdnNi-wenEsxG5~ZorV8WBeS8amQKAH-hBR6OhUcHnvukJooUFfzw17mDMo4K-AiHtGXU15CWKpDTjfGw__"
-          alt="Illustration"
-          style={{ width: '250px', height: 'auto', marginLeft: '400px', marginBottom: '-100px' }}
-        />
       </Box>
-      {isLogin && <LoginForm />}
-      {isRegister && <RegisterForm />}
+      <Box sx={{
+        width: '100%',
+        maxWidth: '360px',
+        boxShadow: 'rgb(0 0 0 / 10%) 0px 0px 10px',
+        borderRadius: '3px',
+        backgroundColor: 'white',
+        p: '20px 30px'
+      }}>
+        <Typography variant="h6" align="center" sx={{ color: '#5E6C84', fontWeight: 'bold', mb: 2 }}>
+          {isLogin ? 'Log in to continue' : 'Sign up for your account'}
+        </Typography>
+        {isLogin ? <LoginForm /> : <RegisterForm />}
+      </Box>
     </Box>
   )
 }
-
