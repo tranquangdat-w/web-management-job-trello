@@ -2,7 +2,6 @@ import axios from 'axios'
 import { toast, Bounce } from 'react-toastify'
 import { intercepterLoadingElements } from '~/utils/formatters'
 import { logoutUserAPI, selectCurrentUser } from '~/redux/user/userSlice'
-import localStorage from 'redux-persist/es/storage'
 import { refreshTokenAPI } from '~/apis'
 import { API_ROOT, API_VERSION } from './constants'
 

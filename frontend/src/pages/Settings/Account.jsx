@@ -10,6 +10,7 @@ import { styled } from '@mui/material/styles'
 import { singleFileValidator } from '~/utils/validators'
 import { toast, Bounce } from 'react-toastify'
 
+// For support upload file
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',

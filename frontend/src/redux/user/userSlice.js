@@ -58,7 +58,6 @@ export const userSlice = createSlice({
 
 })
 
-
 // Selectors
 export const selectCurrentUser = (state) => {
   // State.nameslice.
