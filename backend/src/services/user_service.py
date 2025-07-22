@@ -30,7 +30,8 @@ class UserService:
             verifyToken=str(uuid.uuid4()),
         )
 
-        is_send = self.send_verification_email(new_user["email"], new_user.create_user_data())
+        is_send = self.send_verification_email(
+            new_user["email"], new_user.create_user_data())
 
         if is_send:
             result = await UserModel.create_user(new_user)
@@ -98,18 +99,20 @@ class UserService:
 
             # Tao token tra ve cho frontend
             # Tao thong tin dinh kem JWT gom _id va email
-            user_info = {"_id": exist_user["_id"], "email": exist_user["email"]}
-
+            user_info = {"_id": exist_user["_id"],
+                         "email": exist_user["email"]}
             user_info["exp"] = datetime.now(timezone.utc) + timedelta(
                 days=env["ACCESS_TOKEN_TIME_LIFE"]
             )
 
-            access_token = create_token(user_info, env["ACCESS_TOKEN_SECRET_KEY"])
+            access_token = create_token(
+                user_info, env["ACCESS_TOKEN_SECRET_KEY"])
 
             user_info["exp"] = datetime.now(timezone.utc) + timedelta(
                 days=env["ACCESS_TOKEN_TIME_LIFE"]
             )
-            refesh_token = create_token(user_info, env["REFESH_TOKEN_SECRET_KEY"])
+            refesh_token = create_token(
+                user_info, env["REFESH_TOKEN_SECRET_KEY"])
 
             del exist_user["password"]
 
@@ -120,6 +123,15 @@ class UserService:
         except Exception as e:
             raise e
 
+    async def change_password(self, play_load, passwordData):
+        user = await UserModel.find_one_by_email(play_load['email'])
+
+        if (self.pwd_context.verify(passwordData['oldPassword'], user['password'])):
+            await UserModel.update_user(user['_id'], {"password": self.pwd_context.hash(passwordData['newPassword'])})
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Password not correct")
+
     async def refesh_access_token(self, token: str):
         play_load = verify_token(token, env["REFESH_TOKEN_SECRET_KEY"])
         if not play_load:
@@ -128,14 +140,15 @@ class UserService:
         play_load["exp"] = datetime.now(timezone.utc) + timedelta(
             days=env["ACCESS_TOKEN_TIME_LIFE"]
         )
-        new_access_token = create_token(play_load, env["ACCESS_TOKEN_SECRET_KEY"])
+        new_access_token = create_token(
+            play_load, env["ACCESS_TOKEN_SECRET_KEY"])
 
         return new_access_token
 
-    def send_verification_email(self, email: str, user_data: dict) -> bool:
+    def send_verification_email(self, email: str, user_data: dict):
         """Gửi email xác thực với mã xác nhận."""
         msg = MIMEText(
-            f"Mã xác thực của bạn là: {env['WEBSITE_DOMAIN_DEV']}/account/verification?email={user_data["email"]}&token={user_data['verifyToken']}"
+            f"Mã xác thực của bạn là: {env['WEBSITE_DOMAIN_DEV']}/account/verification?email={user_data['email']}&token={user_data['verifyToken']}"
         )
         msg["Subject"] = "Xác thực tài khoản"
         msg["From"] = env["EMAIL_SENDER"]
@@ -155,12 +168,13 @@ class UserService:
         user = await UserModel.find_one_by_id(payload['_id'])
 
         if not user:
-            raise HTTPException(status_code=422, detail='Some errror occer when change password')
+            raise HTTPException(
+                status_code=422, detail='Some errror occer when change password')
 
         if not self.pwd_context.verify(password_data['oldPassword'], user['password']):
-            raise HTTPException(status_code=422, detail='Old password is not correct')
+            raise HTTPException(
+                status_code=422, detail='Old password is not correct')
 
         await UserModel.change_password(user['_id'], self.pwd_context.hash(password_data['newPassword']))
 
-        return { "status": "change password successfully"}
-
+        return {"status": "change password successfully"}

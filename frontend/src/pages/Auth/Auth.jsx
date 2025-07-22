@@ -21,7 +21,7 @@ export const Auth = () => {
       justifyContent: 'center',
       flexDirection: 'column',
       minHeight: '100vh',
-      backgroundColor: '#F9FAFC'
+      backgroundColor: (theme) => theme.palette.background.default
     }}>
       <Box sx={{
         display: 'flex',
@@ -30,20 +30,20 @@ export const Auth = () => {
         gap: 1,
         mb: 3
       }}>
-        <SvgIcon component={TrelloIcon} inheritViewBox sx={{ fontSize: '2.5rem', color: '#172B4D' }} />
-        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#172B4D' }}>
+        <SvgIcon component={TrelloIcon} inheritViewBox sx={{ fontSize: '2.5rem', color: (theme) => theme.palette.text.primary }} />
+        <Typography variant="h4" sx={{ fontWeight: 'bold', color: (theme) => theme.palette.text.primary }}>
           Trello
         </Typography>
       </Box>
       <Box sx={{
         width: '100%',
         maxWidth: '360px',
-        boxShadow: 'rgb(0 0 0 / 10%) 0px 0px 10px',
+        boxShadow: (theme) => theme.shadows[9],
         borderRadius: '3px',
-        backgroundColor: 'white',
+        backgroundColor: (theme) => theme.palette.background.paper,
         p: '20px 30px'
       }}>
-        <Typography variant="h6" align="center" sx={{ color: '#5E6C84', fontWeight: 'bold', mb: 2 }}>
+        <Typography variant="h6" align="center" sx={{ color: (theme) => theme.palette.text.primary, fontWeight: 'bold', mb: 2 }}>
           {isLogin ? 'Log in to continue' : 'Sign up for your account'}
         </Typography>
         {isLogin ? <LoginForm /> : <RegisterForm />}

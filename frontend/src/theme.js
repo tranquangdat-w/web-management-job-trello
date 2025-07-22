@@ -22,6 +22,10 @@ const theme = extendTheme({
   colorSchemes: {
     light: {
       palette: {
+        primary: {
+          main: '#0079BF',
+          dark: '#005B9A'
+        },
         background: {
           default: '#f7f9fc' // A slightly off-white for a softer look
         }
@@ -29,23 +33,37 @@ const theme = extendTheme({
     },
     dark: {
       palette: {
+        primary: {
+          main: '#0079BF',
+          dark: '#005B9A'
+        },
         background: {
-          default: '#1a2027' // A dark, cool gray
+          default: '#212121',
+          paper: '#2C2C2C'
         }
       }
     }
   },
   components: {
     MuiCssBaseline: {
-      styleOverrides: (theme) => `
+      styleOverrides: `
         input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px ${theme.palette.background.paper} inset !important;
-            -webkit-text-fill-color: ${theme.palette.text.primary} !important;
-            transition: background-color 5000s ease-in-out 0s;
-            caret-color: ${theme.palette.text.primary};
+          transition: background-color 5000s ease-in-out 0s;
+          -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+          -webkit-text-fill-color: rgba(0, 0, 0, 0.87) !important;
+          caret-color: rgba(0, 0, 0, 0.87) !important;
+        }
+
+        [data-mui-color-scheme="dark"] input:-webkit-autofill,
+        [data-mui-color-scheme="dark"] input:-webkit-autofill:hover,
+        [data-mui-color-scheme="dark"] input:-webkit-autofill:focus,
+        [data-mui-color-scheme="dark"] input:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 0px #121212 inset !important;
+          -webkit-text-fill-color: #ffffff !important;
+          caret-color: #ffffff !important;
         }
       `
     },

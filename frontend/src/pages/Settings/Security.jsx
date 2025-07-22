@@ -61,7 +61,7 @@ export const Security = () => {
       elevation={6}
       sx={{
         p: 4,
-        backgroundColor: theme.palette.mode === 'dark' ? '#2d3748' : '#ffffff',
+        backgroundColor: (theme) => theme.palette.background.paper,
         borderRadius: 4,
         border: `1px solid ${theme.palette.divider}`
       }}

@@ -93,9 +93,9 @@ export const LoginForm = () => {
       <Button
         fullWidth
         variant="contained"
-        color="success"
+        color="primary"
         type="submit"
-        sx={{ mt: 1.5, mb: 1.5, bgcolor: '#026AA7', '&:hover': { bgcolor: '#005B9A' } }}
+        sx={{ mt: 1.5, mb: 1.5, bgcolor: (theme) => theme.palette.primary.main, '&:hover': { bgcolor: (theme) => theme.palette.primary.dark } }}
       >
         Log In
       </Button>
@@ -111,10 +111,10 @@ export const LoginForm = () => {
       </Box>
 
       <Box sx={{ mt: 2, pt: 1.5, borderTop: '1px solid #ccc', textAlign: 'center' }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: '#172B4D' }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: (theme) => theme.palette.text.primary }}>
           Trello helps teams move work forward.
         </Typography>
-        <Typography variant="caption" sx={{ color: '#5E6C84', px: 2 }}>
+        <Typography variant="caption" sx={{ color: (theme) => theme.palette.text.secondary, px: 2 }}>
           Collaborate, manage projects, and reach new productivity peaks. From high rises to the home office, the way your team works is unique—accomplish it all with Trello.
         </Typography>
       </Box>
