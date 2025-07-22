@@ -101,7 +101,7 @@ const Card = ({ card }) => {
         justifyContent: 'space-between'
       }}>
         <Typography sx={{ wordBreak: 'break-word' }}>{card?.title}</Typography>
-        <Box sx={{ borderRadius: '20px', paddingX: '6px', opacity: 0.1, '&:hover': { bgcolor: 'gray', opacity: 1 }}} onClick={handleClick}>
+        <Box sx={{ borderRadius: '20px', paddingX: '6px', opacity: 0.1, '&:hover': { bgcolor: 'gray', opacity: 1 } }} onClick={handleClick}>
           <ModeIcon sx ={{ fontSize: '12px' }}/>
         </Box>
         <Menu

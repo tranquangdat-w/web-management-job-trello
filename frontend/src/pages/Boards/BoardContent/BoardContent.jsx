@@ -14,6 +14,7 @@ import {
   rectIntersection,
   getFirstCollision
 } from '@dnd-kit/core'
+
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
@@ -29,6 +30,7 @@ const BoardContent = ( { board, moveColumn, moveCardInSameColumn, moveCardToDiff
   const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } })
   const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
   const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 500 } })
+
   const sensors = useSensors(pointerSensor, mouseSensor, touchSensor)
 
   const [orderedColumns, setOrderedColumns] = useState([])

@@ -123,6 +123,7 @@ const ListColumns = ( { columns } ) => {
                 size="small"
                 placeholder={'Enter list name'}
                 autoFocus
+                onBlur={() => {setNewColumnTitle(''); setIsOpenNewColumnForm(false)}}
                 value={newColumnTitle}
                 onChange={(e) => setNewColumnTitle(e.target.value)}
                 inputProps={{
@@ -164,7 +165,7 @@ const ListColumns = ( { columns } ) => {
                 variant="contained"
                 size="small"
                 disableElevation={true}
-                onClick={addNewColumn}
+                onMouseDown={(e) => {e.preventDefault(); addNewColumn()}}
                 >
                   Add list
                 </Button>
