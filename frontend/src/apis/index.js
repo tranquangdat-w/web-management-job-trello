@@ -12,7 +12,11 @@ export const getBoards = async (newPage) => {
       page: newPage
     }
   })
+  return response.data
+}
 
+export const createBoard = async (boardData) => {
+  const response = await authorizedAxiosInstance.post('/boards', boardData)
   return response.data
 }
 

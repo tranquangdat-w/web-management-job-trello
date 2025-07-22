@@ -1,13 +1,12 @@
 import { mapOrder } from '~/utils/sorts'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { API_ROOT, API_VERSION } from '~/utils/constants'
 import authorizedAxiosInstance from '~/utils/authorizeAxios'
 
 export const fetchBoardDetailsAPI = createAsyncThunk(
   'activeBoard/fetchBoardDetailsAPI',
   async (boardId) => {
     const response = await authorizedAxiosInstance
-      .get(`${API_ROOT}/${API_VERSION}/boards/${boardId}`)
+      .get(`/boards/${boardId}`)
 
     return response.data
   }

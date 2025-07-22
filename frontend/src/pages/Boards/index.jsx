@@ -3,38 +3,36 @@ import { Box, Button, Grid, LinearProgress, Stack, Tab, Tabs, Typography } from 
 import { useEffect, useState } from 'react'
 import AppBar from '~/components/AppBar/AppBar'
 import DashboardIcon from '@mui/icons-material/Dashboard'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import LayersIcon from '@mui/icons-material/Layers'
 import Pagination from '@mui/material/Pagination'
 import BoardCreateModal from './create' // Import the modal component
-import { getBoards } from '~/apis'
+import { createBoard, getBoards } from '~/apis'
 import { ITEMS_PER_PAGE } from '~/utils/constants'
+import { Bounce, toast } from 'react-toastify'
 
 const Boards = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [modalOpen, setModalOpen] = useState(false)
+
+  const pageNumber = searchParams.get('page')
 
   let navigate = useNavigate()
   const theme = useTheme()
   const location = useLocation()
   const [value, setValue] = useState(location.pathname)
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(parseInt(pageNumber) || 1)
   const [pageCount, setPageCount] = useState(0)
   const [displayedBoards, setDisplayedBoards] = useState(null)
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getBoards(page)
-        setDisplayedBoards(data.boardData)
-        const totalBoards = data.metadata[0].totalCount
-        const newPageCount = Math.ceil(totalBoards / ITEMS_PER_PAGE)
-        setPageCount(newPageCount)
-      } catch (error) {
-        console.error('Failed to fetch boards:', error)
-      }
-    }
-
-    fetchData()
+    getBoards(page).then((res) => {
+      setDisplayedBoards(res.boardData)
+      const totalBoards = res.metadata[0]?.totalCount
+      const pageCount = totalBoards ? Math.ceil(totalBoards / ITEMS_PER_PAGE) : 0
+      setPageCount(pageCount)
+    })
   }, [page])
 
 
@@ -53,14 +51,44 @@ const Boards = () => {
       return
     }
 
-    const data = await getBoards(newPage)
+    if (newPage != 1) {
+      searchParams.set('page', newPage)
+      setSearchParams(searchParams)
+    } else {
+      searchParams.delete('page')
+      setSearchParams(searchParams)
+    }
+
     setPage(newPage)
   }
 
-  const handleCreateBoard = (data) => {
-    console.log('Creating new board with data:', data)
-    // Here you would typically call an API to create the board
-    // For now, we just log the data and close the modal
+  const handleCreateBoard = (boardData) => {
+    if (boardData?.description == '') {
+      delete boardData.description
+    }
+
+    createBoard(boardData).then(() => {
+      getBoards(page).then((res) => {
+        setDisplayedBoards(res.boardData)
+        const totalBoards = res.metadata[0]?.totalCount
+        const pageCount = totalBoards ? Math.ceil(totalBoards / ITEMS_PER_PAGE) : 0
+        setPageCount(pageCount)
+      })
+    }).then(() => {
+      toast.success('Created board successfully', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseonhover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
+    })
+
+
     setModalOpen(false)
   }
 
@@ -123,7 +151,15 @@ const Boards = () => {
               </Box>
             }
             {displayedBoards != null && displayedBoards.map((board) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={board._id}>
+              <Grid
+                item xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                key={board._id}
+                component={Link}
+                to={`/boards/${board._id}`}
+                sx={{ textDecoration: 'none' }}>
                 <Box
                   sx={{
                     '&:hover .image-box': {

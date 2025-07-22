@@ -50,7 +50,7 @@ const AppBar = () => {
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <AppsIcon sx={{ color: colorComponents }}/>
-          <Link to="/" style={{ textDecoration: 'none' }}>
+          <Link to="/boards" style={{ textDecoration: 'none' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
               <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color: (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white' }}/>
               <Typography sx={{ display: 'inline', fontSize: '1.2rem', fontWeight: 'bold', color: colorComponents }}>Trello</Typography>

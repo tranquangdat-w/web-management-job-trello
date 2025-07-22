@@ -15,7 +15,7 @@ const App = () => {
   return (
     <Routes>
       {/* Redirect Route */}
-      <Route path='/' element={<Navigate to='/boards/1f3018c7-174d-49f0-99c2-da415b66a579' replace={true} />}/>
+      <Route path='/' element={<Navigate to='/boards' replace={true} />}/>
       <Route element={<ProtectedRoute user={currentUser} />}>
         {/*List Boards*/}
         <Route path='/boards' element={<Boards />}/>
