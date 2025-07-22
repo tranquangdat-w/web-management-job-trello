@@ -6,6 +6,7 @@ from src.utils.jwt_util import verify_token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
 def auth_middleware(token: str = Depends(oauth2_scheme)):
+    print("ok")
     if not token:
         raise HTTPException(status_code=410, detail='Not found access token')
     try:

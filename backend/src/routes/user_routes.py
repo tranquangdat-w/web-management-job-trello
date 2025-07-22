@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends, Body
+from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from src.controllers.user_controller import UserController
 from src.validations.user_validation import UserLoginValidation, UserRegisterValidation, UserVerifyAcountValidation, ChangePasswordValidation
@@ -9,7 +9,9 @@ router = APIRouter()
 # Khởi tạo controller
 user_controller = UserController()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
+# OAuth2PasswordBearer sẽ giúp nhận token từ header
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 @router.post("/register")
 async def create_user(user_data: UserRegisterValidation) -> dict:
@@ -23,7 +25,8 @@ async def create_user(user_data: UserRegisterValidation) -> dict:
         return result
     except Exception as e:
         raise e
-  
+
+
 @router.put("/verify")
 async def verify_user(user_data: UserVerifyAcountValidation):
     try:

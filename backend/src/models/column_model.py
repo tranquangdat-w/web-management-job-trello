@@ -11,6 +11,7 @@ from mongoengine.fields import (
 
 from datetime import datetime, timezone
 
+
 class ColumnModel(Document):
     _id = UUIDField(default=uuid.uuid4, primary_key=True)
     title = StringField(required=True, unique=True)

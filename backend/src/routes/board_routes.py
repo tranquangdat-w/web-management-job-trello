@@ -17,11 +17,14 @@ router = APIRouter()
 def get_boards():
     return {"GET": "APIs for list of boards"}
 
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
 
+
 @router.post("/")
-async def create_board(board: CreateBoardValidation, token: str = Depends(oauth2_scheme)):
-    auth_middleware(token) 
+async def create_board(board: CreateBoardValidation,
+                       token: str = Depends(oauth2_scheme)):
+    auth_middleware(token)
     try:
         board_controller = BoardController()
         result = await board_controller.create_board(
@@ -42,7 +45,7 @@ async def create_board(board: CreateBoardValidation, token: str = Depends(oauth2
 
 @router.get("/{id}")
 async def get_details(id: UUID = Path(...), token : str = Depends(oauth2_scheme)) -> dict:
-    auth_middleware(token) 
+    auth_middleware(token)
     try:
         board_controller = BoardController()
         board = await board_controller.get_details(str(id))
@@ -93,3 +96,4 @@ async def move_card_to_different_column(req_body: MoveCardToDifferentValidation 
         )
 
     return {"status": "Successfully"}
+
