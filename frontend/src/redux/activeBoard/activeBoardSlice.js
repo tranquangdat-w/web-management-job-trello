@@ -49,10 +49,7 @@ export const activeBoardSlice = createSlice({
 export const { updateCurrentActiveBoard } = activeBoardSlice.actions
 
 // Selectors
-export const selectCurrentActiveBoard = (state) => {
-  // State.nameSlice.tencuaState
-  return state.activeBoard.currentActiveBoard
-}
+export const selectCurrentActiveBoard = (state) => state.activeBoard.currentActiveBoard
 
 // export default activeBoardSlice.reducer
 export const activeBoardReducer = activeBoardSlice.reducer

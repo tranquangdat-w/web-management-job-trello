@@ -3,15 +3,16 @@ import { Box, Button, Grid, LinearProgress, Stack, Tab, Tabs, Typography } from 
 import { useEffect, useState } from 'react'
 import AppBar from '~/components/AppBar/AppBar'
 import DashboardIcon from '@mui/icons-material/Dashboard'
-import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import LayersIcon from '@mui/icons-material/Layers'
 import Pagination from '@mui/material/Pagination'
-import BoardCreateModal from './create' // Import the modal component
+import BoardCreateModal from './create'
 import { createBoard, getBoards } from '~/apis'
 import { ITEMS_PER_PAGE } from '~/utils/constants'
 import { Bounce, toast } from 'react-toastify'
 
 const Boards = () => {
+
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [modalOpen, setModalOpen] = useState(false)

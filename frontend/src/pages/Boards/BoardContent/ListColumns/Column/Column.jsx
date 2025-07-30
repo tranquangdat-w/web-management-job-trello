@@ -30,19 +30,26 @@ import {
 import { cloneDeep } from 'lodash'
 import { deleteColumnDetailsAPI } from '~/apis'
 
+import EditableTitle from '~/components/EditableTitle/EditableTitle'
+import { selectIsDisableDragNDrop, setIsDisableDragNDrop } from '~/redux/shareState/isDisableStateSlice'
+
 const Column = ({ column }) => {
+  const isDisableDragNDrop = useSelector(selectIsDisableDragNDrop)
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
   const [isOpenNewCardForm, setIsOpenNewCardForm] = useState(false)
-  const toggleOpenNewCardForm = () => setIsOpenNewCardForm(!isOpenNewCardForm)
+
   const newCardTextareaRef = useRef(null)
   const [newCardTitle, setNewCardTitle] = useState('')
 
+
   useEffect(() => {
+    dispatch(setIsDisableDragNDrop(isOpenNewCardForm))
+
     if (isOpenNewCardForm) {
       newCardTextareaRef.current?.focus()
     }
-  }, [isOpenNewCardForm])
+  }, [isOpenNewCardForm, dispatch])
 
   const addNewCard = async () => {
     if (!newCardTitle) {
@@ -64,7 +71,7 @@ const Column = ({ column }) => {
     }
     dispatch(updateCurrentActiveBoard(newBoard))
     setNewCardTitle('')
-    toggleOpenNewCardForm()
+    setIsOpenNewCardForm(false)
   }
 
   const handleAddNewCard = () => {
@@ -75,32 +82,15 @@ const Column = ({ column }) => {
     addNewCard()
   }
 
-  const [columnTitle, setColumnTitle] = useState(column.title)
-  const handleUpdateColumnTitle = () => {
-    const newColumnTitle = columnTitle.trim()
-
-    setColumnTitle(newColumnTitle)
-
-    if (!newColumnTitle) {
-      setColumnTitle(column.title)
-      return
-    }
-
-    if (newColumnTitle === column.title) return
-
-    updateColumnDetailsAPI(column._id, { title: newColumnTitle }).then(
-      () => {
-        const newBoard = cloneDeep(board)
-        const columnToUpdate = newBoard.columns.find(
-          (c) => c._id === column._id
-        )
-        if (columnToUpdate) {
-          columnToUpdate.title = newColumnTitle
-        }
-
-        dispatch(updateCurrentActiveBoard(newBoard))
+  const handleUpdateColumnTitle = (newTitle) => {
+    updateColumnDetailsAPI(column._id, { title: newTitle }).then(() => {
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find((c) => c._id === column._id)
+      if (columnToUpdate) {
+        columnToUpdate.title = newTitle
       }
-    )
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
   }
 
   const {
@@ -112,7 +102,8 @@ const Column = ({ column }) => {
     isDragging
   } = useSortable({
     id: column._id,
-    data: { ...column }
+    data: { ...column },
+    disabled: isDisableDragNDrop
   })
 
   const style = {
@@ -201,42 +192,15 @@ const Column = ({ column }) => {
         <Box
           ref={headerRef}
           sx={{
-            height: 'auto',
+            height: 50,
             paddingX: 2,
             paddingTop: 1.5,
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'space-between'
-          }}
-        >
-          <TextField
-            value={columnTitle}
-            onChange={(e) => setColumnTitle(e.target.value)}
-            onFocus={(e) => e.target.select()}
-            onBlur={handleUpdateColumnTitle}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                e.target.blur()
-              }
-            }}
-            variant="outlined"
-            size="small"
-            sx={{
-              width: '100%',
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: 'transparent' },
-                '&:hover fieldset': { borderColor: 'transparent' },
-                '&.Mui-focused fieldset': { borderColor: 'primary.main' }
-              },
-              '& .MuiInputBase-input': {
-                typography: 'body1',
-                fontWeight: 'bold',
-                padding: '8px 10px',
-                cursor: 'pointer'
-              }
-            }}
-          />
+          }} >
+          <EditableTitle initialTitle={column.title} onSave={handleUpdateColumnTitle} size={18} />
+
           <Box>
             <Button
               id="basic-column-dropdown"
@@ -288,7 +252,7 @@ const Column = ({ column }) => {
                 Operation
               </Typography>
 
-              <MenuItem onClick={toggleOpenNewCardForm}>
+              <MenuItem onClick={() => {setIsOpenNewCardForm(true)}}>
                 <ListItemIcon>
                   <AddCardIcon />
                 </ListItemIcon>
@@ -337,7 +301,7 @@ const Column = ({ column }) => {
                     theme.palette.mode === 'dark' ? '#282f28' : '#d0d4db'
                 }
               }}
-              onClick={toggleOpenNewCardForm}
+              onClick={() => {setIsOpenNewCardForm(true)}}
             >
               <Typography>Add new card</Typography>
             </Button>
@@ -439,7 +403,7 @@ const Column = ({ column }) => {
                       color: (theme) =>
                         theme.palette.mode === 'dark' ? 'white' : 'black'
                     }}
-                    onClick={toggleOpenNewCardForm}
+                    onClick={() => {setIsOpenNewCardForm(false)}}
                   />
                 </Box>
               </Box>

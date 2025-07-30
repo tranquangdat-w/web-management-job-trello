@@ -20,11 +20,42 @@ import More from './Menus/Responsive/More'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import BoardCreateModal from '~/pages/Boards/create'
+import { createBoard } from '~/apis'
+import { Bounce, toast } from 'react-toastify'
 
 const AppBar = () => {
   const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
   const [placeholderSearch, setPlacehoderSearch] = useState('Search')
+  const [modalOpen, setModalOpen] = useState(false)
+  const navigate = useNavigate()
+
+  const handleCreateBoard = (boardData) => {
+    if (boardData?.description == '') {
+      delete boardData.description
+    }
+
+    createBoard(boardData).then((result) => {
+      const insertedBoardId = result.createdBoard.insertedId
+
+      navigate(`/boards/${insertedBoardId}`)
+    }).then(() => {
+      toast.success('Created board successfully', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseonhover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+        transition: Bounce
+      })
+    })
+
+    setModalOpen(false)
+  }
 
   const handleFocus = () => {
     setPlacehoderSearch('Search in Trello')
@@ -33,6 +64,7 @@ const AppBar = () => {
   const handleBlur = () => {
     setPlacehoderSearch('Search')
   }
+
   return (
     <>
       <Box
@@ -65,6 +97,7 @@ const AppBar = () => {
             <Button
               variant="outlined"
               startIcon={<LibraryAddIcon />}
+              onClick={() => setModalOpen(true)}
               sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -132,6 +165,7 @@ const AppBar = () => {
           <Profiles />
         </Box>
       </Box>
+      <BoardCreateModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleCreateBoard} />
     </>
   )
 }

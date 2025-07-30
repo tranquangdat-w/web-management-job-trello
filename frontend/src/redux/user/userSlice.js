@@ -45,7 +45,7 @@ export const userSlice = createSlice({
       // Same with set State when call api
       state.currentUser = user
     }),
-    builder.addCase(logoutUserAPI.fulfilled, (state, action) => {
+    builder.addCase(logoutUserAPI.fulfilled, state => {
 
       state.currentUser = null
     }),
@@ -59,10 +59,7 @@ export const userSlice = createSlice({
 })
 
 // Selectors
-export const selectCurrentUser = (state) => {
-  // State.nameslice.
-  return state.user.currentUser
-}
+export const selectCurrentUser = (state) => state.user.currentUser
 
 export const userReducer = userSlice.reducer
 

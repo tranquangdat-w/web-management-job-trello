@@ -2,14 +2,14 @@ import { Box } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import Chip from '@mui/material/Chip'
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt'
-import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import Button from '@mui/material/Button'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
 import { capitalizeFirstLetter } from '~/utils/formatters'
+import PublicIcon from '@mui/icons-material/Public'
+import PublicOffIcon from '@mui/icons-material/PublicOff'
+import { GroupAvatar } from './GroupAvatar'
 
 const BoardBar = ({ board }) => {
   const bgColorBoardBar = (theme) => theme.palette.mode === 'dark' ? '#004065' : '#005c91'
@@ -17,6 +17,7 @@ const BoardBar = ({ board }) => {
   const MENU_STYLES = {
     bgcolor: bgColorBoardBar,
     paddingX: 0.5,
+    fontWeight: 'bold',
     border: 'none',
     borderRadius: '6px',
     color: 'white',
@@ -56,7 +57,7 @@ const BoardBar = ({ board }) => {
         </Tooltip>
 
         <Chip
-          icon={<VpnLockIcon fontSize='small'/>}
+          icon={(board?.type === 'public') ? <PublicIcon /> : <PublicOffIcon />}
           label={capitalizeFirstLetter(board?.type)}
           clickable
           onClick= {() => {}}
@@ -84,7 +85,6 @@ const BoardBar = ({ board }) => {
           onClick= {() => {}}
           sx={MENU_STYLES}
         />
-
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
         <Button
@@ -105,52 +105,7 @@ const BoardBar = ({ board }) => {
         >
           Invite
         </Button>
-        <AvatarGroup max={4}
-          sx={{
-            gap: 0.7,
-            '.MuiAvatar-root': {
-              width: '32px',
-              height: '32px',
-              fontSize: '16px',
-              border: 'none',
-              color: 'white'
-            },
-            '.MuiAvatar-colorDefault': {
-              bgcolor: 'grey'
-            }
-          }}>
-          <Tooltip title={'name of user'}>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
-            />
-          </Tooltip>
-
-          <Tooltip title={'name of user'}>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
-            />
-          </Tooltip>
-          <Tooltip title={'name of user'}>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
-            />
-          </Tooltip>
-          <Tooltip title={'name of user'}>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
-            />
-          </Tooltip>
-          <Tooltip title={'name of user'}>
-            <Avatar
-              alt="Remy Sharp"
-              src="https://scontent.fhan14-5.fna.fbcdn.net/v/t39.30808-1/515438313_741675728376323_6364192442705188771_n.jpg?stp=c0.107.1073.1073a_cp0_dst-jpg_s40x40_tt6&_nc_cat=104&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeHfmnBwXyGu0k0u5EBBTZRbcTUmj8ICXZhxNSaPwgJdmNX_8QtlYmKNCVbCQitRN9p_xnya9e4WDPTBB1pWHyr4&_nc_ohc=qn_SolACFMEQ7kNvwGYiVAQ&_nc_oc=Adl_VcKVSNmjRmoumLbLfZ8ym0J-fkKxXiUm5xC25nS7Wqz7WjzSpSlK66BSP7rmeOw&_nc_zt=24&_nc_ht=scontent.fhan14-5.fna&_nc_gid=8uxNuPNwqhwWrdn7Co8qgg&oh=00_AfN-ulLFuZbMc7d1nUIbdPbviQ9gxNQA8ep7j1N2ep7zBA&oe=686B0C56"
-            />
-          </Tooltip>
-        </AvatarGroup>
+        <GroupAvatar />
       </Box>
     </Box>
   )

@@ -6,6 +6,7 @@ import { combineReducers } from 'redux'
 import storage from 'redux-persist/lib/storage'
 import { configureStore } from '@reduxjs/toolkit'
 
+
 import {
   persistReducer,
   FLUSH,
@@ -15,6 +16,8 @@ import {
   PURGE,
   REGISTER
 } from 'redux-persist'
+import { isDisableDragNDropReducer } from './shareState/isDisableStateSlice'
+import { activeCardReducer } from './activeCard/activeCardSlice'
 
 const rootPersistConfig = {
   key: 'root',
@@ -25,7 +28,9 @@ const rootPersistConfig = {
 
 const reducers = combineReducers({
   activeBoard: activeBoardReducer,
-  user: userReducer
+  user: userReducer,
+  isDisableDragNDrop: isDisableDragNDropReducer,
+  activeCard: activeCardReducer
 })
 
 

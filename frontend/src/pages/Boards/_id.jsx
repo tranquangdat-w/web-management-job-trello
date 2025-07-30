@@ -6,18 +6,29 @@ import BoardBar from './BoardBar/BoardBar'
 import BoardContent from './BoardContent/BoardContent'
 import { cloneDeep } from 'lodash'
 import { useEffect } from 'react'
-import { updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis'
+
+import {
+  updateBoardDetailsAPI,
+  updateColumnDetailsAPI,
+  moveCardToDifferentColumnAPI
+} from '~/apis'
+
 import {
   fetchBoardDetailsAPI,
   updateCurrentActiveBoard,
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import ActiveCardModal from '~/components/ActiveCardModal/ActiveCardModal'
+import { selectCurrentCard } from '~/redux/activeCard/activeCardSlice'
 
 const Board = () => {
   // like store.dispatch
   const dispatch = useDispatch()
+
+  const activeCard = useSelector(selectCurrentCard)
 
   const board = useSelector(selectCurrentActiveBoard)
 
@@ -54,7 +65,12 @@ const Board = () => {
     dispatch(updateCurrentActiveBoard(newBoard))
   }
 
-  const moveCardToDifferentColumn = (currentCardId, prevColumnId, nextColumnId, dndOrderedColumns) => {
+  const moveCardToDifferentColumn = (
+    currentCardId,
+    prevColumnId,
+    nextColumnId,
+    dndOrderedColumns
+  ) => {
     const dndOrderedColumnsIds = dndOrderedColumns.map(c => c._id)
     const newBoard = { ...board }
     newBoard.columns = dndOrderedColumns
@@ -78,19 +94,17 @@ const Board = () => {
   }
 
   return (
-    <>
-      <Container disableGutters={ true } maxWidth={ false } sx={{ height: '100vh' }}>
-        <AppBar />
-        <BoardBar board={board}/>
-        <BoardContent
-          board={board}
-
-          moveColumn={moveColumn}
-          moveCardInSameColumn={moveCardInSameColumn}
-          moveCardToDifferentColumn={moveCardToDifferentColumn}
-        />
-      </Container>
-    </>
+    <Container disableGutters={ true } maxWidth={ false } sx={{ height: '100vh' }}>
+      {activeCard && <ActiveCardModal />}
+      <AppBar />
+      <BoardBar board={board}/>
+      <BoardContent
+        board={board}
+        moveColumn={moveColumn}
+        moveCardInSameColumn={moveCardInSameColumn}
+        moveCardToDifferentColumn={moveCardToDifferentColumn}
+      />
+    </Container>
   )
 }
 

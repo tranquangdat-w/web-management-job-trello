@@ -1,6 +1,20 @@
-import { Box, Typography, TextField, Button, InputAdornment, IconButton, Paper, Grid, LinearProgress } from '@mui/material'
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  InputAdornment,
+  IconButton,
+  Paper,
+  Grid,
+  LinearProgress
+} from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { FIELDS_REQUIRED_MESSAGE, PASSWORD_RULE, PASSWORD_RULE_MESSAGE } from '~/utils/validators'
+import {
+  FIELDS_REQUIRED_MESSAGE,
+  PASSWORD_RULE,
+  PASSWORD_RULE_MESSAGE
+} from '~/utils/validators'
 import { toast } from 'react-toastify'
 import { logoutUserAPI, updateUserAPI } from '~/redux/user/userSlice'
 import { useDispatch } from 'react-redux'
@@ -44,7 +58,11 @@ export const Security = () => {
       buttonOrder: ['confirm', 'cancel']
     }).then(() => {
       toast.promise(
-        dispatch(updateUserAPI({ oldPassword: data.oldPassword, newPassword: data.newPassword, confirmPassword: data.confirmPassword })),
+        dispatch(updateUserAPI({
+          oldPassword: data.oldPassword,
+          newPassword: data.newPassword,
+          confirmPassword: data.confirmPassword
+        })),
         {
           pending: 'Updating password...'
         }).then(res => {
