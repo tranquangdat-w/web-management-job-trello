@@ -1,8 +1,7 @@
-from src.validations.card_validation import CardValidation, UpdateCardValidation, DeleteCardValidation
-from src.controllers.card_controller import CardController
-from src.middlewares.auth_middleware import auth_middleware
+from validations.card_validation import CardValidation, UpdateCardValidation, DeleteCardValidation
+from controllers.card_controller import CardController
+from middlewares.auth_middleware import auth_middleware
 from fastapi import APIRouter, HTTPException, status, Path, Body, Depends
-from src.middlewares.auth_middleware import auth_middleware
 from uuid import UUID
 from fastapi.security import OAuth2PasswordBearer
 
@@ -10,6 +9,7 @@ from fastapi.security import OAuth2PasswordBearer
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  # OAuth2PasswordBearer sẽ giúp nhận token từ header
+
 
 @router.post("/")
 async def create_card(card: CardValidation, token: str = Depends(oauth2_scheme)):
@@ -26,8 +26,9 @@ async def create_card(card: CardValidation, token: str = Depends(oauth2_scheme))
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=f"Can't create card: {e}")
 
+
 @router.put("/{id}")
-async def update_card(id: UUID = Path(...), req_body: UpdateCardValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict: 
+async def update_card(id: UUID = Path(...), req_body: UpdateCardValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict:
     auth_middleware(token)
     card_controller = CardController()
 
@@ -39,12 +40,13 @@ async def update_card(id: UUID = Path(...), req_body: UpdateCardValidation = Bod
     card = await card_controller.update_card(id, new_req_body)
 
     if not card:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail = "Can't update card") 
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Can't update card")
 
     return card
 
+
 @router.delete("/{id}")
-async def delete_card(id: UUID = Path(...), req_body: DeleteCardValidation = Body(...),token: str = Depends(oauth2_scheme)) -> dict: 
+async def delete_card(id: UUID = Path(...), req_body: DeleteCardValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict:
     auth_middleware(token)
 
     card_controller = CardController()
@@ -57,7 +59,6 @@ async def delete_card(id: UUID = Path(...), req_body: DeleteCardValidation = Bod
     card = await card_controller.delete_card(str(id), new_req_body['columnId'])
 
     if not card:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail = "Can't delete card") 
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Can't delete card")
 
     return card
-

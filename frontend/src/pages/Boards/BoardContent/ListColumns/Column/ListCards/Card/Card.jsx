@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
 import { useState } from 'react'
 import { selectIsDisableDragNDrop } from '~/redux/shareState/isDisableStateSlice'
-import { updateActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { fetchAndSetActiveCard, updateActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Card = ({ card }) => {
   const isDisableDragNDrop = useSelector(selectIsDisableDragNDrop)
@@ -110,9 +110,8 @@ const Card = ({ card }) => {
   }
 
   const setActiveCard = () => {
-    dispatch(updateActiveCard(card))
+    dispatch(fetchAndSetActiveCard(card._id))
   }
-
 
   return (
     <>

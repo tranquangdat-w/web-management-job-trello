@@ -1,7 +1,7 @@
-from src.config.mongodb import mongodb_connector
-from src.models.column_model import ColumnModel
-from src.models.board_model import BoardModel
-from src.models.card_model import CardModel
+from config.mongodb import mongodb_connector
+from models.column_model import ColumnModel
+from models.board_model import BoardModel
+from models.card_model import CardModel
 
 class ColumnService:
     async def create_column(self, column: ColumnModel) -> dict:

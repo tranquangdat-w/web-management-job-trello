@@ -1,6 +1,6 @@
 from mongoengine import Document
-from src.config.mongodb import mongodb_connector
-from src.config.environment import env
+from config.mongodb import mongodb_connector
+from config.environment import env
 from mongoengine.fields import (
     UUIDField,
     StringField,

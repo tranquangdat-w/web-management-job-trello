@@ -1,8 +1,8 @@
 from uuid import uuid4
-from src.config.mongodb import mongodb_connector
-from src.models.group_message_model import GroupMessageModel
-from src.models.message_model import MessageModel
-from src.providers.websocket_provider import WebSocketProvider
+from config.mongodb import mongodb_connector
+from models.group_message_model import GroupMessageModel
+from models.message_model import MessageModel
+from providers.websocket_provider import WebSocketProvider
 
 
 class GroupService:

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from src.controllers.message_controller import MessageController
-from src.validations.message_validation import MessageValidation
+from controllers.message_controller import MessageController
+from validations.message_validation import MessageValidation
 
 router = APIRouter()
 

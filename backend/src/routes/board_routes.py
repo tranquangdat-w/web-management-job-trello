@@ -1,13 +1,13 @@
-from src.validations.board_validation import (
+from validations.board_validation import (
     CreateBoardValidation,
     UpdateBoardValidation,
     MoveCardToDifferentValidation,
 )
 
 from fastapi.security import OAuth2PasswordBearer
-from src.controllers.board_controller import BoardController
+from controllers.board_controller import BoardController
 from fastapi import APIRouter, HTTPException, status, Path, Body, Depends
-from src.middlewares.auth_middleware import auth_middleware
+from middlewares.auth_middleware import auth_middleware
 from uuid import UUID
 
 router = APIRouter()
@@ -44,7 +44,7 @@ async def create_board(board: CreateBoardValidation,
 
 
 @router.get("/{id}")
-async def get_details(id: UUID = Path(...), token : str = Depends(oauth2_scheme)) -> dict:
+async def get_details(id: UUID = Path(...), token: str = Depends(oauth2_scheme)) -> dict:
     auth_middleware(token)
     try:
         board_controller = BoardController()
@@ -53,11 +53,12 @@ async def get_details(id: UUID = Path(...), token : str = Depends(oauth2_scheme)
         if not board:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found Board")
         return board
-    except Exception: 
+    except Exception:
         raise Exception
 
+
 @router.put("/{id}")
-async def update_board(id: UUID = Path(...), req_body: UpdateBoardValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict: 
+async def update_board(id: UUID = Path(...), req_body: UpdateBoardValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict:
     auth_middleware(token)
     board_controller = BoardController()
 
@@ -78,7 +79,7 @@ async def update_board(id: UUID = Path(...), req_body: UpdateBoardValidation = B
 
 
 @router.put("/supports/moving_card")
-async def move_card_to_different_column(req_body: MoveCardToDifferentValidation = Body(...),token : str = Depends(oauth2_scheme)) -> dict:
+async def move_card_to_different_column(req_body: MoveCardToDifferentValidation = Body(...), token: str = Depends(oauth2_scheme)) -> dict:
     auth_middleware(token)
     try:
         board_controller = BoardController()
@@ -96,4 +97,3 @@ async def move_card_to_different_column(req_body: MoveCardToDifferentValidation 
         )
 
     return {"status": "Successfully"}
-

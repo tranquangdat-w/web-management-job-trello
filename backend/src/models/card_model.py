@@ -1,7 +1,7 @@
 import uuid
 
-from src.config.mongodb import mongodb_connector
-from src.config.environment import env
+from config.mongodb import mongodb_connector
+from config.environment import env
 from mongoengine import Document
 from mongoengine.fields import (
     UUIDField,
@@ -49,10 +49,10 @@ class CardModel(Document):
         req_body['updatedAt'] = datetime.now(timezone.utc)
 
         result = await card_collection.find_one_and_update(
-                {"_id": card_id},
-                {"$set": req_body},
-                return_document=True
-            )
+            {"_id": card_id},
+            {"$set": req_body},
+            return_document=True
+        )
 
         return result
 
@@ -77,5 +77,4 @@ class CardModel(Document):
     async def delete_card(card_id):
         card_collection = mongodb_connector \
             .get_database_instance()[CardModel.card_collection_name]
-
         await card_collection.delete_one({"_id": card_id})

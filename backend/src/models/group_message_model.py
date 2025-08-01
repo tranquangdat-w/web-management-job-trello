@@ -8,8 +8,8 @@ from mongoengine import (
 )
 import uuid
 from datetime import datetime, timezone
-from src.config.environment import env
-from src.models.user_model import UserModel
+from config.environment import env
+from models.user_model import UserModel
 
 
 class GroupMessageModel(Document):
@@ -28,7 +28,7 @@ class GroupMessageModel(Document):
     group_message_collection_name = env["GROUP_MESSAGE_COLLECTION_NAME"]
 
     def group_conversation_dict(self):
-        from src.models.message_model import MessageModel  # Import ở bên trong
+        from models.message_model import MessageModel  # Import ở bên trong
 
         return {
             "id": str(self.id),

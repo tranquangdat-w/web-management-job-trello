@@ -1,6 +1,6 @@
-from src.validations.column_validation import ColumnValidation, UpdateColumnValidation
-from src.controllers.column_controller import ColumnController
-from src.middlewares.auth_middleware import auth_middleware
+from validations.column_validation import ColumnValidation, UpdateColumnValidation
+from controllers.column_controller import ColumnController
+from middlewares.auth_middleware import auth_middleware
 from fastapi import APIRouter, HTTPException, status, Path, Body, Depends
 from uuid import UUID
 from fastapi.security import OAuth2PasswordBearer

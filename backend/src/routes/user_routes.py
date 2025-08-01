@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
-from src.controllers.user_controller import UserController
-from src.validations.user_validation import UserLoginValidation, UserRegisterValidation, UserVerifyAcountValidation, ChangePasswordValidation
-from src.middlewares.auth_middleware import auth_middleware
+from controllers.user_controller import UserController
+from validations.user_validation import UserLoginValidation, UserRegisterValidation, UserVerifyAcountValidation, ChangePasswordValidation
+from middlewares.auth_middleware import auth_middleware
 
 router = APIRouter()
 

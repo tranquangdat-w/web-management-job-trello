@@ -1,7 +1,7 @@
-from src.config.mongodb import mongodb_connector
-from src.models.board_model import BoardModel
-from src.models.column_model import ColumnModel
-from src.models.card_model import CardModel
+from config.mongodb import mongodb_connector
+from models.board_model import BoardModel
+from models.column_model import ColumnModel
+from models.card_model import CardModel
 from datetime import datetime, timezone
 from uuid import UUID
 

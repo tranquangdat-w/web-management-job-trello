@@ -1,6 +1,7 @@
 import unicodedata
 import re
 
+
 def slugify(val):
     if not val:
         return ''

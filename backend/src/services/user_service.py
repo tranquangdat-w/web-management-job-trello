@@ -4,9 +4,9 @@ from datetime import datetime, timedelta, timezone
 import uuid
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
-from src.models.user_model import UserModel
-from src.config.environment import env
-from src.utils.jwt_util import create_token, verify_token
+from models.user_model import UserModel
+from config.environment import env
+from utils.jwt_util import create_token, verify_token
 
 
 class UserService:

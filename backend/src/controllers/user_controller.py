@@ -1,4 +1,4 @@
-from src.services.user_service import UserService
+from services.user_service import UserService
 
 class UserController:
     """
@@ -32,7 +32,7 @@ class UserController:
         try:
             return await self.user_service.refesh_access_token(token)
         except Exception as e:
-            raise e 
+            raise e
 
     async def change_password(self, payload, passwordData):
         try:

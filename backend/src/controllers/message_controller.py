@@ -1,5 +1,5 @@
-from src.services.message_service import MessageService
-from src.providers.websocket_provider import WebSocketProvider
+from services.message_service import MessageService
+from providers.websocket_provider import WebSocketProvider
 
 
 class MessageController:

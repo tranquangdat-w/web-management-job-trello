@@ -1,6 +1,6 @@
-from src.models.message_model import MessageModel
-from src.config.mongodb import mongodb_connector
-from src.providers.websocket_provider import WebSocketProvider
+from models.message_model import MessageModel
+from config.mongodb import mongodb_connector
+from providers.websocket_provider import WebSocketProvider
 
 
 class MessageService:

@@ -1,7 +1,7 @@
 # env
 import sys
-from src.config.environment import env
-from src.utils.constants import WHITElIST_DOMAINS
+from config.environment import env
+from utils.constants import WHITElIST_DOMAINS
 
 import uvicorn
 from contextlib import asynccontextmanager
@@ -9,15 +9,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # routers
-from src.routes.board_routes import router as board_router
-from src.routes.card_routes import router as card_router
-from src.routes.column_routes import router as column_router
-from src.routes.user_routes import router as user_router
-from src.routes.message_routes import router as message_router
-from src.routes.group_message_routes import router as group_message_router
+from routes.board_routes import router as board_router
+from routes.card_routes import router as card_router
+from routes.column_routes import router as column_router
+from routes.user_routes import router as user_router
 
 # mongodb connector to atlast
-from src.config.mongodb import mongodb_connector
+from config.mongodb import mongodb_connector
 
 APP_HOST = env["APP_HOST"]
 APP_PORT = env["APP_PORT"]

@@ -1,5 +1,5 @@
-from src.services.column_service import ColumnService
-from src.models.column_model import ColumnModel
+from services.column_service import ColumnService
+from models.column_model import ColumnModel
 
 class ColumnController:
     def __init__(self):

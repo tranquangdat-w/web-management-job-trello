@@ -1,7 +1,7 @@
 from fastapi import HTTPException
-from src.config.mongodb import mongodb_connector
-from src.models.card_model import CardModel
-from src.models.column_model import ColumnModel
+from config.mongodb import mongodb_connector
+from models.card_model import CardModel
+from models.column_model import ColumnModel
 
 class CardService:
     async def create_card(self, card: CardModel) -> dict:

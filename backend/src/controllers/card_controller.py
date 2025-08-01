@@ -1,5 +1,5 @@
-from src.services.card_service import CardService
-from src.models.card_model import CardModel
+from services.card_service import CardService
+from models.card_model import CardModel
 
 class CardController:
     def __init__(self):

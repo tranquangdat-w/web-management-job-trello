@@ -1,5 +1,5 @@
-from src.providers.websocket_provider import WebSocketProvider
-from src.services.group_message_service import GroupService
+from providers.websocket_provider import WebSocketProvider
+from services.group_message_service import GroupService
 
 
 class GroupController:

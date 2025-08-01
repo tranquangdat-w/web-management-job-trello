@@ -9,8 +9,8 @@ from mongoengine import (
 )
 from datetime import datetime, timezone
 import uuid
-from src.config.environment import env
-from src.models.user_model import UserModel
+from config.environment import env
+from models.user_model import UserModel
 
 
 class MessageModel(Document):
@@ -35,7 +35,7 @@ class MessageModel(Document):
     message_collection_name = env["MESSAGE_COLLECTION_NAME"]
 
     def message_dict(self):
-        from src.models.group_message_model import (
+        from models.group_message_model import (
             GroupMessageModel,
         )
 
