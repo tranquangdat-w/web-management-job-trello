@@ -1,5 +1,13 @@
 import Modal from '@mui/material/Modal'
-import { Avatar, Box, Button, Divider, TextField, Typography, useColorScheme } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  TextField,
+  Typography,
+  useColorScheme
+} from '@mui/material'
 import EditableTitle from '../EditableTitle/EditableTitle'
 import ImageIcon from '@mui/icons-material/Image'
 import MessageIcon from '@mui/icons-material/Message'
@@ -36,7 +44,7 @@ const VisuallyHiddenInput = styled('input')({
 })
 
 
-const buttonStyle = {
+const buttonCardIconStyle = {
   width: 30,
   height: 30,
   minWidth: 0,
@@ -217,7 +225,7 @@ const ActiveCardModal = () => {
 
         {/*Icon section*/}
         {
-          (activeCard.cover || !isEditingMarkDown) &&
+          (activeCard.cover || !isEdittingCardTitle) &&
           <Box
             sx={{
               position: 'absolute',
@@ -227,7 +235,7 @@ const ActiveCardModal = () => {
               display: 'flex',
               gap: 1
             }} >
-            <Button component="label" sx={buttonStyle}>
+            <Button component="label" sx={buttonCardIconStyle}>
               <ImageIcon fontSize="small" />
               <VisuallyHiddenInput
                 type="file"
@@ -235,7 +243,7 @@ const ActiveCardModal = () => {
                 multiple
               />
             </Button>
-            <Button sx={buttonStyle} onClick={handleCloseCardModal}>
+            <Button sx={buttonCardIconStyle} onClick={handleCloseCardModal}>
               <CloseIcon fontSize="small" />
             </Button>
           </Box>
@@ -278,6 +286,7 @@ const ActiveCardModal = () => {
             initialTitle={activeCard.title}
             onSave={handleUpdateCardTitle}
             size={30}
+            getIsEditing={setIsEditingCardTitle}
           />
         </Box>
 

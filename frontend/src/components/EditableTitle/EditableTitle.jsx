@@ -3,7 +3,7 @@ import { Box, TextField } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { setIsDisableDragNDrop } from '~/redux/shareState/isDisableStateSlice'
 
-const EditableTitle = ({ initialTitle, onSave, size }) => {
+const EditableTitle = ({ initialTitle, onSave, size, getIsEditing = null }) => {
   const dispatch = useDispatch()
 
   const [isEditing, setIsEditing] = useState(false)
@@ -21,6 +21,11 @@ const EditableTitle = ({ initialTitle, onSave, size }) => {
     }
   }, [isEditing, dispatch])
 
+  const startEditTittle = () => {
+    setIsEditing(true)
+    getIsEditing(true)
+  }
+
   const handleSave = () => {
     dispatch(setIsDisableDragNDrop(false))
     const newTitle = title.trim()
@@ -28,12 +33,14 @@ const EditableTitle = ({ initialTitle, onSave, size }) => {
     if (!newTitle || newTitle == '' || newTitle == initialTitle) {
       setTitle(initialTitle)
       setIsEditing(false)
+      getIsEditing(false)
       return
     }
 
     // chỉ call api nếu mà newTitle != initialTitle
     onSave(newTitle)
     setIsEditing(false)
+    getIsEditing(false)
   }
 
   if (isEditing) {
@@ -72,7 +79,7 @@ const EditableTitle = ({ initialTitle, onSave, size }) => {
 
   return (
     <Box
-      onClick={() => setIsEditing(true)}
+      onClick={startEditTittle}
       sx={{
         fontSize: size,
         fontWeight: 'bold',
