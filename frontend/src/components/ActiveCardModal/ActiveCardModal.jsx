@@ -8,12 +8,13 @@ import {
   Typography,
   useColorScheme
 } from '@mui/material'
+import SendIcon from '@mui/icons-material/Send'
 import EditableTitle from '../EditableTitle/EditableTitle'
 import ImageIcon from '@mui/icons-material/Image'
 import MessageIcon from '@mui/icons-material/Message'
 import CloseIcon from '@mui/icons-material/Close'
 import { GroupAvatar } from '~/pages/Boards/BoardBar/GroupAvatar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import MDEditor from '@uiw/react-md-editor'
 import { styled } from '@mui/material/styles'
@@ -21,7 +22,9 @@ import { singleFileValidator } from '~/utils/validators'
 import { toast, Bounce } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  clearActiveCard,
   selectCurrentCard,
+  selectIsDisPlayActiveCard,
   updateActiveCard
 } from '~/redux/activeCard/activeCardSlice'
 import { updateCardAPI } from '~/apis'
@@ -30,6 +33,8 @@ import {
   updateCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 import { cloneDeep } from 'lodash'
+import { selectCurrentUser } from '~/redux/user/userSlice'
+import moment from 'moment'
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -66,17 +71,60 @@ const ActiveCardModal = () => {
 
   const activeCard = useSelector(selectCurrentCard)
 
+  const isDisplayActiveCard = useSelector(selectIsDisPlayActiveCard)
+
   const activeBoard = useSelector(selectCurrentActiveBoard)
 
-  const [markDownValue, setMarkdownValue] = useState(activeCard?.description)
+  const currentActiveUser = useSelector(selectCurrentUser)
+
+  const [markDownValue, setMarkdownValue] = useState(activeCard?.description || '')
 
   const [isEditingMarkDown, setIsEditingMarkDown] = useState(false)
 
   const [isEdittingCardTitle, setIsEditingCardTitle] = useState(false)
 
   const [showComments, setShowComments] = useState(false)
+  const [displayedCommentsCount, setDisplayedCommentsCount] = useState(5)
 
-  const toggleComments = () => {
+  const [contentOfComment, setContentOfCommnet] = useState('')
+
+  useEffect(() => {
+    setMarkdownValue(activeCard?.description)
+  }, [activeCard])
+
+  const handleAddNewCommnet = () => {
+    if (!contentOfComment || contentOfComment === '') {
+      return
+    }
+
+    updateCardAPI(
+      activeCard._id,
+      {
+        userAvatar: currentActiveUser.avatar,
+        userName: currentActiveUser.username,
+        commentedAt: Date.now(),
+        content: contentOfComment
+      }
+    ).then(() => {
+      const newActiveCard = cloneDeep(activeCard)
+      const comments = newActiveCard.comments
+
+      comments.unshift({
+        userId: currentActiveUser._id,
+        userEmail: currentActiveUser.email,
+        userAvatar: currentActiveUser.avatar,
+        userName: currentActiveUser.username,
+        commentedAt: Date.now(),
+        content: contentOfComment
+      })
+
+      dispatch(updateActiveCard(newActiveCard))
+    })
+
+    setContentOfCommnet('')
+  }
+
+  const toggleDisplayComments = () => {
     setShowComments(!showComments)
   }
 
@@ -85,7 +133,7 @@ const ActiveCardModal = () => {
   }
 
   const hanldeCloseEditingMarkDown = () => {
-    const newDescription = markDownValue.trim()
+    const newDescription = markDownValue ? markDownValue.trim() : ''
     if (newDescription !== activeCard.description) {
       updateCardAPI(
         activeCard._id,
@@ -104,7 +152,10 @@ const ActiveCardModal = () => {
   }
 
   const handleCloseCardModal = () => {
-    dispatch(updateActiveCard(null))
+    setDisplayedCommentsCount(5)
+    setIsEditingMarkDown(false)
+    setContentOfCommnet('')
+    dispatch(clearActiveCard())
   }
 
 
@@ -198,13 +249,14 @@ const ActiveCardModal = () => {
 
         break
       }
+
       dispatch(updateCurrentActiveBoard(newBoard))
     })
   }
 
   return (
     <Modal
-      open={true} // always openBecause we will check in board._id
+      open={isDisplayActiveCard}
       onClose={handleCloseCardModal} >
       <Box
         sx={{
@@ -225,7 +277,7 @@ const ActiveCardModal = () => {
 
         {/*Icon section*/}
         {
-          (activeCard.cover || !isEdittingCardTitle) &&
+          (activeCard?.cover || !isEdittingCardTitle) &&
           <Box
             sx={{
               position: 'absolute',
@@ -252,7 +304,7 @@ const ActiveCardModal = () => {
         {/*First section*/}
         {/*Card cover*/}
         {
-          activeCard.cover &&
+          activeCard?.cover &&
           <Box
             sx={{
               borderTopRightRadius: 'inherit',
@@ -265,7 +317,7 @@ const ActiveCardModal = () => {
               justifyContent: 'center'
             }} >
             <img
-              src={activeCard.cover}
+              src={activeCard?.cover}
               loading="lazy" style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
           </Box>
         }
@@ -283,7 +335,7 @@ const ActiveCardModal = () => {
           }} >
           <CreditCardIcon />
           <EditableTitle
-            initialTitle={activeCard.title}
+            initialTitle={activeCard?.title}
             onSave={handleUpdateCardTitle}
             size={30}
             getIsEditing={setIsEditingCardTitle}
@@ -307,7 +359,7 @@ const ActiveCardModal = () => {
             <Typography variant="h6" fontWeight={'bold'} >
               Members
             </Typography>
-            <GroupAvatar />
+            <GroupAvatar boardUsers={activeBoard.boardUsers} limit={3} />
           </Box>
 
           <Box
@@ -338,8 +390,8 @@ const ActiveCardModal = () => {
               Edit
             </Button>
           </Box>
-          {
-            isEditingMarkDown &&
+          {isEditingMarkDown &&
+
             <Box data-color-mode={mode}
               sx={{
                 display: 'flex',
@@ -380,10 +432,8 @@ const ActiveCardModal = () => {
                 }} >
                 Save
               </Button>
-            </Box>
-          }
-          {
-            !isEditingMarkDown &&
+            </Box>}
+          {!isEditingMarkDown &&
             (markDownValue ?
               <Box
                 onClick={openEditingMarkDown}
@@ -411,45 +461,96 @@ const ActiveCardModal = () => {
                 <Typography>
                   Enter card description here!
                 </Typography>
-              </Box>)
-          }
-          {
-            showComments &&
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              </Box>)}
+          {showComments &&
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Typography variant="h6" fontWeight={'bold'} >
                 Comments
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
                 {
-                  Array.from({ length: 50 }, (_, i) => ({
-                    id: i + 1,
-                    author: ['John Doe', 'Jane Smith', 'Peter Jones', 'Mary Williams', 'David Brown'][i % 5],
-                    avatar: ['/static/images/avatar/1.jpg', '/static/images/avatar/2.jpg', '/static/images/avatar/3.jpg', '/static/images/avatar/4.jpg', '/static/images/avatar/5.jpg'][i % 5],
-                    text: `This is a sample comment text, just to fill up space. Comment number #${i + 1}`,
-                    timestamp: `${i + 1} minutes ago`
-                  })).map(comment => (
-                    <Box key={comment.id} sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'flex-start' }}>
-                      <Avatar alt={comment.author} src={comment.avatar} sx={{ width: 32, height: 32 }} />
+                  activeCard?.comments.slice(0, displayedCommentsCount).map((comment, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: 1,
+                        alignItems: 'flex-start',
+                        justifyContent: 'center'
+                      }}>
+                      <Avatar
+                        alt={comment.userName}
+                        src={comment.userAvatar}
+                        sx={{ width: 32, height: 32, marginTop: 1 }} />
                       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography variant="subtitle2" fontWeight="bold">{comment.author}</Typography>
-                          <Typography variant="caption" color="text.secondary">{comment.timestamp}</Typography>
-                        </Box>
-                        <Typography variant="body2" sx={{
+                        <Box sx={{
                           bgcolor: (theme) => theme.palette.mode === 'dark' ? '#3A3A3A' : '#EAEBEF',
                           p: 1,
                           borderRadius: 1,
                           mt: 0.5
                         }}>
-                          {comment.text}
-                        </Typography>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              gap: 0.5
+                            }}>
+                            <Typography variant="subtitle2" fontWeight="bold">
+                              {comment.userName}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              color="text.secondary">
+                              {comment.userEmail}
+                            </Typography>
+                          </Box>
+                          <Typography>
+                            {comment.content}
+                          </Typography>
+                        </Box>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Typography
+                            variant="caption"
+                            color="text.secondary">
+                            {moment(comment.commentedAt).fromNow()}
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
                   ))
                 }
+                {
+                  activeCard?.comments.length > displayedCommentsCount &&
+                  <Button
+                    onClick={() => setDisplayedCommentsCount(displayedCommentsCount + 5)}
+                    variant="outlined"
+                    sx={{
+                      px: 3,
+                      py: 1,
+                      alignSelf: 'center',
+                      color: '#050505', // màu chữ kiểu Facebook
+                      borderColor: '#ccc',
+                      borderRadius: '999px', // bo tròn cực đại
+                      textTransform: 'none', // không viết hoa
+                      fontWeight: 500,
+                      fontSize: 12,
+                      backgroundColor: '#f0f2f5',
+                      boxShadow: 'none',
+                      '&:hover': {
+                        backgroundColor: '#e4e6eb',
+                        borderColor: '#bbb',
+                        boxShadow: 'none'
+                      },
+                      transition: 'all 0.2s ease-in-out'
+                    }}
+                  >
+                    Load more
+                  </Button>
+                }
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, mt: 2 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg"
+                <Avatar alt={currentActiveUser.username} src={currentActiveUser.avatar}
                   sx={{ width: '32px', height: '32px' }}
                 />
                 <TextField
@@ -457,10 +558,20 @@ const ActiveCardModal = () => {
                   variant="outlined"
                   size="small"
                   placeholder='Add a comment'
+                  value={contentOfComment}
+                  onChange={(e) => { setContentOfCommnet(e.target.value) }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault()
+                      handleAddNewCommnet()
+                    }
+                  }}
                 />
+                <Button onClick={handleAddNewCommnet}>
+                  <SendIcon />
+                </Button>
               </Box>
-            </Box>
-          }
+            </Box>}
         </Box>
         <Box sx={{
           left: '50%',
@@ -470,7 +581,7 @@ const ActiveCardModal = () => {
           zIndex: 10
         }}>
           <Button
-            onClick={toggleComments}
+            onClick={toggleDisplayComments}
             sx={{
               bgcolor: showComments ? 'grey.700' : 'none',
               borderRadius: 2,
@@ -488,7 +599,6 @@ const ActiveCardModal = () => {
         </Box>
       </Box>
     </Modal>
-
   )
 }
 

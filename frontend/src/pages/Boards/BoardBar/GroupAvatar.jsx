@@ -1,13 +1,7 @@
 import { Avatar, Box, Popover, Stack, Tooltip } from '@mui/material'
 import { useState } from 'react'
 
-export const GroupAvatar = () => {
-  const limit = 7
-  const fakeArr = new Array(8)
-  fakeArr.fill({
-    username: 'username',
-    avatar: 'https://res.cloudinary.com/dye1xowrr/image/upload/v1753888213/cards/o8reuhiqfdpfeg6fr04o.jpg'
-  })
+export const GroupAvatar = ({ boardUsers, limit }) => {
   const avatarStyle = {
     height: 32,
     width: 32
@@ -30,11 +24,11 @@ export const GroupAvatar = () => {
         {
           (() => {
             const avatars = []
-            for (let index = 0; index < fakeArr.length; index++) {
+            for (let index = 0; index < boardUsers.length; index++) {
               if (index < limit) {
                 avatars.push(
-                  <Tooltip key={index} title={fakeArr[index].username}>
-                    <Avatar sx={avatarStyle} alt={fakeArr[index].username} src={fakeArr[index].avatar}/>
+                  <Tooltip key={index} title={boardUsers[index].username}>
+                    <Avatar sx={avatarStyle} alt={boardUsers[index].username} src={boardUsers[index].avatar} />
                   </Tooltip>
                 )
                 continue
@@ -48,7 +42,7 @@ export const GroupAvatar = () => {
                         sx={{
                           ...avatarStyle, fontSize: 15, cursor: 'pointer'
                         }}>
-                        +{fakeArr.length - limit}
+                        +{boardUsers.length - limit}
                       </Avatar>
                     </Tooltip>
                     <Popover
@@ -63,11 +57,16 @@ export const GroupAvatar = () => {
                       <Box sx={{ p: 2 }}>
                         <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap
                           sx={{ maxWidth: 5 * 32 + 16 }} >
-                          {fakeArr.slice(limit).map((_, index) => (
-                            <Tooltip key={index} title={`Avatar ${index + 1}`}>
-                              <Avatar sx={avatarStyle} alt={fakeArr[index].username} src={fakeArr[index].avatar} />
-                            </Tooltip>
-                          ))}
+                          {boardUsers.slice(limit).map((_, index) => {
+                            // Because new array of slice has index start at 0.
+                            // so need to increate index with limit.
+                            const newIdx = index + limit
+                            return (
+                              <Tooltip key={newIdx} title={boardUsers[newIdx].username}>
+                                <Avatar sx={avatarStyle} alt={boardUsers[newIdx].username} src={boardUsers[newIdx].avatar} />
+                              </Tooltip>
+                            )
+                          })}
                         </Stack>
                       </Box>
                     </Popover>

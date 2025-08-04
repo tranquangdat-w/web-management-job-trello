@@ -32,6 +32,13 @@ export const activeBoardSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchBoardDetailsAPI.fulfilled, (state, action) => {
       let board = action.payload // respone.data khi ma api duoc goi thanh cong
+
+      // Frontend handle owners and members
+      board.boardUsers = board.owners.concat(board.members)
+
+      delete board.members
+      delete board.owners
+
       board.columns = mapOrder(board?.columns, board?.columnOrderIds, '_id')
 
       board.columns.forEach(column => {

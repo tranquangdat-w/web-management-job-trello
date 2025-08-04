@@ -47,7 +47,7 @@ const BoardBar = ({ board }) => {
           <Chip
             label={board?.title}
             clickable
-            onClick= {() => {}}
+            onClick={() => { }}
             sx={{
               ...MENU_STYLES,
               fontSize: '20px',
@@ -60,29 +60,29 @@ const BoardBar = ({ board }) => {
           icon={(board?.type === 'public') ? <PublicIcon /> : <PublicOffIcon />}
           label={capitalizeFirstLetter(board?.type)}
           clickable
-          onClick= {() => {}}
+          onClick={() => { }}
           sx={MENU_STYLES}
         />
 
         <Chip
-          icon={<AddToDriveIcon fontSize='small'/>}
+          icon={<AddToDriveIcon fontSize='small' />}
           label="Add to Google Drive"
           clickable
-          onClick= {() => {}}
+          onClick={() => { }}
           sx={MENU_STYLES}
         />
         <Chip
-          icon={<BoltIcon fontSize='small'/>}
+          icon={<BoltIcon fontSize='small' />}
           label="Automatic"
           clickable
-          onClick= {() => {}}
+          onClick={() => { }}
           sx={MENU_STYLES}
         />
         <Chip
-          icon={<FilterListIcon fontSize='small'/>}
+          icon={<FilterListIcon fontSize='small' />}
           label="Filter"
           clickable
-          onClick= {() => {}}
+          onClick={() => { }}
           sx={MENU_STYLES}
         />
       </Box>
@@ -105,7 +105,7 @@ const BoardBar = ({ board }) => {
         >
           Invite
         </Button>
-        <GroupAvatar />
+        <GroupAvatar boardUsers={board.boardUsers} limit={3} />
       </Box>
     </Box>
   )

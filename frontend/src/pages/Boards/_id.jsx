@@ -1,4 +1,3 @@
-// Details board
 import { PageLoading } from '~/components/Loading/PageLoading'
 import Container from '@mui/material/Container'
 import AppBar from '~/components/AppBar/AppBar'
@@ -22,13 +21,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import ActiveCardModal from '~/components/ActiveCardModal/ActiveCardModal'
-import { selectCurrentCard } from '~/redux/activeCard/activeCardSlice'
+import { selectIsDisPlayActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Board = () => {
   // like store.dispatch
   const dispatch = useDispatch()
-
-  const activeCard = useSelector(selectCurrentCard)
 
   const board = useSelector(selectCurrentActiveBoard)
 
@@ -94,10 +91,10 @@ const Board = () => {
   }
 
   return (
-    <Container disableGutters={ true } maxWidth={ false } sx={{ height: '100vh' }}>
-      {activeCard && <ActiveCardModal />}
+    <Container disableGutters={true} maxWidth={false} sx={{ height: '100vh' }}>
+      <ActiveCardModal />
       <AppBar />
-      <BoardBar board={board}/>
+      <BoardBar board={board} />
       <BoardContent
         board={board}
         moveColumn={moveColumn}
@@ -105,6 +102,7 @@ const Board = () => {
         moveCardToDifferentColumn={moveCardToDifferentColumn}
       />
     </Container>
+
   )
 }
 

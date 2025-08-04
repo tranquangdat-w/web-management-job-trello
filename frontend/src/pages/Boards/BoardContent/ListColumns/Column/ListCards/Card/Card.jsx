@@ -29,7 +29,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
 import { useState } from 'react'
 import { selectIsDisableDragNDrop } from '~/redux/shareState/isDisableStateSlice'
-import { fetchAndSetActiveCard, updateActiveCard } from '~/redux/activeCard/activeCardSlice'
+import { fetchAndSetActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Card = ({ card }) => {
   const isDisableDragNDrop = useSelector(selectIsDisableDragNDrop)
@@ -109,14 +109,14 @@ const Card = ({ card }) => {
     handleMenuClose()
   }
 
-  const setActiveCard = () => {
+  const showCardModal = () => {
     dispatch(fetchAndSetActiveCard(card._id))
   }
 
   return (
     <>
       <MuiCard
-        onClick={setActiveCard}
+        onClick={showCardModal}
         ref={setNodeRef} style={dndStyleCard} {...attributes} {...listeners}
         sx={{
           cursor: 'pointer',
@@ -141,10 +141,10 @@ const Card = ({ card }) => {
         </CardContent>
 
         {shouldShowCardActions() &&
-          <Box sx={{ p: 1 }}>
+          <Box sx={{ paddingX: 1.5, marginTop: -1, paddingBottom: 1 }}>
             <CardActions
               sx={{
-                p: '0 4px 8px 4px',
+                p: 0,
                 '& .MuiButton-root': {
                   ':not(:first-of-type)': {
                     marginLeft: '0px'
@@ -163,25 +163,42 @@ const Card = ({ card }) => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 alignItems: 'center',
-                gap: 2
+                gap: 1
               }}>
               {!!card?.dueDate &&
                 <Button
                   disableRipple
-                  size="small"
-                  startIcon={hoverCheck ? <CheckBoxOutlineBlankIcon /> : <AccessTimeIcon />}
                   onMouseEnter={() => setHoverCheck(true)}
                   onMouseLeave={() => setHoverCheck(false)}
-                >
-                  {card?.dueDate}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '1px'
+                  }} >
+                  {hoverCheck ?
+                    <CheckBoxOutlineBlankIcon sx={{ height: 17, width: 17 }} />
+                    : <AccessTimeIcon sx={{ height: 17, width: 17 }} />}
+                  <Typography variant="caption">
+                    {card?.dueDate}
+                  </Typography>
                 </Button>
               }
-
-              {Boolean(card?.memberIds?.length) && <Button size="small" disableRipple startIcon={<GroupIcon />}>{card?.memberIds.length}</Button>}
-
-              {!!card?.comments?.length && <Button size="small" disableRipple startIcon={<CommentIcon />}>{card?.comments?.length}</Button>}
-
-              {!!card?.attachments?.length && <Button size="small" disableRipple startIcon={<LinkIcon />}>{card?.attachments?.length}</Button>}
+              {!!card?.comments?.length && (
+                <Button
+                  disableRipple
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '1px'
+                  }} >
+                  <CommentIcon sx={{ height: 17, width: 17 }} />
+                  <Typography variant="caption">
+                    {card?.comments?.length}
+                  </Typography>
+                </Button>
+              )}
             </CardActions>
           </Box>
         }

@@ -12,7 +12,6 @@ import { ITEMS_PER_PAGE } from '~/utils/constants'
 import { Bounce, toast } from 'react-toastify'
 
 const Boards = () => {
-
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -131,8 +130,7 @@ const Boards = () => {
           <Grid
             container
             spacing={2} >
-            {displayedBoards == null
-              &&
+            {displayedBoards == null &&
               <Box sx={{ paddingTop: 5, width: '100%' }}>
                 <Typography
                   variant='h6'
@@ -142,9 +140,9 @@ const Boards = () => {
                   Loading page {page}. Please wait for a moment
                 </Typography>
                 <LinearProgress />
-              </Box>}
-            {displayedBoards != null && displayedBoards.length == 0
-              &&
+              </Box>
+            }
+            {displayedBoards != null && displayedBoards.length == 0 &&
               <Box paddingTop={5}>
                 <Typography variant='h4' sx={{ color: 'text.secondary' }}>
                   Not found any board
@@ -211,9 +209,9 @@ const Boards = () => {
             </Stack>
           }
         </Box>
-      </Box>
+      </Box >
       <BoardCreateModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleCreateBoard} />
-    </Box>
+    </Box >
   )
 }
 

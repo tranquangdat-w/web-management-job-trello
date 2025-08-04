@@ -15,13 +15,14 @@ const App = () => {
   return (
     <Routes>
       {/* Redirect Route */}
-      <Route path='/' element={<Navigate to='/boards' replace={true} />}/>
+      <Route path='/' element={<Navigate to='/boards' replace={true} />} />
+
       <Route element={<ProtectedRoute user={currentUser} />}>
         {/*List Boards*/}
-        <Route path='/boards' element={<Boards />}/>
+        <Route path='/boards' element={<Boards />} />
 
         {/*Board Details*/}
-        <Route path='/boards/:boardId' element={<Board />}/>
+        <Route path='/boards/:boardId' element={<Board />} />
 
         {/*Settings*/}
         <Route path='/setting/account' element={<Settings />} />
@@ -34,7 +35,7 @@ const App = () => {
       <Route path='/users/verification' element={<AccountVerification />} />
 
       {/* 404 Not found */}
-      <Route path='*' element={<NotFound />}/>
+      <Route path='*' element={<NotFound />} />
     </Routes>
   )
 }
