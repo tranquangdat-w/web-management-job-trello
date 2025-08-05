@@ -1,4 +1,5 @@
 import { Card as MuiCard } from '@mui/material'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { Box } from '@mui/material'
 import CardActions from '@mui/material/CardActions'
 import CardContent from '@mui/material/CardContent'
@@ -6,35 +7,36 @@ import ModeIcon from '@mui/icons-material/Mode'
 import CardMedia from '@mui/material/CardMedia'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
-import GroupIcon from '@mui/icons-material/Group'
 import CommentIcon from '@mui/icons-material/Comment'
-import LinkIcon from '@mui/icons-material/Link'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Popover from '@mui/material/Popover'
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import DeleteIcon from '@mui/icons-material/Delete'
-import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { deleteCardAPI } from '~/apis'
+import { deleteCardAPI, updateCardAPI } from '~/apis'
 import {
   updateCurrentActiveBoard,
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { cloneDeep } from 'lodash'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { selectIsDisableDragNDrop } from '~/redux/shareState/isDisableStateSlice'
 import { fetchAndSetActiveCard } from '~/redux/activeCard/activeCardSlice'
+import moment from 'moment'
 
 const Card = ({ card }) => {
+  const [isDone, setIsDone] = useState(card.isDone)
   const isDisableDragNDrop = useSelector(selectIsDisableDragNDrop)
   const dispatch = useDispatch()
   const board = useSelector(selectCurrentActiveBoard)
+
+  useEffect(() => {
+    setIsDone(card.isDone)
+  }, [card.isDone])
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
@@ -51,7 +53,7 @@ const Card = ({ card }) => {
   const [hoverCheck, setHoverCheck] = useState(false)
 
   const shouldShowCardActions = () => {
-    return Boolean(card?.memberIds?.length) || !!card?.comments?.length || !!card?.attachments?.length
+    return Boolean(card?.memberIds?.length) || !!card?.comments?.length || card?.dueDate
   }
 
   const deleteCard = async () => {
@@ -74,12 +76,6 @@ const Card = ({ card }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const openMenu = Boolean(anchorEl)
 
-  // State for the due date picker popover
-  const [datePickerAnchorEl, setDatePickerAnchorEl] = useState(null)
-  const openDatePicker = Boolean(datePickerAnchorEl)
-  const [selectedDate, setSelectedDate] = useState(null)
-
-
   const handleMenuClick = (event) => {
     event.stopPropagation()
     setAnchorEl(event.currentTarget)
@@ -87,20 +83,6 @@ const Card = ({ card }) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null)
-  }
-
-  const handleDatePickerOpen = (event) => {
-    setDatePickerAnchorEl(event.currentTarget)
-    handleMenuClose() // Close the main menu
-  }
-
-  const handleDatePickerClose = () => {
-    setDatePickerAnchorEl(null)
-  }
-
-  const handleDateSelect = (date) => {
-    setSelectedDate(date)
-    handleDatePickerClose()
   }
 
   const handleDeleteCard = (event) => {
@@ -111,6 +93,36 @@ const Card = ({ card }) => {
 
   const showCardModal = () => {
     dispatch(fetchAndSetActiveCard(card._id))
+  }
+
+  const handleUpdateIsComplete = (e) => {
+    e.stopPropagation()
+
+    updateCardAPI(card._id, {
+      isDone: !isDone
+    }).then(() => {
+      const newBoard = cloneDeep(board)
+      const columns = newBoard.columns
+
+      for (let i = 0; i < columns.length; i++) {
+        if (columns[i]._id != board?.columnId) {
+          continue
+        }
+
+        const cards = columns[i].cards
+        for (let j = 0; j < cards.length; j++) {
+          if (cards[j]._id == board?._id) {
+            cards[j].isDone = !isDone
+            break
+          }
+        }
+
+        break
+      }
+
+      dispatch(updateCurrentActiveBoard(newBoard))
+      setIsDone(!isDone)
+    })
   }
 
   return (
@@ -134,8 +146,28 @@ const Card = ({ card }) => {
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
-          <Typography sx={{ wordBreak: 'break-word' }} >{card?.title}</Typography>
-          <Box sx={{ borderRadius: '20px', paddingX: '6px', opacity: 0.1, '&:hover': { bgcolor: 'gray', opacity: 1 } }} onClick={handleMenuClick}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 1
+            }}>
+            {isDone && <CheckCircleIcon sx={{ height: '15px' }} />}
+            <Typography sx={{ wordBreak: 'break-word' }}>
+              {card?.title}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              borderRadius: '20px',
+              paddingX: '6px',
+              opacity: 0.1,
+              '&:hover': {
+                bgcolor: 'gray', opacity: 1
+              }
+            }}
+            onClick={handleMenuClick}>
             <ModeIcon sx={{ fontSize: '12px' }} />
           </Box>
         </CardContent>
@@ -170,17 +202,23 @@ const Card = ({ card }) => {
                   disableRipple
                   onMouseEnter={() => setHoverCheck(true)}
                   onMouseLeave={() => setHoverCheck(false)}
+                  onClick={handleUpdateIsComplete}
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    gap: '1px'
+                    gap: '3px',
+                    bgcolor: isDone ? '#43a047 !important' : 'auto',
+                    color: isDone ? 'black' : 'grey',
+                    '&:hover': {
+                      bgcolor: isDone ? '#43a047 !important' : 'auto'
+                    }
                   }} >
-                  {hoverCheck ?
+                  {hoverCheck && !isDone ?
                     <CheckBoxOutlineBlankIcon sx={{ height: 17, width: 17 }} />
                     : <AccessTimeIcon sx={{ height: 17, width: 17 }} />}
                   <Typography variant="caption">
-                    {card?.dueDate}
+                    {moment(card?.dueDate).calendar()}
                   </Typography>
                 </Button>
               }
@@ -191,7 +229,8 @@ const Card = ({ card }) => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    gap: '1px'
+                    gap: '1px',
+                    color: 'grey'
                   }} >
                   <CommentIcon sx={{ height: 17, width: 17 }} />
                   <Typography variant="caption">
@@ -234,43 +273,16 @@ const Card = ({ card }) => {
               color: '#888'
             }
           }
-        }}
-      >
-        <MenuItem onClick={handleDatePickerOpen} sx={{ '& p': { color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' } }}>
-          <CalendarMonthIcon />
-          <Typography>Due Date</Typography>
-        </MenuItem>
+        }} >
         <MenuItem onClick={handleDeleteCard} sx={{ '& p': { color: (theme) => theme.palette.mode === 'dark' ? 'white' : 'black' } }}>
           <DeleteIcon />
           <Typography>Delete Card</Typography>
         </MenuItem>
       </Menu>
-
-      {/* Popover for Date Picker */}
-      <Popover
-        open={openDatePicker}
-        anchorEl={datePickerAnchorEl}
-        onClose={handleDatePickerClose}
-        onClick={(e) => e.stopPropagation()} // Prevent clicks inside popover from bubbling to the card
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
-        sx={{ marginTop: '-60px' }}
-      >
-        <DatePicker
-          selected={selectedDate}
-          onChange={handleDateSelect}
-          inline
-          dateFormat="dd/MM/yyyy"
-        />
-      </Popover>
     </>
   )
 }
 
 export default Card
+
+

@@ -23,7 +23,7 @@ const EditableTitle = ({ initialTitle, onSave, size, getIsEditing = null }) => {
 
   const startEditTittle = () => {
     setIsEditing(true)
-    getIsEditing(true)
+    if (getIsEditing != null) getIsEditing(true)
   }
 
   const handleSave = () => {
@@ -33,14 +33,14 @@ const EditableTitle = ({ initialTitle, onSave, size, getIsEditing = null }) => {
     if (!newTitle || newTitle == '' || newTitle == initialTitle) {
       setTitle(initialTitle)
       setIsEditing(false)
-      getIsEditing(false)
+      if (getIsEditing != null) getIsEditing(false)
       return
     }
 
     // chỉ call api nếu mà newTitle != initialTitle
     onSave(newTitle)
     setIsEditing(false)
-    getIsEditing(false)
+    if (getIsEditing != null) getIsEditing(false)
   }
 
   if (isEditing) {
