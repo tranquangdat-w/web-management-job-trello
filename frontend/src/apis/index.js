@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import authorizedAxiosInstance from '~/utils/authorizeAxios'
 
 // Board APIs
@@ -78,4 +79,12 @@ export const refreshTokenAPI = async () => {
   const response = await authorizedAxiosInstance.get('/users/refresh_token')
   return response.data
 }
+
+export const inviteUserToBoardAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post('/invitations/board', data)
+  toast.success('User invited successfully!')
+
+  return response.data
+}
+
 

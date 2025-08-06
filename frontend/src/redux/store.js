@@ -18,6 +18,7 @@ import {
 } from 'redux-persist'
 import { isDisableDragNDropReducer } from './shareState/isDisableStateSlice'
 import { activeCardReducer } from './activeCard/activeCardSlice'
+import { activeNotificationsReducer } from './actionNotifications/activeNotificationSlice'
 
 const rootPersistConfig = {
   key: 'root',
@@ -30,7 +31,8 @@ const reducers = combineReducers({
   activeBoard: activeBoardReducer,
   user: userReducer,
   isDisableDragNDrop: isDisableDragNDropReducer,
-  activeCard: activeCardReducer
+  activeCard: activeCardReducer,
+  activeNotifications: activeNotificationsReducer
 })
 
 

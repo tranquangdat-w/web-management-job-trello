@@ -21,7 +21,6 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import ActiveCardModal from '~/components/ActiveCardModal/ActiveCardModal'
-import { selectIsDisPlayActiveCard } from '~/redux/activeCard/activeCardSlice'
 
 const Board = () => {
   // like store.dispatch

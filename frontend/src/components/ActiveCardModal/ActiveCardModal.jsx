@@ -8,7 +8,6 @@ import {
   Typography,
   useColorScheme
 } from '@mui/material'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import SendIcon from '@mui/icons-material/Send'
 import EditableTitle from '../EditableTitle/EditableTitle'
 import ImageIcon from '@mui/icons-material/Image'
@@ -36,64 +35,10 @@ import {
 import { cloneDeep } from 'lodash'
 import { selectCurrentUser } from '~/redux/user/userSlice'
 import moment from 'moment'
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
-import useForkRef from '@mui/utils/useForkRef'
-import { useValidation, validateDateTime } from '@mui/x-date-pickers/validation'
-import {
-  useSplitFieldProps,
-  usePickerContext
-} from '@mui/x-date-pickers/hooks'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
+import DateTimePickerButton from './DateTimePickerButton'
 
-const ButtonDateTimeField = (props) => {
-  const { internalProps, forwardedProps } = useSplitFieldProps(props, 'date-time')
-  const pickerContext = usePickerContext()
-  const handleRef = useForkRef(pickerContext.triggerRef, pickerContext.rootRef)
-
-  const { hasValidationError } = useValidation({
-    validator: validateDateTime,
-    value: pickerContext.value,
-    timezone: pickerContext.timezone,
-    props: internalProps
-  })
-
-  return (
-    <Button
-      {...forwardedProps}
-      variant="outlined"
-      color={hasValidationError ? 'error' : 'primary'}
-      ref={handleRef}
-      className={pickerContext.rootClassName}
-      sx={{
-        display: 'flex',
-        gap: 1,
-        paddingX: 1
-      }}
-      onClick={() => pickerContext.setOpen((prev) => !prev)}
-    >
-      {pickerContext.value ?
-        pickerContext.value.format(pickerContext.fieldFormat)
-        :
-        <>
-          <AccessTimeIcon />
-          <Typography>
-            Dates
-          </Typography>
-        </>
-      }
-    </Button >
-  )
-}
-
-const ButtonFieldDateTimePicker = (props) => (
-  <DateTimePicker
-    {...props}
-    slots={{ ...props.slots, field: ButtonDateTimeField }}
-  />
-)
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -124,7 +69,6 @@ const buttonCardIconStyle = {
 }
 
 const ActiveCardModal = () => {
-
   const mode = useColorScheme().mode
 
   const dispatch = useDispatch()
@@ -151,13 +95,8 @@ const ActiveCardModal = () => {
 
   const [contentOfComment, setContentOfCommnet] = useState('')
 
-  const [dueDate, setDueDate] = useState(
-    activeCard?.dueDate ? moment(activeCard?.dueDate) : null
-  )
-
   useEffect(() => {
     setMarkdownValue(activeCard?.description)
-    setDueDate(activeCard?.dueDate ? moment(activeCard?.dueDate) : null)
     setIsDone(activeCard?.isDone || false)
   }, [activeCard])
 
@@ -283,7 +222,7 @@ const ActiveCardModal = () => {
       updateCardAPI(activeCard._id, reqData),
       { pending: 'Uploading' })
       .then(res => {
-        dispatch(updateActiveCard(res))
+        if (activeCard._id === res._id) dispatch(updateActiveCard(res))
 
         const newBoard = cloneDeep(activeBoard)
         const columns = newBoard.columns
@@ -344,41 +283,6 @@ const ActiveCardModal = () => {
     })
   }
 
-  const handleUpdateDueDate = (newDate) => {
-    const newDueDate = newDate ? moment(newDate).valueOf() : newDate
-
-    if (newDueDate === activeCard?.dueDate) return
-
-    updateCardAPI(activeCard?._id, { dueDate: newDueDate }).then(
-      () => {
-        const newActiveCard = cloneDeep(activeCard)
-        newActiveCard.dueDate = newDueDate
-
-        dispatch(updateActiveCard(newActiveCard))
-
-        const newBoard = cloneDeep(activeBoard)
-        const columns = newBoard.columns
-
-        for (let i = 0; i < columns.length; i++) {
-          if (columns[i]._id != activeCard?.columnId) {
-            continue
-          }
-
-          const cards = columns[i].cards
-          for (let j = 0; j < cards.length; j++) {
-            if (cards[j]._id == activeCard?._id) {
-              cards[j].dueDate = newDueDate
-              break
-            }
-          }
-
-          break
-        }
-
-        dispatch(updateCurrentActiveBoard(newBoard))
-      }
-    )
-  }
 
   const handleUpdateIsComplete = () => {
     const newStatus = !isDone
@@ -545,25 +449,7 @@ const ActiveCardModal = () => {
                 </>
               }
             </Button>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <ButtonFieldDateTimePicker
-                value={dueDate}
-                onChange={(newDueDate) => {
-                  if (!newDueDate) {
-                    handleUpdateDueDate(null)
-                  }
-
-                  setDueDate(newDueDate)
-                }
-                }
-                onAccept={handleUpdateDueDate}
-                slotProps={{
-                  actionBar: {
-                    actions: ['clear', 'accept']
-                  }
-                }}
-              />
-            </LocalizationProvider>
+            <DateTimePickerButton activeCard={activeCard} activeBoard={activeBoard} />
           </Box>
           {/*Avatar group*/}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -794,7 +680,7 @@ const ActiveCardModal = () => {
           <Button
             onClick={toggleDisplayComments}
             sx={{
-              bgcolor: showComments ? 'grey.700' : 'none',
+              bgcolor: showComments ? 'grey.300' : 'grey.700',
               borderRadius: 2,
               minWidth: 40,
               height: 40,

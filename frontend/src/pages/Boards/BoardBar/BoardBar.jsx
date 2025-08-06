@@ -1,15 +1,14 @@
 import { Box } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import Chip from '@mui/material/Chip'
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import Button from '@mui/material/Button'
 import { capitalizeFirstLetter } from '~/utils/formatters'
 import PublicIcon from '@mui/icons-material/Public'
 import PublicOffIcon from '@mui/icons-material/PublicOff'
 import { GroupAvatar } from './GroupAvatar'
+import InviteForm from './InviteForm'
 
 const BoardBar = ({ board }) => {
   const bgColorBoardBar = (theme) => theme.palette.mode === 'dark' ? '#004065' : '#005c91'
@@ -87,24 +86,7 @@ const BoardBar = ({ board }) => {
         />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-        <Button
-          variant="outlined"
-          size="small"
-          startIcon={<PersonAddAltIcon />}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            bgcolor: '#dcdfe4',
-            color: 'black',
-            border: 'none',
-            '&:hover': {
-              border: 'none',
-              bgcolor: 'white'
-            }
-          }}
-        >
-          Invite
-        </Button>
+        <InviteForm boardId={board._id} />
         <GroupAvatar boardUsers={board.boardUsers} limit={3} />
       </Box>
     </Box>

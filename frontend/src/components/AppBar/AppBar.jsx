@@ -9,8 +9,6 @@ import Recent from './Menus/Recent'
 import Started from './Menus/Started'
 import Templates from './Menus/Templates'
 import TextField from '@mui/material/TextField'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
-import Badge from '@mui/material/Badge'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
@@ -23,6 +21,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import BoardCreateModal from '~/pages/Boards/create'
 import { createBoard } from '~/apis'
 import { Bounce, toast } from 'react-toastify'
+import Notifications from './Notifications/Notifications'
 
 const AppBar = () => {
   const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
@@ -151,11 +150,7 @@ const AppBar = () => {
             />
           </Tooltip>
           <ModeSelect />
-          <Tooltip title="Notifications">
-            <Badge color="secondary" variant="dot" sx={{ cursor: 'pointer', color: colorComponents }}>
-              <NotificationsNoneIcon />
-            </Badge>
-          </Tooltip>
+          <Notifications />
           <Tooltip title="Help">
             <HelpOutlineIcon sx={{ cursor: 'pointer', color: colorComponents }} />
           </Tooltip>
@@ -169,4 +164,3 @@ const AppBar = () => {
 }
 
 export default AppBar
-
