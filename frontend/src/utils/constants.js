@@ -6,3 +6,7 @@ export const INVITATION_STATUS = {
   ACCEPTED: 'accepted',
   REJECTED: 'rejected'
 }
+export const ACTION_TO_MEMBER_CARD = {
+  ADD: 'add',
+  REMOVE: 'remove'
+}

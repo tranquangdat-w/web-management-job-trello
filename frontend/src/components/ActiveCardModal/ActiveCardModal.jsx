@@ -13,7 +13,6 @@ import EditableTitle from '../EditableTitle/EditableTitle'
 import ImageIcon from '@mui/icons-material/Image'
 import MessageIcon from '@mui/icons-material/Message'
 import CloseIcon from '@mui/icons-material/Close'
-import { GroupAvatar } from '~/pages/Boards/BoardBar/GroupAvatar'
 import { useEffect, useState } from 'react'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
 import MDEditor from '@uiw/react-md-editor'
@@ -38,6 +37,8 @@ import moment from 'moment'
 import CheckBoxIcon from '@mui/icons-material/CheckBox'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank'
 import DateTimePickerButton from './DateTimePickerButton'
+import { CardMemberGroup } from './CardMemberGroup'
+import { ACTION_TO_MEMBER_CARD } from '~/utils/constants'
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -98,7 +99,7 @@ const ActiveCardModal = () => {
   useEffect(() => {
     setMarkdownValue(activeCard?.description)
     setIsDone(activeCard?.isDone || false)
-  }, [activeCard])
+  }, [activeCard, currentActiveUser])
 
   const handleAddNewCommnet = () => {
     if (!contentOfComment || contentOfComment === '') {
@@ -125,7 +126,6 @@ const ActiveCardModal = () => {
         commentedAt: Date.now(),
         content: contentOfComment
       })
-
 
       dispatch(updateActiveCard(newActiveCard))
 
@@ -318,6 +318,31 @@ const ActiveCardModal = () => {
     })
   }
 
+  const onUpdateCardMember = (updateMember) => {
+    updateCardAPI(activeCard._id, updateMember).then((res) => {
+      dispatch(updateActiveCard(res))
+
+      const newBoard = cloneDeep(activeBoard)
+      const columns = newBoard.columns
+
+      for (let i = 0; i < columns.length; i++) {
+        if (columns[i]._id != activeCard?.columnId) {
+          continue
+        }
+
+        const cards = columns[i].cards
+        for (let j = 0; j < cards.length; j++) {
+          if (cards[j]._id == activeCard?._id) {
+            cards[j] = res
+          }
+        }
+        break
+      }
+
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
+  }
+
   return (
     <Modal
       open={isDisplayActiveCard}
@@ -450,13 +475,38 @@ const ActiveCardModal = () => {
               }
             </Button>
             <DateTimePickerButton activeCard={activeCard} activeBoard={activeBoard} />
+            {!activeCard?.memberIds.includes(currentActiveUser?._id) &&
+              <Button
+                onClick={() => {
+                  const updateMember = {
+                    memberId: currentActiveUser?._id,
+                    action: ACTION_TO_MEMBER_CARD.ADD
+                  }
+
+                  onUpdateCardMember({ updateMember })
+                }
+                }
+                variant="outlined"
+                sx={{
+                  padding: 0.8,
+                  gap: 1
+                }}>
+                <Typography>
+                  Join
+                </Typography>
+              </Button>
+            }
           </Box>
           {/*Avatar group*/}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Typography variant="h6" fontWeight={'bold'} >
               Members
             </Typography>
-            <GroupAvatar boardUsers={activeBoard.boardUsers} limit={3} />
+            <CardMemberGroup
+              boardUsers={activeBoard?.boardUsers}
+              limit={5}
+              activeCard={activeCard}
+              onUpdateCardMember={onUpdateCardMember} />
           </Box>
 
           <Box
