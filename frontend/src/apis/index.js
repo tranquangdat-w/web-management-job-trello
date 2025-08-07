@@ -7,12 +7,19 @@ export const updateBoardDetailsAPI = async (boardId, updateData) => {
   return response.data
 }
 
-export const getBoards = async (newPage) => {
-  const response = await authorizedAxiosInstance.get('/boards', {
-    params: {
-      page: newPage
-    }
-  })
+export const getBoardsAPI = async (newPage, searchPath) => {
+  if (newPage) {
+    const response = await authorizedAxiosInstance.get('/boards', {
+      params: {
+        page: newPage
+      }
+    })
+
+    return response.data
+  }
+
+  const response = await authorizedAxiosInstance.get(`/boards${searchPath}`)
+
   return response.data
 }
 

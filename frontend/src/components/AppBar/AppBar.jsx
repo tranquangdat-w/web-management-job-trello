@@ -1,6 +1,5 @@
 import ModeSelect from '../ModeSelect/ModeSelect'
 import { Box } from '@mui/material'
-import InputAdornment from '@mui/material/InputAdornment'
 import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
 import { SvgIcon } from '@mui/material'
 import Typography from '@mui/material/Typography'
@@ -8,24 +7,22 @@ import WorkSpaces from './Menus/WorkSpaces'
 import Recent from './Menus/Recent'
 import Started from './Menus/Started'
 import Templates from './Menus/Templates'
-import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Profiles from './Menus/Profiles'
 import Button from '@mui/material/Button'
 import More from './Menus/Responsive/More'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
-import SearchIcon from '@mui/icons-material/Search'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import BoardCreateModal from '~/pages/Boards/create'
 import { createBoard } from '~/apis'
 import { Bounce, toast } from 'react-toastify'
 import Notifications from './Notifications/Notifications'
+import AutoCompleteSearchBoard from './SearchBoard/SearchBoardAutoComplete'
 
 const AppBar = () => {
   const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
-  const [placeholderSearch, setPlacehoderSearch] = useState('Search')
   const [modalOpen, setModalOpen] = useState(false)
   const navigate = useNavigate()
 
@@ -53,14 +50,6 @@ const AppBar = () => {
     })
 
     setModalOpen(false)
-  }
-
-  const handleFocus = () => {
-    setPlacehoderSearch('Search in Trello')
-  }
-
-  const handleBlur = () => {
-    setPlacehoderSearch('Search')
   }
 
   return (
@@ -112,43 +101,7 @@ const AppBar = () => {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Tooltip title="Search">
-            <TextField
-              id="outlined-search"
-              type="search"
-              size="small"
-              placeholder={placeholderSearch}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <SearchIcon sx={{ color: colorComponents }} />
-                  </InputAdornment>
-                )
-              }}
-              inputProps={{
-                sx: {
-                  '&::placeholder': {
-                    color: 'white',
-                    opacity: 0.8,
-                    fontSize: '18px'
-                  }
-                }
-              }}
-              sx={{
-                width: (theme) => theme.spacing(28),
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: '#8590a2' },
-                  '&:hover fieldset': { borderColor: '#8590a2' },
-                  '&.Mui-focused fieldset': { borderColor: 'white' }
-                },
-                '& .MuiInputBase-root': {
-                  color: 'white'
-                }
-              }}
-            />
-          </Tooltip>
+          <AutoCompleteSearchBoard />
           <ModeSelect />
           <Notifications />
           <Tooltip title="Help">

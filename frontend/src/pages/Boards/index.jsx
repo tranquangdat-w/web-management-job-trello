@@ -16,7 +16,7 @@ import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-do
 import LayersIcon from '@mui/icons-material/Layers'
 import Pagination from '@mui/material/Pagination'
 import BoardCreateModal from './create'
-import { createBoard, getBoards } from '~/apis'
+import { createBoard, getBoardsAPI } from '~/apis'
 import { ITEMS_PER_PAGE } from '~/utils/constants'
 import { Bounce, toast } from 'react-toastify'
 
@@ -36,7 +36,7 @@ const Boards = () => {
   const [displayedBoards, setDisplayedBoards] = useState(null)
 
   useEffect(() => {
-    getBoards(page).then((res) => {
+    getBoardsAPI(page).then((res) => {
       setDisplayedBoards(res.boardData)
       const totalBoards = res.metadata[0]?.totalCount
       const pageCount = totalBoards ? Math.ceil(totalBoards / ITEMS_PER_PAGE) : 0
@@ -77,7 +77,7 @@ const Boards = () => {
     }
 
     createBoard(boardData).then(() => {
-      getBoards(page).then((res) => {
+      getBoardsAPI(page).then((res) => {
         setDisplayedBoards(res.boardData)
         const totalBoards = res.metadata[0]?.totalCount
         const pageCount = totalBoards ? Math.ceil(totalBoards / ITEMS_PER_PAGE) : 0
