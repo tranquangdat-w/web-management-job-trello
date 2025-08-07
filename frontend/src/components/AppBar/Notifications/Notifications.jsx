@@ -9,14 +9,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   clearCurrentActiveNotifications,
   getBoardInvitationsAPI,
-  selectCurrentActiveNotifications
+  selectCurrentActiveNotifications,
+  updateInvitationAPI
 } from '~/redux/actionNotifications/activeNotificationSlice'
 import NotificationsOffIcon from '@mui/icons-material/NotificationsOff'
 import NotificationItem from './NotificationItem'
+import { socket } from '~/socket/socket'
+import { selectCurrentUser } from '~/redux/user/userSlice'
 
 const Notifications = () => {
   const dispatch = useDispatch()
   const currentActiveNotifications = useSelector(selectCurrentActiveNotifications)
+  const [isHaveNotification, setIsHaveNotification] = useState(false)
+  const currentActiveUser = useSelector(selectCurrentUser)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
@@ -30,10 +35,36 @@ const Notifications = () => {
   }
 
   useEffect(() => {
+    socket.on('connect', () => {
+      socket.emit('FE_REGISTER_USER_NAME_SOCKET', currentActiveUser.username)
+    })
+
+    // handle when receive notification
+    socket.on('receive-message', (inviteeUserName) => {
+      if (inviteeUserName !== currentActiveUser.username) {
+        return
+      }
+
+      if (!open) {
+        setIsHaveNotification(true)
+        return
+      }
+
+      dispatch(getBoardInvitationsAPI())
+      setIsHaveNotification(false)
+
+    })
+
     if (open) {
+      setIsHaveNotification(false)
       dispatch(getBoardInvitationsAPI())
     }
-  }, [open, dispatch])
+
+    return () => {
+      socket.off('connect')
+      socket.off('receive-message')
+    }
+  }, [open, dispatch, currentActiveUser.username])
 
   const colorComponents = (theme) =>
     theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
@@ -48,7 +79,7 @@ const Notifications = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           color="secondary"
-          variant="dot"
+          variant={isHaveNotification ? 'dot' : 'none'}
           sx={{ cursor: 'pointer', color: colorComponents }}
         >
           <NotificationsNoneIcon />

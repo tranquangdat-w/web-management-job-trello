@@ -8,6 +8,7 @@ import { FIELDS_REQUIRED_MESSAGE } from '~/utils/validators'
 import { FieldErrorAlert } from '~/components/Form/FieldErrorAlert'
 import { inviteUserToBoardAPI } from '~/apis'
 import { intercepterLoadingElements } from '~/utils/formatters'
+import { socket } from '~/socket/socket'
 
 const InviteForm = ({ boardId }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -37,6 +38,9 @@ const InviteForm = ({ boardId }) => {
         // Close popover
         handleCloseInvitePopUp()
         intercepterLoadingElements(false)
+
+        const userNameToDisplayInvite = inviteeUserName
+        socket.emit('FE_INVITE_USER_TO_BOARD', userNameToDisplayInvite)
       })
   }
 
