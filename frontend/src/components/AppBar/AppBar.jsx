@@ -13,8 +13,11 @@ import Profiles from './Menus/Profiles'
 import Button from '@mui/material/Button'
 import More from './Menus/Responsive/More'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
+import SettingsIcon from '@mui/icons-material/Settings'
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { selectCurrentUser } from '~/redux/user/userSlice'
 import BoardCreateModal from '~/pages/Boards/create'
 import { createBoard } from '~/apis'
 import { Bounce, toast } from 'react-toastify'
@@ -25,6 +28,7 @@ const AppBar = () => {
   const colorComponents = (theme) => theme.palette.mode === 'dark' ? '#9da8b7' : 'white'
   const [modalOpen, setModalOpen] = useState(false)
   const navigate = useNavigate()
+  const currentUser = useSelector(selectCurrentUser)
 
   const handleCreateBoard = (boardData) => {
     if (boardData?.description == '') {
@@ -94,6 +98,25 @@ const AppBar = () => {
               }}>
               Create
             </Button>
+
+            {currentUser?.role === 'admin' && (
+              <Tooltip title="Admin Panel">
+                <Button
+                  component={Link}
+                  to="/admin/users"
+                  startIcon={<SettingsIcon />}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    border: 'none',
+                    color: (theme) => theme.palette.mode === 'dark' ? 'black' : 'white',
+                    bgcolor: (theme) => theme.palette.mode === 'dark' ? '#ff6b6b' : '#e53935',
+                    '&:hover': { border: 'none', bgcolor: (theme) => theme.palette.mode === 'dark' ? '#ff5252' : '#c62828' }
+                  }}>
+                  Admin
+                </Button>
+              </Tooltip>
+            )}
           </Box>
 
           {/* For responsive */}

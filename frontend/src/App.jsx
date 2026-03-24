@@ -7,7 +7,9 @@ import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useSelector } from 'react-redux'
 import { Settings } from '~/pages/Settings/Settings'
 import { ProtectedRoute } from './pages/Auth/ProtectedRoute'
+import { AdminRoute } from './pages/Auth/AdminRoute'
 import Boards from '~/pages/Boards'
+import { AdminUsers } from './pages/Admin/AdminUsers'
 
 const App = () => {
   const currentUser = useSelector(selectCurrentUser)
@@ -27,6 +29,10 @@ const App = () => {
         {/*Settings*/}
         <Route path='/setting/account' element={<Settings />} />
         <Route path='/setting/security' element={<Settings />} />
+      </Route>
+
+      <Route element={<AdminRoute user={currentUser} />}>
+        <Route path='/admin/users' element={<AdminUsers />} />
       </Route>
 
       {/*Auth*/}

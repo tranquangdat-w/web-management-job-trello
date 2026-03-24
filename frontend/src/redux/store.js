@@ -19,6 +19,7 @@ import {
 import { isDisableDragNDropReducer } from './shareState/isDisableStateSlice'
 import { activeCardReducer } from './activeCard/activeCardSlice'
 import { activeNotificationsReducer } from './actionNotifications/activeNotificationSlice'
+import { adminUsersReducer } from './adminUsers/adminUsersSlice'
 
 const rootPersistConfig = {
   key: 'root',
@@ -32,7 +33,8 @@ const reducers = combineReducers({
   user: userReducer,
   isDisableDragNDrop: isDisableDragNDropReducer,
   activeCard: activeCardReducer,
-  activeNotifications: activeNotificationsReducer
+  activeNotifications: activeNotificationsReducer,
+  adminUsers: adminUsersReducer
 })
 
 
