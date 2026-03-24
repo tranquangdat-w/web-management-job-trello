@@ -1,0 +1,4 @@
+    {
+     name: 'setup',
+     testMatch: /.*\.setup\.js/
+    },

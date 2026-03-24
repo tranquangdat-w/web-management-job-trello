@@ -1,0 +1,5 @@
+export { LoginPage } from './LoginPage'
+export { RegisterPage } from './RegisterPage'
+export { BoardsPage } from './BoardsPage'
+export { AdminUsersPage } from './AdminUsersPage'
+export { NotFoundPage } from './NotFoundPage'

@@ -53,7 +53,7 @@ test.describe('Authentication', () => {
       const registerPage = new RegisterPage(page)
       await registerPage.usernameInput.fill('testuser')
       await registerPage.emailInput.fill('test@test.com')
-      await registerPage.passwordInput.fill('Test1234') // No special chars
+      await registerPage.passwordInput.fill('Test1234')
       await registerPage.continueButton.click()
       await expect(page.locator('text=Password must have at least 8 characters including letters and numbers, special symbols')).toBeVisible()
     })

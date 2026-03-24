@@ -1,0 +1,47 @@
+{
+  "cookies": [
+    {
+      "name": "accessToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJmZjkyZTc3NS1lY2UzLTRlNzAtODU3ZC02NjU4MjQwZDNlMDkiLCJlbWFpbCI6InRyYW5xdWFuZ2RhdF90NjdAaHVzLmVkdS52biIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkQXQiOjE3NzQyNzkxODM5MjEsImlhdCI6MTc3NDMzNzE2MiwiZXhwIjoxNzc0MzQwNzYyfQ.SdGb7FOlz6iAcP3k9XPtG8skn1OyV-vUktXFbqr8ikM",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1775546762.668207,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "refreshToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJmZjkyZTc3NS1lY2UzLTRlNzAtODU3ZC02NjU4MjQwZDNlMDkiLCJlbWFpbCI6InRyYW5xdWFuZ2RhdF90NjdAaHVzLmVkdS52biIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkQXQiOjE3NzQyNzkxODM5MjEsImlhdCI6MTc3NDMzNzE2MiwiZXhwIjoxNzc1NTQ2NzYyfQ.kyxjqT85SFwtZWSUA_JQCw1U3OcisLF2dHdCLCo_e28",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1775546762.668358,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "http://localhost:5173",
+      "localStorage": [
+        {
+          "name": "mui-color-scheme-dark",
+          "value": "dark"
+        },
+        {
+          "name": "mui-color-scheme-light",
+          "value": "light"
+        },
+        {
+          "name": "persist:root",
+          "value": "{\"user\":\"{\\\"currentUser\\\":{\\\"accessToken\\\":\\\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJmZjkyZTc3NS1lY2UzLTRlNzAtODU3ZC02NjU4MjQwZDNlMDkiLCJlbWFpbCI6InRyYW5xdWFuZ2RhdF90NjdAaHVzLmVkdS52biIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkQXQiOjE3NzQyNzkxODM5MjEsImlhdCI6MTc3NDMzNzE2MiwiZXhwIjoxNzc0MzQwNzYyfQ.SdGb7FOlz6iAcP3k9XPtG8skn1OyV-vUktXFbqr8ikM\\\",\\\"refreshToken\\\":\\\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiJmZjkyZTc3NS1lY2UzLTRlNzAtODU3ZC02NjU4MjQwZDNlMDkiLCJlbWFpbCI6InRyYW5xdWFuZ2RhdF90NjdAaHVzLmVkdS52biIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkQXQiOjE3NzQyNzkxODM5MjEsImlhdCI6MTc3NDMzNzE2MiwiZXhwIjoxNzc1NTQ2NzYyfQ.kyxjqT85SFwtZWSUA_JQCw1U3OcisLF2dHdCLCo_e28\\\",\\\"_id\\\":\\\"ff92e775-ece3-4e70-857d-6658240d3e09\\\",\\\"username\\\":\\\"admin\\\",\\\"email\\\":\\\"tranquangdat_t67@hus.edu.vn\\\",\\\"avatar\\\":\\\"https://res.cloudinary.com/dye1xowrr/image/upload/v1774316943/user/na9mmijhdlosbbttun4f.jpg\\\",\\\"role\\\":\\\"admin\\\",\\\"isActive\\\":true,\\\"createdAt\\\":1774279183921,\\\"updatedAt\\\":null}}\",\"_persist\":\"{\\\"version\\\":-1,\\\"rehydrated\\\":true}\"}"
+        },
+        {
+          "name": "mui-mode",
+          "value": "light"
+        }
+      ]
+    }
+  ]
+}
